@@ -9,5 +9,9 @@ PDF splitter / merger
 * Single-page
 * Alt kjører client-side: Ingen store filer lastes opp/ned til server
 
-# Scope
-* Noscope
+# Funksjoner
+* Spleise 2 eller flere PDFer sammen
+* Splitte enkelte sider eller flere sider av gangen fra PDF
+* Stokke om på siderekkefølge i PDF
+* Rotere og speilvende sider i PDF
+* Konvertere bilder til PDF
