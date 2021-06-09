@@ -15,4 +15,4 @@ PDF splitter / merger
 * Splitte enkelte sider eller flere sider av gangen fra PDF
 * Stokke om på siderekkefølge i PDF
 * Rotere og speilvende sider i PDF
-* Konvertere bilder til PDF
+* Konvertere ulike filer til PDF, som bilder, kodefiler og mer
