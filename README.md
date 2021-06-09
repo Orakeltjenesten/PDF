@@ -9,5 +9,5 @@ PDF splitter / merger
 * Single-page
 * Alt kjører client-side: Ingen store filer lastes opp/ned til server
 
-#Scope
+# Scope
 * Noscope
