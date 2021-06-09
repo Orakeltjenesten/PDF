@@ -10,6 +10,7 @@ PDF splitter / merger
 * Alt kjører client-side: Ingen store filer lastes opp/ned til server
 
 # Funksjoner
+* Brukervennlig drag and drop
 * Spleise 2 eller flere PDFer sammen
 * Splitte enkelte sider eller flere sider av gangen fra PDF
 * Stokke om på siderekkefølge i PDF
