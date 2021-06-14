@@ -1,0 +1,25 @@
+{
+  "name": "pdf-tool",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@types/wicg-file-system-access": "^2020.9.1",
+    "browser-fs-access": "^0.17.3",
+    "next": "10.2.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@ijsto/eslint-config": "^4.1.6",
+    "@types/react": "17.0.11",
+    "eslint": "^7.25.0",
+    "jest": "^27.0.4",
+    "typescript": "4.3.2"
+  }
+}
