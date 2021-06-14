@@ -1,4 +1,5 @@
 # PDF
+<img src="public/PDFlogo.svg" width="200" height="150" alt="logo"/>
 PDF splitter / merger
 
 
