@@ -3,20 +3,62 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { SyntheticEvent } from 'react'
+let file1 : File;
+let file2 : File;
 
-function UploadFileButton() {
+function UploadFirstPDFButton(text : String) {
   async function fileUpload(e: SyntheticEvent) {
     e.preventDefault();
+    try {
     let fileHandle = await window.showOpenFilePicker();
-    const file = await fileHandle[0].getFile();
-    alert(await file.text());
-
-    let saveHandle = await window.showSaveFilePicker();
-
+    file1 = await fileHandle[0].getFile();
+    } catch (error) {
+      
+    }
   }
   return (
-    <button onClick={fileUpload}>Upload file</button>
+    <button className={styles.upload} onClick={fileUpload}>{text}</button>
   )
+}
+
+function UploadSecondPDFButton(text: String) {
+
+  async function fileUpload(e: SyntheticEvent) {
+    e.preventDefault();
+    try {
+    let fileHandle = await window.showOpenFilePicker();
+    file2 = await fileHandle[0].getFile();
+    const writable = await saveLocation();
+    await writable.write("Hello, test!")
+    await writable.close();
+    } catch (error) {
+
+    }
+  }
+
+  async function saveLocation() {
+    const options = {
+      types: [
+        {
+        description: 'PDF',
+        accept: {
+          'pdf/document': ['.pdf'],
+        },
+      },
+    ],
+  }
+
+    let saveHandle = await window.showSaveFilePicker(options);
+    return await saveHandle.createWritable();
+  }
+
+
+  return (
+    <button className={styles.upload} onClick={fileUpload}>{text}</button>
+  )
+
+
+  
 }
 
 
@@ -24,22 +66,26 @@ export default function Home() {
   return (
     <body>
       <Head>
-        <title>Test Project</title>
+        <title>Merge 2 PDFs</title>
         <meta name="Test Project" content="Test creation" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1>
-          This is a test app.
+          Merge two PDFs.
         </h1>
+
+
+        {UploadFirstPDFButton("Upload PDF1")}
+        {UploadSecondPDFButton("Upload PDF2")}
       </main>
 
-      {UploadFileButton()}
+      
       
 
       <footer className={styles.footer}>
-          Test site.
+          Laget med kjærlighet i Trondheim
       </footer>
     </body>
   )
