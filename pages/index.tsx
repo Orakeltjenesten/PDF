@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { SyntheticEvent } from 'react'
+import {PDFDocument, StandardFonts} from 'pdf-lib'
 let file1 : File;
 let file2 : File;
 
@@ -13,7 +14,7 @@ function UploadFirstPDFButton(text : String) {
     let fileHandle = await window.showOpenFilePicker();
     file1 = await fileHandle[0].getFile();
     } catch (error) {
-      
+      // error handling
     }
   }
   return (
@@ -28,11 +29,25 @@ function UploadSecondPDFButton(text: String) {
     try {
     let fileHandle = await window.showOpenFilePicker();
     file2 = await fileHandle[0].getFile();
-    const writable = await saveLocation();
-    await writable.write("Hello, test!")
-    await writable.close();
-    } catch (error) {
+    
+    const pdfDoc = await PDFDocument.create();
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const first = await PDFDocument.load(await file1.arrayBuffer());
+    const second = await PDFDocument.load(await file2.arrayBuffer());
 
+    const copiedFirst = await pdfDoc.copyPages(first, first.getPageIndices())
+    const copiedSecond = await pdfDoc.copyPages(second, second.getPageIndices());
+
+    copiedFirst.forEach((page) => pdfDoc.addPage(page));
+    copiedSecond.forEach((page) => pdfDoc.addPage(page));
+
+    const writable = (await saveLocation())
+    writable.write(await pdfDoc.save());
+
+    writable.close();
+
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -49,7 +64,8 @@ function UploadSecondPDFButton(text: String) {
   }
 
     let saveHandle = await window.showSaveFilePicker(options);
-    return await saveHandle.createWritable();
+    return (await saveHandle.createWritable());
+    
   }
 
 
