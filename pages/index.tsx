@@ -5,70 +5,100 @@ import Link from 'next/link'
 import { SyntheticEvent } from 'react'
 import {PDFDocument, StandardFonts} from 'pdf-lib'
 import { fileSave } from 'browser-fs-access'
-let files : File[] = [];
+import React from 'react'
 let entryText : string;
 
-function moveOneUp(name : string) {
-  for (let i=0; i<files.length; i++) {
-    if (name.includes(files[i].name)) {
-      if (i == 0) {
-        let f : File = files.splice(0,1)[0]
-        files.push(f);
-      } else {
-        files.splice(i-1, 0, files.splice(i, 1)[0]);
-      }
-      break;
-    }
+class PDFsDisplayEntry extends React.Component<any> { // possibly replace any with function callback in props
+  constructor(props: {}) {
+    super(props);
   }
-  renderEntries();
+  render() {
+  return (
+    <div>
+      <div className={styles.PDFDisplayEntryText}></div>
+      <div className={styles.PDFDisplayEntryControls}> 
+        <button id="moveEntryUpButton" onClick={(e) => (this.props.clickEntryOneUp(this.props.file))}> </button>
+        <button id="deleteEntryButton" onClick={(e) => (this.props.clickDeleteEntry(this.props.file))}></button>
+      </div>
+    </div>
+  );
+  }
 }
 
-function deleteEntry(name: string) {
-  for (let i=0; i<files.length; i++) {
-    if (name.includes(files[i].name)) {
-      files.splice(i, 1);
-      break;
-    }
+class PDFsDisplay extends React.Component<{}, {files : File[]}> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {files: []};
+    this.moveEntryOneUp = this.moveEntryOneUp.bind(this);
+    this.deleteEntry = this.deleteEntry.bind(this);
   }
-  renderEntries();
-}
-
-function addEntry(text : string) {
-  var div = document.createElement("div");
-
-  var upButton = document.createElement("button");
-  upButton.onclick = (e) => moveOneUp(text);
-  upButton.innerText = "^"
-
-  var delButton = document.createElement("button");
-  delButton.onclick = (e) => deleteEntry(text);
-  delButton.innerText = "X";
-
-  var textDiv = document.createElement("div");
-  textDiv.innerText = text;
-
-  var buttons = document.createElement("div");
-  textDiv.style.flex = "5 1 0";
-  buttons.style.flex = "1 1 0"
-  textDiv.style.whiteSpace = "nowrap"
-  textDiv.style.overflow = "hidden";
-  textDiv.style.textOverflow = "ellipsis"
   
-  buttons.style.justifyContent = "right";
-  buttons.appendChild(upButton);
-  buttons.appendChild(delButton);
+  moveEntryOneUp(name : string) {
+    for (let i=0; i<this.state.files.length; i++) {
+      if (name.includes(this.state.files[i].name)) {
+        if (i == 0) {
+          let f : File = this.state.files.splice(0,1)[0]
+          this.state.files.push(f);
+        } else {
+          this.state.files.splice(i-1, 0, this.state.files.splice(i, 1)[0]);
+        }
+        break;
+      }
+    }
+  }
 
-  div.appendChild(textDiv);
-  div.appendChild(buttons);
+  deleteEntry(name: string) {
+    for (let i=0; i<this.state.files.length; i++) {
+      if (name.includes(this.state.files[i].name)) {
+        this.state.files.splice(i, 1);
+        break;
+      }
+    }
+  }
+/*
+  makeEntry(file : File) : PDFsDisplayEntry {
+    var div = document.createElement("div");
+  
+    var upButton = document.createElement("button");
+    upButton.onclick = (e) => moveOneUp(text);
+    upButton.innerText = "^"
+  
+    var delButton = document.createElement("button");
+    delButton.onclick = (e) => deleteEntry(text);
+    delButton.innerText = "X";
+  
+    var textDiv = document.createElement("div");
+    textDiv.innerText = text;
+  
+    var buttons = document.createElement("div");
+    textDiv.style.flex = "5 1 0";
+    buttons.style.flex = "1 1 0"
+    textDiv.style.whiteSpace = "nowrap"
+    textDiv.style.overflow = "hidden";
+    textDiv.style.textOverflow = "ellipsis"
+    
+    buttons.style.justifyContent = "right";
+    buttons.appendChild(upButton);
+    buttons.appendChild(delButton);
+  
+    div.appendChild(textDiv);
+    div.appendChild(buttons);
+  
+    document.getElementById("entries")!.appendChild(div);
+  }
+  */
 
-  document.getElementById("entries")!.appendChild(div);
-}
 
+  pdfList() {
+    return this.state.files.map((file) => 
+    <PDFsDisplayEntry clickEntryOneUp={this.moveEntryOneUp} clickDeleteEntry={this.deleteEntry} />
+    )
+  }
 
-function renderEntries() {
-  document.getElementById("entries")!.innerHTML = "";
-  for (let i=0;i<files.length; i++) {
-    addEntry(i.toString() + ". " + files[i].name);
+  render() {
+    return <div id="entries" className={styles.entries}>
+      {this.pdfList()}
+    </div>
   }
 }
 
@@ -85,15 +115,14 @@ function UploadButton(text : string) {
   function handleFiles(handledFiles: FileList | null) {
     if (handledFiles != null) {
       files = Array.from(handledFiles);
-      renderEntries();
     }
   }
 
   return (
     <div>
-    <input className={styles.hidden} onChange={(e) => handleFiles(e.target.files)} type="file" id="file1" multiple/>
+    <input className={styles.hidden} onChange={(e) => handleFiles(e.target.files)} type="file" id="file1" multiple accept=".pdf"/>
 
-    <input className={styles.upload} type="button" value={text} onClick={triggerUpload} />
+    <input className={styles.upload} type="button" value={text} onClick={triggerUpload}/>
     </div>
   )
 }
@@ -112,8 +141,6 @@ function SavePDFButton(text: string) {
 
   async function getDownload(e : SyntheticEvent) {
     e.preventDefault();
-
-    
     let url: string;
     let name: string;
     renderEntries();
