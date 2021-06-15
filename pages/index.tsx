@@ -4,31 +4,39 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { SyntheticEvent } from 'react'
 import {PDFDocument, StandardFonts} from 'pdf-lib'
-let file1 : File;
-let file2 : File;
+let currentFile : File;
 
-function UploadFirstPDFButton(text : String) {
-  async function fileUpload(e: SyntheticEvent) {
+
+function UploadButton(text : String) {
+
+  function triggerUpload(e: SyntheticEvent){
     e.preventDefault();
-    try {
-    let fileHandle = await window.showOpenFilePicker();
-    file1 = await fileHandle[0].getFile();
-    } catch (error) {
-      // error handling
+    // Click the hidden element. This is necessary to change styling and text of the button.
+    (document.getElementById('file1') as HTMLElement).click()
+
+  }
+
+  function handleFiles(files: FileList) {
+    let firstFile : File | null = files.item(0);
+    if (firstFile != null) {
+      currentFile = firstFile;
     }
   }
+
   return (
-    <button className={styles.upload} onClick={fileUpload}>{text}</button>
+    <div>
+    <input className={styles.hidden} onChange={(e) => handleFiles(e.target.files)} type="file" id="file1" multiple/>
+
+    <input className={styles.upload} type="button" value="Upload" onClick={triggerUpload} />
+    </div>
   )
 }
 
-function UploadSecondPDFButton(text: String) {
+function SavePDFButton(text: String) {
 
-  async function fileUpload(e: SyntheticEvent) {
+  async function savePDF(e: SyntheticEvent) {
     e.preventDefault();
-    try {
-    let fileHandle = await window.showOpenFilePicker();
-    file2 = await fileHandle[0].getFile();
+    /*try {
     
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -48,29 +56,43 @@ function UploadSecondPDFButton(text: String) {
 
     } catch (error) {
       console.log(error);
-    }
+    }*/
   }
 
-  async function saveLocation() {
-    const options = {
-      types: [
-        {
-        description: 'PDF',
-        accept: {
-          'pdf/document': ['.pdf'],
-        },
-      },
-    ],
-  }
+  async function getDownload(e : SyntheticEvent) {
+    e.preventDefault();
 
-    let saveHandle = await window.showSaveFilePicker(options);
-    return (await saveHandle.createWritable());
     
+    let url: string;
+    let name: string;
+
+    if (currentFile == null) {
+      // Create a test file
+      let blob = new Blob(["You had not uploaded a file, so this empty one was returned."]);
+      url = window.URL.createObjectURL(blob);
+      name = "empty.txt"
+    } else {
+      // Embed the current file in a URL
+      url = window.URL.createObjectURL(currentFile);
+      name = "your_file_as_text.txt"
+    }
+
+    // Create a ghost 'a'-element
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.setAttribute("style", "display: none;");
+
+    // Set its download and href attributes accordingly to filename and URL of file
+    a.download = name;
+    a.href = url;
+    a.click();
+
+    a.remove();
   }
 
 
   return (
-    <button className={styles.upload} onClick={fileUpload}>{text}</button>
+    <input className={styles.upload} type="button" value="Save" onClick={getDownload} />
   )
 
 
@@ -93,8 +115,8 @@ export default function Home() {
         </h1>
 
 
-        {UploadFirstPDFButton("Upload PDF1")}
-        {UploadSecondPDFButton("Upload PDF2")}
+        {UploadButton("Upload PDF1")}
+        {SavePDFButton("Save")}
       </main>
 
       
