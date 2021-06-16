@@ -102,7 +102,7 @@ class MainFrame extends React.Component<{}, {files: File[], selectedURL: string}
 
 export default function Home() {
   return (
-    <body>
+    <>
       <Head>
         <title>PDF MERGER</title>
         <meta name="PDF Merger" content="Merging PDF" />
@@ -126,6 +126,6 @@ export default function Home() {
       <footer className={styles.footer}>
           Laget med kjærlighet i Trondheim
       </footer>
-    </body>
+    </>
   )
 }

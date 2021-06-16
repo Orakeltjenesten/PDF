@@ -1,7 +1,7 @@
 import { useCallback, useState, useLayoutEffect, useContext, createContext, ReactNode } from 'react';
 import { getCookie, setCookie } from '../utils/cookie';
 import { getTheme, themes, ThemeTypes } from '../containers/theme';
-import { MuiThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const THEME_COOKIE = 'theme-cookie';
@@ -13,7 +13,7 @@ interface ContextProps {
 
 const ThemeContext = createContext<ContextProps | undefined>(undefined);
 
-const ThemeProvider = ({ children }: { children: ReactNode }) => {
+const ThemeMaker = ({ children }: { children: ReactNode }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [selectedTheme, setSelectedTheme] = useState<ThemeTypes>('automatic');
 
@@ -55,7 +55,9 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ThemeContext.Provider value={themeStore}>
-      <MuiThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)}>{children}</MuiThemeProvider>
+      <ThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)}>
+        {children}
+      </ThemeProvider>
     </ThemeContext.Provider>
   );
 };
@@ -68,4 +70,4 @@ const useThemeSettings = () => {
   return context;
 };
 
-export { ThemeProvider, useThemeSettings };
+export { ThemeMaker, useThemeSettings };
