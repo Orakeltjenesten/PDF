@@ -43,11 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
         margin: 'auto',
         padding: theme.spacing(0, 2),
-        display: 'grid',
-        gridTemplateColumns: '120px 1fr auto',
+        display: 'flex',
+        justifyContent: 'space-between',
         [theme.breakpoints.down('md')]: {
           padding: theme.spacing(0, 1),
-          gridTemplateColumns: '80px 1fr',
         },
       },
     
@@ -132,27 +131,29 @@ const Topbar = ({ variant }: TopbarProps) => {
 
   return (
     <AppBar
-    className={classnames(
-      classes.appBar,
-      variant !== 'filled' && scrollAtTop && !sidebarOpen && classes.transparentAppBar,
-      (variant === 'filled' || !scrollAtTop) && !sidebarOpen && classes.backdrop,
-    )}
-    color='primary'
-    elevation={0}
-    position='fixed'>
+      className={classnames(
+        classes.appBar,
+        variant !== 'filled' && scrollAtTop && !sidebarOpen && classes.transparentAppBar,
+        (variant === 'filled' || !scrollAtTop) && !sidebarOpen && classes.backdrop,
+      )}
+      color='primary'
+      elevation={0}
+      position='fixed'>
       <Toolbar disableGutters>
         <div className={classes.toolbar}>
-          <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }} className={classnames(classes.items, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
+          <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
+            <div className={classnames(classes.items, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
               {items.map((item, i) => (
                 <TopBarItem key={i} {...item} />
               ))}
+            </div>
           </Box>
           <div className={classnames(classes.right, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
             <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
               <ThemeSettings className={classes.topbarItem} />
             </Box>
-            <Box component='div' sx={{ display: { md: 'none', xs: 'block' } }}>
-              <IconButton className={classes.topbarItem} onClick={() => setSidebarOpen((prev) => !prev)}>
+            <Box component='div'>
+              <IconButton sx={{ display: { md: 'none', xs: 'block' } }} className={classes.topbarItem} onClick={() => setSidebarOpen((prev) => !prev)}>
                 {sidebarOpen ? <CloseIcon aria-label='Lukk meny' /> : <MenuIcon aria-label='Åpne meny' />}
               </IconButton>
               <Sidebar items={items} onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
