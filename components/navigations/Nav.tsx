@@ -1,12 +1,12 @@
+import React, { Component } from 'react';
 import Link from 'next/link'
-import navStyles from 'styles/Nav.module.css'
+import navStyles from '../../styles/Nav.module.css'
 
-import {makeStyles} from '@material-ui/core/styles'
 
 class Nav extends Component {
     render() {
         return (
-            <nav class={navStyles.nav}>
+            <nav className={navStyles.nav}>
                 <ul>
                     <li>
                         <Link href='/'>
