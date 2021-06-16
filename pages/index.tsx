@@ -12,10 +12,10 @@ import { UploadButton } from '../components/UploadButton'
 import { PDFPreview } from '../components/PDFPreview'
 
 
-class MainFrame extends React.Component<{}, {files: File[], selectedFile? : File}> {
+class MainFrame extends React.Component<{}, {files: File[], selectedURL: string}> {
   constructor(props: {}) {
     super(props);
-    this.state = {files : [], selectedFile: undefined}
+    this.state = {files : [], selectedURL: ""}
     this.deleteEntry = this.deleteEntry.bind(this);
     this.moveEntryOneUp = this.moveEntryOneUp.bind(this);
     this.updateFiles = this.updateFiles.bind(this);
@@ -30,10 +30,21 @@ class MainFrame extends React.Component<{}, {files: File[], selectedFile? : File
     );
   }
 
+  async getURL(file: File) {
+    if (file != null) {
+        let saved : Uint8Array = toUint8Array(await file.arrayBuffer());
+        let url = window.URL.createObjectURL(new Blob([saved]));
+        return url;
+    }
+    return "";
+
+}
+
   async updateSelected(newFile : File) {
+    let url : string = await this.getURL(newFile);
     this.setState( 
       {
-        selectedFile : newFile
+        selectedURL : url
       }
     )
   }
@@ -78,8 +89,8 @@ class MainFrame extends React.Component<{}, {files: File[], selectedFile? : File
           <SavePDFButton text="Download" files={this.state.files}/>
         </div>
         {
-        (this.state.selectedFile != null) &&
-        <div className={styles.preview}><PDFPreview file={this.state.selectedFile} /></div>
+        (this.state.selectedURL != "") &&
+        <div className={styles.preview}><PDFPreview url={this.state.selectedURL} /></div>
         }
       </div>
     )

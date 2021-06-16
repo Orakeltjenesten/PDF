@@ -25,6 +25,10 @@
   justify-content: center;
 }
 
+.documentView {
+  border: 1px solid black;
+}
+
 .colorRed {
   background-color: red;
   width: 350px;
