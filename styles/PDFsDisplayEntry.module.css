@@ -1,0 +1,44 @@
+.entry {
+    border-radius: 7px;
+    background-color: cadetblue;
+    width: 400px;
+    padding: 8px;
+    margin: 3px;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .entry:focus {
+    background-color: darkcyan;
+  }
+  
+
+  .text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 5px;
+    margin: auto auto;
+    padding: 2px 2px;
+    flex: 6 1 0;
+  }
+
+  .controls {
+    flex: 1 1 0;
+  }
+  .controls button {
+    border-radius: 3px;
+    border: 0px;
+    background-color: white;
+    margin: 3px;
+  }
+
+  .controls button:hover {
+    border: 3px solid black;
+    margin: 0px;
+  }
