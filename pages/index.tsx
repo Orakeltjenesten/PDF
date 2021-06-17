@@ -118,7 +118,6 @@ export default function Home() {
         </div>
 
         <MainFrame/>
-      
 
       
       
