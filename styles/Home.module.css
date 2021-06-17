@@ -25,10 +25,6 @@
   justify-content: center;
 }
 
-.documentView {
-  border: 1px solid black;
-}
-
 .colorRed {
   background-color: red;
   width: 350px;
@@ -40,7 +36,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+  height: 100%;
 }
 
 .footer {

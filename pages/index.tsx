@@ -12,62 +12,58 @@ import { UploadButton } from '../components/UploadButton'
 import { PDFPreview } from '../components/PDFPreview'
 
 
-class MainFrame extends React.Component<{}, {files: File[], selectedURL: string}> {
+class MainFrame extends React.Component<{}, {files: File[], selectedFile?: File}> {
   constructor(props: {}) {
     super(props);
-    this.state = {files : [], selectedURL: ""}
+    this.state = {files : [], selectedFile: undefined}
     this.deleteEntry = this.deleteEntry.bind(this);
-    this.moveEntryOneUp = this.moveEntryOneUp.bind(this);
+    this.reorder = this.reorder.bind(this);
     this.updateFiles = this.updateFiles.bind(this);
     this.updateSelected = this.updateSelected.bind(this);
   }
 
   updateFiles(newFiles : File[]) {
+
+    let updatedFiles = Array.from(this.state.files);
+    let contains = (file: File, files: File[]) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
+    updatedFiles = updatedFiles.concat(newFiles.filter((file: File) => (!contains(file, this.state.files))));
+
+    if (updatedFiles.length != this.state.files.length + newFiles.length) {
+      alert("It is not allowed to have multiple files with the same name.")
+    }
+
+
     this.setState(
       {
-        files: newFiles
+        files: updatedFiles
       }
     );
   }
 
-  async getURL(file: File) {
-    if (file != null) {
-        let saved : Uint8Array = toUint8Array(await file.arrayBuffer());
-        let url = window.URL.createObjectURL(new Blob([saved]));
-        return url;
-    }
-    return "";
 
-}
-
-  async updateSelected(newFile : File) {
-    let url : string = await this.getURL(newFile);
+  async updateSelected(newFile : File | undefined) {
     this.setState( 
       {
-        selectedURL : url
+        selectedFile : newFile!
       }
     )
+    console.log(this.state);
   }
 
-  moveEntryOneUp(file: File) {
+  reorder(from: number, to: number) {
     let newFiles = Array.from(this.state.files); // Copy the array, as arrays should not be changed directly
-    for (let i =0; i<newFiles.length; i++) {
-      if (file === newFiles[i]) {
-        if (i == 0) {
-          let f: File = newFiles.splice(0,1)[0]
-          newFiles.push(f);
-        } else {
-          newFiles.splice(i-1, 0, newFiles.splice(i, 1)[0]);
-        }
-        break;
-      }
-    }
+    let [deleted] = newFiles.splice(from, 1);
+    newFiles.splice(to, 0, deleted);
     this.setState( { // End by updating state with the modified array
       files : newFiles
     })
   }
 
   deleteEntry(file: File) {
+    if (this.state.selectedFile == undefined || this.state.selectedFile!.name == file.name) {
+      this.updateSelected(undefined);
+    }
+    
     let newFiles = Array.from(this.state.files);
     for (let i=0; i<newFiles.length; i++) {
       if (file === newFiles[i]) {
@@ -75,6 +71,7 @@ class MainFrame extends React.Component<{}, {files: File[], selectedURL: string}
         break;
       }
     }
+
     this.setState( { // End by updating state with the modified array
       files : newFiles
     })
@@ -85,12 +82,11 @@ class MainFrame extends React.Component<{}, {files: File[], selectedURL: string}
       <div className={styles.mainFrame}>
         <div className={styles.listView}>
           <UploadButton text="Upload PDFs" updateFiles={this.updateFiles} />
-          <PDFsDisplay moveEntryOneUp={this.moveEntryOneUp} deleteEntry={this.deleteEntry} updateSelected={this.updateSelected} files={this.state.files} />
+          <PDFsDisplay reorder={this.reorder} deleteEntry={this.deleteEntry} updateSelected={this.updateSelected} files={this.state.files} />
           <SavePDFButton text="Download" files={this.state.files}/>
         </div>
         {
-        (this.state.selectedURL != "") &&
-        <div className={styles.preview}><PDFPreview url={this.state.selectedURL} /></div>
+        <div className={styles.preview}><PDFPreview file={this.state.selectedFile}/></div>
         }
       </div>
     )

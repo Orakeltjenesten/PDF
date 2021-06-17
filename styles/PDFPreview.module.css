@@ -1,0 +1,24 @@
+ 
+  .documentView {
+    border: 1px solid black;
+  }
+
+  .pdfPage {
+    position: relative;
+  }
+
+  .controls {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 4px;
+      width: 200px;
+
+  }
