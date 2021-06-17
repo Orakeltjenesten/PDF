@@ -1,9 +1,9 @@
 import React, { useMemo, useState, useEffect, Component } from 'react';
 import Link from 'next/link';
-import navStyles from '../../styles/Nav.module.css';
 import classnames from 'classnames';
 import ThemeSettings from './ThemeSettings';
 import Sidebar from './Sidebar';
+import Logo from './Logo';
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
@@ -43,10 +43,12 @@ const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
         margin: 'auto',
         padding: theme.spacing(0, 2),
-        display: 'flex',
-        justifyContent: 'space-between',
+        display: 'grid',
+        gridTemplateColumns: '120px 1fr auto',
+        gap: theme.spacing(3),
         [theme.breakpoints.down('md')]: {
           padding: theme.spacing(0, 1),
+          gridTemplateColumns: '80px 1fr',
         },
       },
     
@@ -77,9 +79,10 @@ const useStyles = makeStyles((theme: Theme) =>
         whiteSpace: 'nowrap',
       },
       topbarItem: {
-        height: 35,
+        height: 50,
         margin: 'auto 0',
         color: 'inherit',
+        fontSize: '1rem',
       },
       reverseColor: {
         color: theme.palette.get<string>({ light: theme.palette.common.black, dark: theme.palette.common.white }),
@@ -98,7 +101,9 @@ const TopBarItem = ({ text, to }: TopBarItemProps) => {
   //<Button className={classes.topbarItem}color='inherit' variant={partial ? 'outlined' : 'text'}>{text}</Button>-->
   return (
       <Link href={to}>
-          <Button className={classes.topbarItem}color='inherit' variant='text'>{text}</Button>
+          <Button className={classes.topbarItem}color='inherit' variant='text'>
+            {text}
+          </Button>
       </Link>
   );
 };
@@ -123,10 +128,10 @@ const Topbar = ({ variant }: TopbarProps) => {
   const scrollAtTop = useMemo(() => scrollLength < 20, [scrollLength]);
 
   const items = [
-        { text: 'Upload', to: "/upload" },
-        { text: 'Organize', to: "/organize" },
-        { text: 'Merge', to: "/merge" },
-        { text: 'Split', to: "/split" }
+        { text: 'Upload', to: '/upload' },
+        { text: 'Organize', to: '/organize' },
+        { text: 'Merge', to: '/merge' },
+        { text: 'Split', to: '/split' }
       ] as Array<TopBarItemProps>;
 
   return (
@@ -141,6 +146,9 @@ const Topbar = ({ variant }: TopbarProps) => {
       position='fixed'>
       <Toolbar disableGutters>
         <div className={classes.toolbar}>
+          <Link href='/index'>
+            <Logo darkColor={'white'} lightColor={'black'} />
+          </Link>
           <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
             <div className={classnames(classes.items, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
               {items.map((item, i) => (

@@ -2,9 +2,9 @@ import { createTheme } from '@material-ui/core/styles'
 import darkScrollbar from '@material-ui/core/darkScrollbar';
 
 // Icons
-import DarkIcon from '@material-ui/icons/Brightness2Outlined';
-import AutomaticIcon from '@material-ui/icons/DevicesOutlined';
-import LightIcon from '@material-ui/icons/WbSunnyOutlined';
+import DarkIcon from '@material-ui/icons/Brightness3Outlined';
+import AutomaticIcon from '@material-ui/icons/PhonelinkSetupOutlined';;
+import LightIcon from '@material-ui/icons/WbSunnyOutlined';;
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
@@ -97,7 +97,7 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
       MuiCssBaseline: {
         styleOverrides: {
           body: {
-            background: get<string>({ light: 'linear-gradient(45deg, #3e843142, #0000ff3d)', dark: 'linear-gradient(45deg, #160202d9, #070727ed)' }),
+            background: get<string>({ light: 'linear-gradient(45deg, #e3ffe7 0%, #d9e7ff 100%);', dark: 'linear-gradient(45deg, rgba(40,13,41,1) 0%, rgba(16,16,73,1) 100%)' }),
             // eslint-disable-next-line @typescript-eslint/ban-types
             ...get<object>({ light: {}, dark: darkScrollbar() }),
           },
