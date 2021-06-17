@@ -121,7 +121,6 @@ export default function Home() {
 
       
       
-
         <footer className={styles.footer}>
             Laget med kjærlighet i Trondheim
         </footer>
