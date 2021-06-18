@@ -1,7 +1,7 @@
 .entry {
     border-radius: 7px;
     background-color: cadetblue;
-    width: 400px;
+    width: 550px;
     padding: 0px;
     margin: 3px;
     text-align: center;
@@ -31,12 +31,14 @@
     padding: 5px;
     margin: auto auto;
     padding: 2px 2px;
-    flex: 6 1 0;
+    flex: 3 1 0;
     margin: 12px;
   }
 
   .controls {
-    flex: 1 1 0;
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 0; 
   }
   .controls button {
     border-radius: 3px;

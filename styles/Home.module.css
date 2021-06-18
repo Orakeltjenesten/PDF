@@ -17,6 +17,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: 80vh;
+}
+
+.pdfList {
+  overflow-y: scroll;
 }
 
 .preview {

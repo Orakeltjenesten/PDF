@@ -1,15 +1,16 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+  import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import { SyntheticEvent } from 'react'
-import {PDFDocument, StandardFonts, toUint8Array} from 'pdf-lib'
+import {PDFDocument, PDFPage, StandardFonts, toUint8Array} from 'pdf-lib'
 import { fileSave } from 'browser-fs-access'
 import React from 'react'
 import { PDFsDisplay } from '../components/PDFsDisplay'
 import { SavePDFButton } from '../components/SavePDFButton'
 import { UploadButton } from '../components/UploadButton'
 import { PDFPreview } from '../components/PDFPreview'
+import { jssPreset } from '@material-ui/styles'
 
 
 class MainFrame extends React.Component<{}, {files: File[], selectedFile?: File}> {
@@ -20,13 +21,18 @@ class MainFrame extends React.Component<{}, {files: File[], selectedFile?: File}
     this.reorder = this.reorder.bind(this);
     this.updateFiles = this.updateFiles.bind(this);
     this.updateSelected = this.updateSelected.bind(this);
+    this.split = this.split.bind(this);
   }
 
-  updateFiles(newFiles : File[]) {
+  updateFiles(newFiles : File[], position=-1) {
 
     let updatedFiles = Array.from(this.state.files);
     let contains = (file: File, files: File[]) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
-    updatedFiles = updatedFiles.concat(newFiles.filter((file: File) => (!contains(file, this.state.files))));
+    if (position == -1) {
+      updatedFiles = updatedFiles.concat(newFiles.filter((file: File) => (!contains(file, this.state.files))));
+    } else {
+      updatedFiles.splice(position, 0, ...newFiles);
+    }
 
     if (updatedFiles.length != this.state.files.length + newFiles.length) {
       alert("It is not allowed to have multiple files with the same name.")
@@ -39,6 +45,34 @@ class MainFrame extends React.Component<{}, {files: File[], selectedFile?: File}
       }
     );
   }
+
+  async split(file: File) {
+    let document : PDFDocument = await PDFDocument.load(await file.arrayBuffer());
+    let splits : File[] = [];
+    let pageDoc : PDFDocument;
+    let blob : any;
+    if (document.getPageCount() == 1) {
+      return
+    }
+
+    for (let i = 0; i < document.getPageCount(); i++) {
+      pageDoc = await PDFDocument.create();
+      let p : PDFPage[] = await pageDoc.copyPages(document, [i]);
+      pageDoc.addPage(p[0]);
+
+      blob = new Blob([await pageDoc.save()]);
+      blob.lastModifiedDate = new Date();
+      blob.name = "Page " + i.toString() + " of " + file.name;
+      splits.push(blob);
+    }
+    this.updateFiles(splits, this.state.files.findIndex((f) => (f == file)));
+    this.deleteEntry(file);
+    
+
+
+  }
+    
+    
 
 
   async updateSelected(newFile : File | undefined) {
@@ -82,7 +116,7 @@ class MainFrame extends React.Component<{}, {files: File[], selectedFile?: File}
       <div className={styles.mainFrame}>
         <div className={styles.listView}>
           <UploadButton text="Upload PDFs" updateFiles={this.updateFiles} />
-          <PDFsDisplay reorder={this.reorder} deleteEntry={this.deleteEntry} updateSelected={this.updateSelected} files={this.state.files} />
+          <PDFsDisplay reorder={this.reorder} deleteEntry={this.deleteEntry} updateSelected={this.updateSelected} split={this.split} files={this.state.files} />
           <SavePDFButton text="Download" files={this.state.files}/>
         </div>
         {
