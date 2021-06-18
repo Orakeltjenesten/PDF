@@ -17,10 +17,10 @@ class PreviewControls extends React.Component<{prev : () => void, next : () => v
   }
 }
 
-class PreviewText extends React.Component{
+class PreviewText extends React.Component<{file : File | undefined}, {}>{
   render() {
     return (
-      <div className={styles.previewText}>
+      <div className={`${styles.previewText} ${this.props.file == null? styles.hidden : styles.previewText}`}>
           Preview
       </div>
     )
@@ -71,7 +71,7 @@ export class PDFPreview extends React.Component<{file : File | undefined}, {page
     render() {
       return (
         <div className={styles.outer}>
-          <Document className={styles.documentView} file={this.props.file} onLoadSuccess={(pdf) => (this.setState({ numberPages : pdf.numPages}))}>
+          <Document className={styles.documentView} file={this.props.file} onLoadSuccess={(pdf) => (this.setState({ numberPages : pdf.numPages}))} noData="">
             
             {Array.from(Array(this.state.numberPages).keys()).map( (i) => {
             return <Page className={styles.pdfPage} pageNumber={i+1}>
@@ -81,7 +81,7 @@ export class PDFPreview extends React.Component<{file : File | undefined}, {page
           })}
           
           </Document>
-          <PreviewText />
+          <PreviewText file={this.props.file} />
           </div>
       ) 
     }

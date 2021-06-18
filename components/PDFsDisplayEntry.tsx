@@ -6,7 +6,25 @@ import classNames from "classnames";
 export class PDFsDisplayEntry extends React.Component<{file : File, index: number, clickDeleteEntry : (file : File) => void, updateSelected : (file: File) => void, split : (file : File) => void}, {}> { 
     constructor(props: {file : File, index: number, clickDeleteEntry : (file : File) => void, notifySelected : (file:File) => (void), updateSelected : (file: File) => void, split : (file : File) => void}) {
       super(props);
+      this.download = this.download.bind(this);
     }
+
+
+
+    download() {
+      let url = window.URL.createObjectURL(this.props.file);
+      let name = this.props.file.name;
+      var a = document.createElement("a");
+      document.body.appendChild(a);
+      a.setAttribute("style", "display: none;");
+  
+      // Set its download and href attributes accordingly to filename and URL of file
+      a.download = name;
+      a.href = url!;
+      a.click();
+      a.remove();
+    }
+
 
     render() {
     return (
@@ -17,6 +35,7 @@ export class PDFsDisplayEntry extends React.Component<{file : File, index: numbe
             <span title={this.props.file.name}>{this.props.file.name}</span>
           </div>
           <div className={styles.controls}> 
+            <button id="downloadButton" onClick={this.download}>DL</button>
             <button id="splitButton" onClick={(e) => (this.props.split(this.props.file))}>Split</button>
             <button id="deleteEntryButton" onClick={(e) => (this.props.clickDeleteEntry(this.props.file))}>Remove</button>
           </div>
