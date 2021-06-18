@@ -6,7 +6,14 @@ import { SavePDFButton } from "./SavePDFButton";
 import { UploadButton } from "./UploadButton";
 import styles from '../styles/Home.module.css'
 
-export class MainFrame extends React.Component<{}, {files: File[], selectedFile?: File}> {
+
+
+
+interface MainFrameProps {
+
+};
+
+export class MainFrame extends React.Component<MainFrameProps, {files: File[], selectedFile?: File}> {
     constructor(props: {}) {
       super(props);
       this.state = {files : [], selectedFile: undefined}
