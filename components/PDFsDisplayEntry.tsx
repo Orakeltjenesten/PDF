@@ -44,9 +44,9 @@ export class PDFsDisplayEntry extends React.Component<{file : File, index: numbe
             <span title={this.props.file.name}>{this.props.file.name}</span>
           </div>
           <div className={styles.controls}> 
-            <button style={{backgroundColor: this.getColor(this.props.file)}} className={styles.downloadButton} onClick={this.download}>➥</button>
-            <button className={styles.splitButton} onClick={(e) => (this.props.split(this.props.file))}>✄</button>
-            <button className={styles.deleteButton} onClick={(e) => (this.props.clickDeleteEntry(this.props.file))}>␡</button>
+            <button style={{backgroundColor: this.getColor(this.props.file)}} className={styles.downloadButton} onClick={this.download}>⬇️</button>
+            <button className={styles.splitButton} onClick={(e) => (this.props.split(this.props.file))}>✂️</button>
+            <button className={styles.deleteButton} onClick={(e) => (this.props.clickDeleteEntry(this.props.file))}>🗑</button>
           </div>
         </div>
         )}
