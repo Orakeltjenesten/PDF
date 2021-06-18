@@ -4,17 +4,38 @@ import { PDFPreview } from "./PDFPreview";
 import { PDFsDisplay } from "./PDFsDisplay";
 import { SavePDFButton } from "./SavePDFButton";
 import { UploadButton } from "./UploadButton";
-import styles from '../styles/Home.module.css'
+
+// Material UI Components
+import { withStyles, createStyles, WithStyles }  from '@material-ui/styles/';
+import { Theme } from "@material-ui/core/styles";
+import MuiContainer from '@material-ui/core/Container';
+
+const styles = (theme: Theme) => 
+  createStyles({
+      container: {
+          [theme.breakpoints.down('md')]: {
+          paddingRight: theme.spacing(2),
+          paddingLeft: theme.spacing(2),
+          },
+      },
+      listView: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      },
+      pdfPreview: {
+          display: 'flex',
+          justifyContent: 'center',
+      },
+});
 
 
-
-
-interface MainFrameProps {
+interface MainFrameProps extends WithStyles<typeof styles>{
 
 };
 
-export class MainFrame extends React.Component<MainFrameProps, {files: File[], selectedFile?: File}> {
-    constructor(props: {}) {
+class MainFrame extends React.Component<MainFrameProps, {files: File[], selectedFile?: File}> {
+    constructor(props: MainFrameProps) {
       super(props);
       this.state = {files : [], selectedFile: undefined}
       this.deleteEntry = this.deleteEntry.bind(this);
@@ -68,13 +89,8 @@ export class MainFrame extends React.Component<MainFrameProps, {files: File[], s
       }
       this.updateFiles(splits, this.state.files.findIndex((f) => (f == file)));
       this.deleteEntry(file);
-      
-  
-  
     }
       
-
-    
     updateSelected(newFile : File | undefined) {
         this.setState( 
             {
@@ -83,7 +99,6 @@ export class MainFrame extends React.Component<MainFrameProps, {files: File[], s
         )
         console.log(this.state);
     }
-
   
     reorder(from: number, to: number) {
       let newFiles = Array.from(this.state.files); // Copy the array, as arrays should not be changed directly
@@ -113,17 +128,20 @@ export class MainFrame extends React.Component<MainFrameProps, {files: File[], s
     }
   
     render() {
+      const { classes } = this.props;
       return (
-        <div className={styles.mainFrame}>
-          <div className={styles.listView}>
+        <MuiContainer className={classes.container}>
+          <div className={classes.listView}>
             <UploadButton text="Upload PDFs" updateFiles={this.updateFiles} />
             <PDFsDisplay reorder={this.reorder} deleteEntry={this.deleteEntry} updateSelected={this.updateSelected} split={this.split} files={this.state.files} />
             <SavePDFButton text="Download" files={this.state.files}/>
           </div>
           {
-          <div className={styles.preview}><PDFPreview file={this.state.selectedFile}/></div>
+          <div className={classes.pdfPreview}><PDFPreview file={this.state.selectedFile}/></div>
           }
-        </div>
+        </MuiContainer>
       )
     }
   }
+
+export default withStyles(styles)(MainFrame);
