@@ -15,7 +15,6 @@ export class PDFsDisplay extends React.Component<{files : File[], reorder : (fro
       <PDFsDisplayEntry split={this.props.split} index={index} file={file} clickDeleteEntry={this.props.deleteEntry} updateSelected={this.props.updateSelected} />
       )
     }
-
     onDragEnd = (result: DropResult) => {
       if (result.destination) {
         this.props.reorder(result.source.index, result.destination.index);

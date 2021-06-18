@@ -22,7 +22,10 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Topbar variant='dynamic'/>
+
+        
         <Component {...pageProps} />
+     
       </ThemeMaker>
 
     </>

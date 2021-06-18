@@ -21,7 +21,7 @@ class PreviewText extends React.Component<{file : File | undefined}, {}>{
   render() {
     return (
       <div className={`${styles.previewText} ${this.props.file == null? styles.hidden : styles.previewText}`}>
-          Preview
+          {this.props.file != null ? this.props.file!.name : ""}
       </div>
     )
   }

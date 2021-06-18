@@ -48,6 +48,7 @@ export class MainFrame extends React.Component<MainFrameProps, {files: File[], s
 
   
     async split(file: File) {
+      let colorNumber = Math.floor(Math.random() * 16777215)
       let document : PDFDocument = await PDFDocument.load(await file.arrayBuffer());
       let splits : File[] = [];
       let pageDoc : PDFDocument;
@@ -62,7 +63,7 @@ export class MainFrame extends React.Component<MainFrameProps, {files: File[], s
         pageDoc.addPage(p[0]);
   
         blob = new Blob([await pageDoc.save()]);
-        blob.lastModifiedDate = new Date();
+        blob.lastModifiedDate = colorNumber;
         blob.name = "Page " + i.toString() + " of " + file.name;
         splits.push(blob);
       }
