@@ -6,12 +6,16 @@ export class SavePDFButton extends React.Component<{text: string, files: File[]}
       super(props);
       this.getDownload = this.getDownload.bind(this);
     }
-    async assemblePDF(pdfs : PDFDocument[]) {
-      
+
+    async assemblePDF(files : File[]) {
+      let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
       const merged = await PDFDocument.create();
-      pdfs.forEach(async (pdf) => (await merged.copyPages(pdf, pdf.getPageIndices()))
-      .forEach((page) => merged.addPage(page))
-      );
+      for (let i=0; i < pdfs.length; i++) {
+        let pages = await merged.copyPages(pdfs[i], pdfs[i].getPageIndices());
+        for (let j=0; j < pages.length; j++) {
+          merged.addPage(pages[j]);
+        }
+      }
       
       return merged.save({addDefaultPage: false});
     }
@@ -26,11 +30,7 @@ export class SavePDFButton extends React.Component<{text: string, files: File[]}
         return
       } else {
         let pdfList : PDFDocument[] = [];
-        for (let i=0; i<this.props.files.length; i++) {
-            let pdf = await PDFDocument.load(await this.props.files[i].arrayBuffer());
-            pdfList.push(pdf);
-        }
-        const merged : Uint8Array = await this.assemblePDF(pdfList);
+        const merged : Uint8Array = await this.assemblePDF(this.props.files);
         url = window.URL.createObjectURL(new Blob([merged]));
         name = "merged.pdf"
       }
