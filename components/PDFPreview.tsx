@@ -3,15 +3,25 @@ import React from "react";
 import styles from '../styles/PDFPreview.module.css'
 import { Document, Page, pdfjs } from 'react-pdf'
 import { fileSave } from "browser-fs-access";
+import { ThirtyFpsSelect } from "@material-ui/icons";
 
 
 
-class PreviewControls extends React.Component<{prev : () => void, next : () => void}, {}> {
+class PreviewControls extends React.Component<{prev : () => void, next : () => void, page : number}, {}> {
   render() {
     return (
       <div className={styles.controls}>
-        <button onClick={this.props.prev}>prev</button>
-        <button onClick={this.props.next}>next</button>
+        {this.props.page}
+      </div>
+    )
+  }
+}
+
+class PreviewText extends React.Component{
+  render() {
+    return (
+      <div className={styles.previewText}>
+          Preview
       </div>
     )
   }
@@ -51,16 +61,28 @@ export class PDFPreview extends React.Component<{file : File | undefined}, {page
         })
     }
     }
+
+    pages() {
+      
+      
+      }
+
+
     render() {
       return (
-      <Document className={styles.documentView} file={this.props.file} onLoadSuccess={(pdf) => (    this.setState({ numberPages : pdf.numPages})   )}> 
-      
-        <Page className={styles.pdfPage} pageNumber={this.state.pageNumber} height={1100}>
-          <PreviewControls prev={() => {this.incrementPage(-1)}} next={() => {this.incrementPage(1)}} />
-        </Page>
-      
-      
-      </Document>
-      )
+        <div className={styles.outer}>
+          <Document className={styles.documentView} file={this.props.file} onLoadSuccess={(pdf) => (this.setState({ numberPages : pdf.numPages}))}>
+            
+            {Array.from(Array(this.state.numberPages).keys()).map( (i) => {
+            return <Page className={styles.pdfPage} pageNumber={i+1}>
+              
+              <PreviewControls page={i+1} prev={() => {this.incrementPage(-1)}} next={() => {this.incrementPage(1)}} />
+            </Page>
+          })}
+          
+          </Document>
+          <PreviewText />
+          </div>
+      ) 
     }
   }
