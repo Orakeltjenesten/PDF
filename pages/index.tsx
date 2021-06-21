@@ -21,7 +21,6 @@ export default function Home() {
             PDF Merger
           </h1>
         </div>
-
         <MainFrame/>
 
       

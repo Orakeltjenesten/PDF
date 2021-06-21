@@ -8,7 +8,7 @@ import { ThemeMaker } from '../hooks/ThemeContext';
 import {getTheme} from '../containers/theme';
 import Topbar from '../components/Topbar';
 import { CssBaseline } from '@material-ui/core';
-
+import FileContextWrapper from '../components/FileContextWrapper';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   
@@ -21,10 +21,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <ThemeMaker>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
+
         <Topbar variant='dynamic'/>
-        
-        <Component {...pageProps} />
-     
+        <FileContextWrapper>
+          <Component {...pageProps} />
+        </FileContextWrapper>
       </ThemeMaker>
 
     </>

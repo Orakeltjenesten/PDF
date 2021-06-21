@@ -5,11 +5,11 @@ import { fileSave } from "browser-fs-access";
 import { ThirtyFpsSelect } from "@material-ui/icons";
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
+import { FileContext } from "./FileContextWrapper";
 
 
 const styles =(theme: Theme) => 
   createStyles({
-       
   documentView : {
     overflowY: 'scroll',
     maxHeight: '80vh',
@@ -119,18 +119,6 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
       }
     }
 
-    async incrementPage(amount: number) {
-      if (this.props.file == null || this.state.numberPages == -1) {
-        return
-      }
-
-      if (this.state.pageNumber + amount > 0 && this.state.pageNumber + amount <= this.state.numberPages) {
-        this.setState({
-          pageNumber : this.state.pageNumber + amount
-        })
-    }
-    }
-
     pages() {
       
       
@@ -140,11 +128,13 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
     render() {
       const {classes} = this.props;
       return (
+        <FileContext.Consumer> 
+        { (context: any) => (
         <div className={classes.outer}>
-          <Document className={classes.documentView} file={this.props.file} onLoadSuccess={(pdf) => {this.setState({ numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
+          <Document className={classes.documentView} file={context.selectedFile} onLoadSuccess={(pdf) => {this.setState({ numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
             
             {this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
-            return <Page className={classes.pdfPage} pageNumber={i+1}>
+            return <Page className={classes.pdfPage} pageNumber={i+1} key={i}>
               
               <PreviewControls page={i+1} />
             </Page>
@@ -153,6 +143,8 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
           </Document>
           <PreviewText file={this.props.file} />
           </div>
+        )}
+          </FileContext.Consumer>
       )
     }
   }
