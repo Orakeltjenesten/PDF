@@ -12,7 +12,7 @@ export class PDFsDisplay extends React.Component<{files : File[], reorder : (fro
     }
     pdfList() {
       return this.props.files.map((file : File, index : number) => 
-      <PDFsDisplayEntry split={this.props.split} index={index} file={file} clickDeleteEntry={this.props.deleteEntry} updateSelected={this.props.updateSelected} />
+      <PDFsDisplayEntry split={this.props.split} index={index} file={file} key={file.name} clickDeleteEntry={this.props.deleteEntry} updateSelected={this.props.updateSelected} />
       )
     }
     onDragEnd = (result: DropResult) => {
