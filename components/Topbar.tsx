@@ -146,9 +146,7 @@ const Topbar = ({ variant }: TopbarProps) => {
       position='fixed'>
       <Toolbar disableGutters>
         <div className={classes.toolbar}>
-          <Link href='/index'>
-            <Logo darkColor={'white'} lightColor={'black'} />
-          </Link>
+          <Logo darkColor={'white'} lightColor={'black'} />
           <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
             <div className={classnames(classes.items, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
               {items.map((item, i) => (

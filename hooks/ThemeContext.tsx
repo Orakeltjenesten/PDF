@@ -1,15 +1,10 @@
-import { useCallback, useState, useLayoutEffect, useEffect, useContext, createContext, ReactNode } from 'react';
+import { useCallback, useState, useEffect, useContext, createContext, ReactNode } from 'react';
 import { getCookie, setCookie } from '../utils/cookie';
 import { getTheme, themes, ThemeTypes } from '../containers/theme';
 import { ThemeProvider } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const THEME_COOKIE = 'theme-cookie';
-
-// Material UI Components
-import { makeStyles, createStyles}  from '@material-ui/styles/';
-import { Theme } from "@material-ui/core/styles";
-
 
 interface ContextProps {
   getThemeFromStorage: () => ThemeTypes;
@@ -60,7 +55,7 @@ const ThemeMaker = ({ children }: { children: ReactNode }) => {
 
   const themeStore = { getThemeFromStorage: getThemeFromStorage, set: updateTheme};
 
-  useLayoutEffect(() => updateTheme(getThemeFromStorage()), [getThemeFromStorage, updateTheme]);
+  useEffect(() => updateTheme(getThemeFromStorage()), [getThemeFromStorage, updateTheme]);
 
   return (
     <ThemeContext.Provider value={themeStore}>
