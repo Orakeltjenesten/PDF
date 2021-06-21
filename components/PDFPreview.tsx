@@ -13,7 +13,9 @@ const styles =(theme: Theme) =>
   documentView : {
     overflowY: 'scroll',
     maxHeight: '80vh',
-    position: 'relative'
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column'
   },
 
   pdfPage : {
@@ -23,8 +25,13 @@ const styles =(theme: Theme) =>
   },
 
   outer : {
-    position: 'relative'
-}
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '80vh',
+    minWidth: '500px'
+  }
 
 });
 
@@ -99,7 +106,7 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
         this.state = {
           pageNumber: 1,
-          numberPages: 0
+          numberPages: -1
         }
     }
 
@@ -113,7 +120,7 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
     }
 
     async incrementPage(amount: number) {
-      if (this.props.file == null) {
+      if (this.props.file == null || this.state.numberPages == -1) {
         return
       }
 
@@ -134,19 +141,19 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
       const {classes} = this.props;
       return (
         <div className={classes.outer}>
-          <Document className={classes.documentView} file={this.props.file} onLoadSuccess={(pdf) => (this.setState({ numberPages : pdf.numPages}))} noData="">
+          <Document className={classes.documentView} file={this.props.file} onLoadSuccess={(pdf) => {this.setState({ numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
             
-            {Array.from(Array(this.state.numberPages).keys()).map( (i) => {
+            {this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
             return <Page className={classes.pdfPage} pageNumber={i+1}>
               
               <PreviewControls page={i+1} />
             </Page>
-          })}
+          }) : <div />}
           
           </Document>
           <PreviewText file={this.props.file} />
           </div>
-      ) 
+      )
     }
   }
 

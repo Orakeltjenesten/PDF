@@ -23,11 +23,13 @@ const styles = (theme: Theme) =>
 
       },
       listView: {
+        borderRight: '0',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        flex: '1'
+        flex: '1',
+        maxHeight: '80vh'
       },
       pdfPreview: {
           display: 'flex',
@@ -145,9 +147,7 @@ class MainFrame extends React.Component<MainFrameProps, {files: File[], selected
             <PDFsDisplay reorder={this.reorder} deleteEntry={this.deleteEntry} updateSelected={this.updateSelected} split={this.split} files={this.state.files} />
             <SavePDFButton text="Download" files={this.state.files}/>
           </div>
-          {
           <div className={classes.pdfPreview}><PDFPreview file={this.state.selectedFile}/></div>
-          }
         </MuiContainer>
       )
     }
