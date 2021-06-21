@@ -13,20 +13,27 @@ import MuiContainer from '@material-ui/core/Container';
 const styles = (theme: Theme) => 
   createStyles({
       container: {
-          [theme.breakpoints.down('md')]: {
+          [theme.breakpoints.down('xl')]: {
           paddingRight: theme.spacing(2),
           paddingLeft: theme.spacing(2),
           },
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+
       },
       listView: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        justifyContent: 'center',
+        flex: '1'
       },
       pdfPreview: {
           display: 'flex',
-          justifyContent: 'center'
-
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: '1'
       },
 });
 
@@ -132,7 +139,7 @@ class MainFrame extends React.Component<MainFrameProps, {files: File[], selected
     render() {
       const { classes } = this.props;
       return (
-        <MuiContainer className={classes.container}>
+        <MuiContainer className={classes.container} maxWidth={false}>
           <div className={classes.listView}>
             <UploadButton text="Upload PDFs" updateFiles={this.updateFiles} />
             <PDFsDisplay reorder={this.reorder} deleteEntry={this.deleteEntry} updateSelected={this.updateSelected} split={this.split} files={this.state.files} />
