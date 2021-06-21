@@ -1,9 +1,9 @@
 import React from "react";
-import { PDFsDisplayEntry } from "./PDFsDisplayEntry";
 import { DragDropContext, DropResult} from 'react-beautiful-dnd';
 import { Droppable } from "react-beautiful-dnd";
 import { PersonalVideoRounded } from "@material-ui/icons";
 import styles from '../styles/Home.module.css'
+import PDFsDisplayEntry from "./PDFsDisplayEntry";
 
 
 export class PDFsDisplay extends React.Component<{files : File[], reorder : (from: number, to: number) => void, deleteEntry : (file: File) => void, updateSelected : (file: File) => void, split : (file : File) => void}, {}> {

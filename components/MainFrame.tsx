@@ -1,6 +1,6 @@
 import { PDFDocument, PDFPage } from "pdf-lib";
 import React from "react";
-import { PDFPreview } from "./PDFPreview";
+import PDFPreview from "./PDFPreview";
 import { PDFsDisplay } from "./PDFsDisplay";
 import { SavePDFButton } from "./SavePDFButton";
 import { UploadButton } from "./UploadButton";
@@ -25,7 +25,8 @@ const styles = (theme: Theme) =>
       },
       pdfPreview: {
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'center'
+
       },
 });
 
