@@ -1,10 +1,15 @@
-import { useCallback, useState, useLayoutEffect, useContext, createContext, ReactNode } from 'react';
+import { useCallback, useState, useLayoutEffect, useEffect, useContext, createContext, ReactNode } from 'react';
 import { getCookie, setCookie } from '../utils/cookie';
 import { getTheme, themes, ThemeTypes } from '../containers/theme';
 import { ThemeProvider } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const THEME_COOKIE = 'theme-cookie';
+
+// Material UI Components
+import { makeStyles, createStyles}  from '@material-ui/styles/';
+import { Theme } from "@material-ui/core/styles";
+
 
 interface ContextProps {
   getThemeFromStorage: () => ThemeTypes;
@@ -13,7 +18,10 @@ interface ContextProps {
 
 const ThemeContext = createContext<ContextProps | undefined>(undefined);
 
-const ThemeMaker = ({ children }: { children?: ReactNode }) => {
+const ThemeMaker = ({ children }: { children: ReactNode }) => {
+  const [mounted, setMounted] = useState(false);
+
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [selectedTheme, setSelectedTheme] = useState<ThemeTypes>('automatic');
 
@@ -35,6 +43,7 @@ const ThemeMaker = ({ children }: { children?: ReactNode }) => {
         setSelectedTheme('automatic');
         setCookie(THEME_COOKIE, 'automatic');
       }
+      setMounted(true);
     },
     [getThemeType],
   );
@@ -49,14 +58,14 @@ const ThemeMaker = ({ children }: { children?: ReactNode }) => {
     }
   }, [getThemeType]);
 
-  const themeStore = { getThemeFromStorage: getThemeFromStorage, set: updateTheme };
+  const themeStore = { getThemeFromStorage: getThemeFromStorage, set: updateTheme};
 
   useLayoutEffect(() => updateTheme(getThemeFromStorage()), [getThemeFromStorage, updateTheme]);
 
   return (
     <ThemeContext.Provider value={themeStore}>
-      <ThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)}>
-        {children}
+      <ThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)} >
+        {mounted && children}
       </ThemeProvider>
     </ThemeContext.Provider>
   );

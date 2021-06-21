@@ -49,7 +49,6 @@ const Logo = ({ className, darkColor, lightColor }: LogoProps) => {
         x="0px" 
         y="0px"
         xmlSpace="preserve"
-        preserveAspectRatio="true"
         >
         <g>
             <g>
