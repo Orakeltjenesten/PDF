@@ -13,7 +13,7 @@ interface ContextProps {
 
 const ThemeContext = createContext<ContextProps | undefined>(undefined);
 
-const ThemeMaker = ({ children }: { children: ReactNode }) => {
+const ThemeMaker = ({ children }: { children?: ReactNode }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [selectedTheme, setSelectedTheme] = useState<ThemeTypes>('automatic');
 

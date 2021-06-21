@@ -14,12 +14,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   
   return (
     <>
-      <Head>
-        <title>My page</title>
-        <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-      </Head>
       <ThemeMaker>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
 
         <Topbar variant='dynamic'/>
