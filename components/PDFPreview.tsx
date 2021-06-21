@@ -1,43 +1,112 @@
-import { PDFDocument, toUint8Array } from "pdf-lib";
+import { FieldExistsAsNonTerminalError, PDFDocument, toUint8Array } from "pdf-lib";
 import React from "react";
-import styles from '../styles/PDFPreview.module.css'
 import { Document, Page, pdfjs } from 'react-pdf'
 import { fileSave } from "browser-fs-access";
 import { ThirtyFpsSelect } from "@material-ui/icons";
+import { Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
+import { FileContext } from "./FileContextWrapper";
+
+
+const styles =(theme: Theme) => 
+  createStyles({
+  documentView : {
+    overflowY: 'scroll',
+    maxHeight: '80vh',
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+
+  pdfPage : {
+    position: 'relative',
+    margin: '7px',
+    border: '1px solid black'
+  },
+
+  outer : {
+    position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '80vh',
+    minWidth: '500px'
+  }
+
+});
+
+const useStyles = makeStyles((theme: Theme) => 
+    createStyles({
+      controls : {
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bottom: '0',
+        left: '0',
+        right: '0',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        padding: '4px',
+        width: '200px'
+      },
+
+      previewText : {
+        border: '1px solid black',
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: '7px',
+        left: '0',
+        right: '0',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        padding: '4px',
+        width: '500px',
+        fontSize: '22px',
+        backgroundColor: 'white'
+      },
+
+      hidden : {
+        display: 'none'
+      }
+    }));
 
 
 
-class PreviewControls extends React.Component<{prev : () => void, next : () => void, page : number}, {}> {
-  render() {
+const PreviewControls = (props: {page: number}) => {
+  const classes = useStyles({});
     return (
-      <div className={styles.controls}>
-        {this.props.page}
+      <div className={classes.controls}>
+        {props.page}
       </div>
     )
-  }
 }
 
-class PreviewText extends React.Component<{file : File | undefined}, {}>{
-  render() {
-    return (
-      <div className={`${styles.previewText} ${this.props.file == null? styles.hidden : styles.previewText}`}>
-          {this.props.file != null ? this.props.file!.name : ""}
-      </div>
-    )
-  }
+const PreviewText = (props: {file : File | undefined}) => {
+  const classes = useStyles({});
+  return (
+    <div className={`${classes.previewText} ${props.file == null? classes.hidden : classes.previewText}`}>
+        {props.file != null ? props.file!.name : ""}
+    </div>
+  )
 }
 
 
 
+interface PDFPreviewProps extends WithStyles<typeof styles> {
+  file: File | undefined
+}
 
-
-export class PDFPreview extends React.Component<{file : File | undefined}, {pageNumber : number, numberPages : number}> {
-    constructor(props: {file : File, numberPages : number}) {
+class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, numberPages : number}> {
+    constructor(props: PDFPreviewProps) {
         super(props);
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
         this.state = {
           pageNumber: 1,
-          numberPages: 0
+          numberPages: -1
         }
     }
 
@@ -50,18 +119,6 @@ export class PDFPreview extends React.Component<{file : File | undefined}, {page
       }
     }
 
-    async incrementPage(amount: number) {
-      if (this.props.file == null) {
-        return
-      }
-
-      if (this.state.pageNumber + amount > 0 && this.state.pageNumber + amount <= this.state.numberPages) {
-        this.setState({
-          pageNumber : this.state.pageNumber + amount
-        })
-    }
-    }
-
     pages() {
       
       
@@ -69,20 +126,27 @@ export class PDFPreview extends React.Component<{file : File | undefined}, {page
 
 
     render() {
+      const {classes} = this.props;
       return (
-        <div className={styles.outer}>
-          <Document className={styles.documentView} file={this.props.file} onLoadSuccess={(pdf) => (this.setState({ numberPages : pdf.numPages}))} noData="">
+        <FileContext.Consumer> 
+        { (context: any) => (
+        <div className={classes.outer}>
+          <Document className={classes.documentView} file={context.selectedFile} onLoadSuccess={(pdf) => {this.setState({ numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
             
-            {Array.from(Array(this.state.numberPages).keys()).map( (i) => {
-            return <Page className={styles.pdfPage} pageNumber={i+1}>
+            {this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
+            return <Page className={classes.pdfPage} pageNumber={i+1} key={i}>
               
-              <PreviewControls page={i+1} prev={() => {this.incrementPage(-1)}} next={() => {this.incrementPage(1)}} />
+              <PreviewControls page={i+1} />
             </Page>
-          })}
+          }) : <div />}
           
           </Document>
           <PreviewText file={this.props.file} />
           </div>
-      ) 
+        )}
+          </FileContext.Consumer>
+      )
     }
   }
+
+  export default withStyles(styles)(PDFPreview);

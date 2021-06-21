@@ -60,7 +60,10 @@ const ThemeMaker = ({ children }: { children: ReactNode }) => {
   return (
     <ThemeContext.Provider value={themeStore}>
       <ThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)} >
-        {mounted && children}
+
+        <div style={{display: mounted ? 'block' : 'none'}}>
+          {children}
+        </div>
       </ThemeProvider>
     </ThemeContext.Provider>
   );
