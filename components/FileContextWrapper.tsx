@@ -16,8 +16,6 @@ class FileContextWrapper extends React.Component<{}, {files: File[], selectedFil
   
         let updatedFiles = Array.from(this.state.files);
         let contains = (file: File, files: File[]) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
-        console.log(newFiles);
-        console.log(updatedFiles);
         if (position == -1) {
           updatedFiles = updatedFiles.concat(newFiles.filter((file: File) => (!contains(file, this.state.files))));
         } else {
