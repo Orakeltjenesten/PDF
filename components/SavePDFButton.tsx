@@ -1,7 +1,9 @@
+import { ThemeContext } from "@emotion/react";
 import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
+import { FileContext } from "./FileContextWrapper";
 
-export class SavePDFButton extends React.Component<{text: string, files: File[]}, {}> {
+export class SavePDFButton extends React.Component<{text: string}, {}> {
     constructor(props: {text: string, files: File[]}) {
       super(props);
       this.getDownload = this.getDownload.bind(this);
@@ -20,17 +22,17 @@ export class SavePDFButton extends React.Component<{text: string, files: File[]}
       return merged.save({addDefaultPage: false});
     }
   
-    async getDownload(e : SyntheticEvent) {
+    async getDownload(e : SyntheticEvent, context: any) {
       e.preventDefault();
       let url: string;
       let name: string;
   
-      if (this.props.files == null || this.props.files.length == 0) {
+      if (context.files == null || context.files.length == 0) {
         alert("No files were uploaded.")
         return
       } else {
         let pdfList : PDFDocument[] = [];
-        const merged : Uint8Array = await this.assemblePDF(this.props.files);
+        const merged : Uint8Array = await this.assemblePDF(context.files);
         url = window.URL.createObjectURL(new Blob([merged]));
         name = "merged.pdf"
       }
@@ -48,7 +50,14 @@ export class SavePDFButton extends React.Component<{text: string, files: File[]}
     }
   
     render() {
-      return <input className="button" type="button" value={this.props.text} onClick={this.getDownload} />;
+      return <FileContext.Consumer>
+        {(context) => (
+          <input className="button" type="button" value={this.props.text} onClick={(e) => this.getDownload(e, context)} />
+      )
+        }
+      </FileContext.Consumer>
+      
+      
     }
   
   }

@@ -3,7 +3,7 @@ import React, { SyntheticEvent } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { FileContext } from "./FileContextWrapper";
 
-export class UploadButton extends React.Component<{text: string, updateFiles: (files: File[]) => void}, {}> {
+export class UploadButton extends React.Component<{text: string}, {}> {
     constructor(props: {text: string, updateFiles: (files: File[]) => void}) {
       super(props);
     }

@@ -54,9 +54,9 @@ class MainFrame extends React.Component<MainFrameProps, {}> {
       return (
         <MuiContainer className={classes.container} maxWidth={false}>
           <div className={classes.listView}>
-            <UploadButton text="Upload PDFs" updateFiles={this.context.updateFiles} />
+            <UploadButton text="Upload PDFs" />
             <PDFsDisplay />
-            <SavePDFButton text="Download" files={this.context.files}/>
+            <SavePDFButton text="Download"/>
           </div>
           <div className={classes.pdfPreview}><PDFPreview file={this.context.selectedFile}/></div>
         </MuiContainer>
