@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect, useContext, createContext, ReactNode } from 'react';
+import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import { getCookie, setCookie } from '../utils/cookie';
 import { getTheme, themes, ThemeTypes } from '../containers/theme';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -55,12 +56,11 @@ const ThemeMaker = ({ children }: { children: ReactNode }) => {
 
   const themeStore = { getThemeFromStorage: getThemeFromStorage, set: updateTheme};
 
-  useEffect(() => updateTheme(getThemeFromStorage()), [getThemeFromStorage, updateTheme]);
+  useIsomorphicLayoutEffect(() => updateTheme(getThemeFromStorage()), [getThemeFromStorage, updateTheme]);
 
   return (
     <ThemeContext.Provider value={themeStore}>
       <ThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)} >
-
         <div style={{display: mounted ? 'block' : 'none'}}>
           {children}
         </div>

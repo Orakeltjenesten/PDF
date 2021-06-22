@@ -97,7 +97,7 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
       MuiCssBaseline: {
         styleOverrides: {
           body: {
-            background: get<string>({ light: 'linear-gradient(45deg, #e3ffe7 0%, #d9e7ff 100%);', dark: 'linear-gradient(45deg, rgba(40,13,41,1) 0%, rgba(16,16,73,1) 100%)' }),
+            background: get<string>({ light: 'linear-gradient(45deg, rgba(209,234,235,1) 0%, rgba(235,240,196,1) 100%)', dark: 'linear-gradient(45deg, rgba(72,39,119,1) 0%, rgba(0,80,158,1) 100%)' }),
             // eslint-disable-next-line @typescript-eslint/ban-types
             ...get<object>({ light: {}, dark: darkScrollbar() }),
           },

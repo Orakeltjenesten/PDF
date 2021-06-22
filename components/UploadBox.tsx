@@ -19,7 +19,7 @@ export type UploadedFile = {
 };
 
 
-const UploadBox = () => {
+const UploadBox = ({ children }: { children: ReactNode }) => {
     const [files, setFiles] = useState<UploadedFile[]>([]);
     const onDrop = useCallback((accFiles:File[], rejFiles: FileRejection[]) => {
         const mappedAcc = accFiles.map(file => ({file, errors: []}));
@@ -29,11 +29,16 @@ const UploadBox = () => {
   const {getRootProps, getInputProps} = useDropzone({onDrop})
 
   return (
-      <div {...getRootProps}>
-          <input {...getInputProps()}/>
+      <>
+        <div {...getRootProps}>
+            <input {...getInputProps()}/>
 
-          <Typography>{JSON.stringify(files)}</Typography>
-      </div>
+            <Typography>{JSON.stringify(files)}</Typography>
+        </div>
+
+        {files.map(fileWrapper => {
+        })}
+      </>
   );
 };
 
