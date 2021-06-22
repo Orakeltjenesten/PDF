@@ -168,11 +168,9 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
     typography: {
       h1: {
         fontSize: '3.1rem',
-        fontFamily: 'Playfair Display, Roboto, sans-serif',
         fontWeight: 800,
       },
       h2: {
-        fontFamily: 'Cabin, Roboto, sans-serif',
         fontSize: '2.2rem',
         fontWeight: 700,
       },
