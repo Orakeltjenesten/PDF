@@ -4,7 +4,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { PersonalVideoRounded } from "@material-ui/icons";
 import styles from '../styles/Home.module.css'
 import PDFDisplayEntry from "./PDFDisplayEntry/PDFDisplayEntry";
-import FileContextWrapper, { FileContext } from "./FileContextWrapper";
+import { FileContext } from "../hooks/FileContext";
 
 
 export class PDFsDisplay extends React.Component<{}, {}> {

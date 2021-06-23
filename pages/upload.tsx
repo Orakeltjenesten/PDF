@@ -1,14 +1,11 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import React from 'react'
-import MainFrame  from '../components/MainFrame'
 import UploadBox from '../components/UploadBox'
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
-import { Button, Typography } from '@material-ui/core'
-import Logo from '../components/Logo'
+import { Typography } from '@material-ui/core'
 
 
 const useStyles = makeStyles((theme: Theme) => 
