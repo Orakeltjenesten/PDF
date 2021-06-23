@@ -1,13 +1,13 @@
-import React, { useCallback, useState, createContext, ReactNode, useContext } from 'react';
+import React, { useCallback, useState, createContext, ReactNode} from 'react';
 import { PDFDocument, PDFPage } from "pdf-lib";
 
 
 interface ContextProps {
     files: File[];
-    addFiles: (n: File[], index?: any) => void;
-    splitFile: (index: any) => void;
-    reorderFiles: (n: any, m: any) => void;
-    deleteFile: (n: File) => void;
+    addFiles: (files: File[], index?: any) => void;
+    splitFile: (file: File) => void;
+    reorderFiles: (a: any, b: any) => void;
+    deleteFile: (file: File) => void;
 }
 
 const FileContext = createContext<ContextProps | undefined>(undefined)
@@ -19,17 +19,32 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
     (newFiles : File[], index?) => {
       let updatedFiles = Array.from(uploadedFiles);
       let contains = (file: File, files: File[]) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
-      if (!index) {
+      if (index == undefined) {
         updatedFiles = updatedFiles.concat(newFiles.filter((file: File) => (!contains(file, uploadedFiles))));
       } else {
         updatedFiles.splice(index, 0, ...newFiles);
       }
-  
+      
       if (updatedFiles.length != uploadedFiles.length + newFiles.length) {
         alert("It is not allowed to have multiple files with the same name.")
       }
-  
       setUploadedFiles(updatedFiles);
+    },
+    [uploadedFiles]
+  );
+
+  const deleteFile = useCallback(
+    async (file: File) => {
+      let newFiles = Array.from(uploadedFiles);
+      
+      for (let i = 0; i < newFiles.length; i++) {
+        if (file === newFiles[i]) {
+          newFiles.splice(i, 1); 
+          break;
+        }
+      }
+
+      setUploadedFiles(newFiles);
     },
     [uploadedFiles]
   );
@@ -55,35 +70,23 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
         blob.name = "Page " + i.toString() + " of " + file.name;
         splits.push(blob);
       }
-      addFiles(splits, uploadedFiles.findIndex((f) => (f == file)));
-      deleteFile(file);
+      let index =  uploadedFiles.findIndex((f) => (f == file));
+      let updatedFiles = Array.from(uploadedFiles);
+      updatedFiles.splice(index, 1, ...splits);
+
+      setUploadedFiles(updatedFiles);
     },
     [uploadedFiles]
   );
 
   const reorderFiles = useCallback(
-    (from: number, to: number) => {
+     (from: number, to: number) => {
       if(from > 0 && from < uploadedFiles.length && to > 0 && to < uploadedFiles.length){
         let newFiles = Array.from(uploadedFiles); // Copy the array, as arrays should not be changed directly
         let [deleted] = newFiles.splice(from, 1);
         newFiles.splice(to, 0, deleted);
         setUploadedFiles(newFiles);
       }
-    },
-    [uploadedFiles]
-  );
-  const deleteFile = useCallback(
-    (file: File) => {
-      let newFiles = Array.from(uploadedFiles);
-      
-      for (let i = 0; i < newFiles.length; i++) {
-        if (file === newFiles[i]) {
-          newFiles.splice(i, 1); 
-          break;
-        }
-      }
-
-      setUploadedFiles(newFiles);
     },
     [uploadedFiles]
   );
@@ -96,14 +99,5 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
     </FileContext.Provider>
   );
 }
-
-
-const useFileContext = () => {
-  const context = useContext(FileContext);
-  if (context === undefined) {
-    throw new Error('Must be used within a file context provider');
-  }
-  return context;
-};
 
 export { FileContextWrapper, FileContext };
