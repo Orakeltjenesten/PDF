@@ -5,7 +5,7 @@ import { fileSave } from "browser-fs-access";
 import { ThirtyFpsSelect } from "@material-ui/icons";
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
-import { FileContext } from "./FileContextWrapper";
+import { FileContext } from "../hooks/FileContext";
 
 
 const styles =(theme: Theme) => 
@@ -85,11 +85,11 @@ const PreviewControls = (props: {page: number}) => {
     )
 }
 
-const PreviewText = (props: {file : File | undefined}) => {
+const PreviewText = (props: {text: string}) => {
   const classes = useStyles({});
   return (
-    <div className={`${classes.previewText} ${props.file == null? classes.hidden : classes.previewText}`}>
-        {props.file != null ? props.file!.name : ""}
+    <div className={classes.previewText}>
+        {props.text}
     </div>
   )
 }
@@ -97,32 +97,45 @@ const PreviewText = (props: {file : File | undefined}) => {
 
 
 interface PDFPreviewProps extends WithStyles<typeof styles> {
-  file: File | undefined
+  files: File[] | undefined
 }
 
-class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, numberPages : number}> {
+class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | undefined, pageNumber : number, numberPages : number}> {
     constructor(props: PDFPreviewProps) {
         super(props);
-        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
         this.state = {
+          mergedPDF: undefined,
           pageNumber: 1,
           numberPages: -1
         }
     }
 
-    componentDidUpdate(prevProps : any) {
-      if (this.props.file != prevProps.file) {
-        this.setState({
-          pageNumber: 1
-        }
-        )
+    async componentDidUpdate(prevProps : any) {
+      if (this.props.files != null && this.props.files != prevProps.files) {
+        let file : File = await this.assemblePDF(this.props.files!)
+        this.setState( {
+          mergedPDF : file
+        })
       }
     }
 
-    pages() {
-      
-      
+    async assemblePDF(files : File[]) {
+      let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
+      const merged = await PDFDocument.create();
+      for (let i=0; i < pdfs.length; i++) {
+        let pages = await merged.copyPages(pdfs[i], pdfs[i].getPageIndices());
+        for (let j=0; j < pages.length; j++) {
+          merged.addPage(pages[j]);
+        }
       }
+      let blob : any = new Blob([await merged.save({addDefaultPage: false})], {type:"application/pdf"});
+      blob.name = "preview.pdf";
+      blob.lastModified = 0;
+      return blob
+
+    }
+
 
 
     render() {
@@ -131,9 +144,9 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
         <FileContext.Consumer> 
         { (context: any) => (
         <div className={classes.outer}>
-          <Document className={classes.documentView} file={context.selectedFile} onLoadSuccess={(pdf) => {this.setState({ numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
+          <Document className={classes.documentView} loading={"Laster..."} file={this.state.mergedPDF} onLoadSuccess={(pdf) => {this.setState({numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
             
-            {this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
+            {this.state.mergedPDF != null && this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
             return <Page className={classes.pdfPage} pageNumber={i+1} key={i}>
               
               <PreviewControls page={i+1} />
@@ -141,7 +154,7 @@ class PDFPreview extends React.Component<PDFPreviewProps, {pageNumber : number, 
           }) : <div />}
           
           </Document>
-          <PreviewText file={this.props.file} />
+          <PreviewText text="Preview" />
           </div>
         )}
           </FileContext.Consumer>

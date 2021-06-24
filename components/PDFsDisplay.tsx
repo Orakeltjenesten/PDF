@@ -18,7 +18,7 @@ export class PDFsDisplay extends React.Component<{}, {}> {
     }
     onDragEnd = (result: DropResult, context: any) => {
       if (result.destination) {
-        context.reorder(result.source.index, result.destination.index);
+        context.reorderFiles(result.source.index, result.destination.index);
       }
     };
   
