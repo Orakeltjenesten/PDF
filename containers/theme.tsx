@@ -45,9 +45,9 @@ declare module '@material-ui/core/styles/createPalette' {
 }
 
 export const themesDetails = [
-  { key: 'light', name: 'Lyst', icon: LightIcon },
-  { key: 'automatic', name: 'Automatisk', icon: AutomaticIcon },
-  { key: 'dark', name: 'Mørkt', icon: DarkIcon },
+  { key: 'light', name: 'Light', icon: LightIcon },
+  { key: 'automatic', name: 'Auto', icon: AutomaticIcon },
+  { key: 'dark', name: 'Dark', icon: DarkIcon },
 ] as const;
 
 export const themes = themesDetails.map((theme) => theme.key);

@@ -7,7 +7,7 @@ import Sidebar from './Sidebar';
 import Logo from './Logo';
 
 // Material UI Components
-import { makeStyles, createStyles}  from '@material-ui/styles/';
+import { makeStyles, createStyles}  from '@material-ui/styles';
 import { Theme } from "@material-ui/core/styles";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -99,14 +99,12 @@ const TopBarItem = ({ text, to }: TopBarItemProps) => {
   const router = useRouter()
   const classes = useStyles({});
   const partial = useMemo(() => router.asPath.substr(0, to.length) === to, [router.asPath, to]);
-  const equal = useMemo(() => router.asPath === to, [router.asPath, to]);
 
   return (
       <Link href={to}>
           <Button 
           className={classes.topbarItem}
           color='inherit'
-          onClick={equal ? () => window.location.reload() : undefined}
           variant={partial ? 'outlined' : 'text'}>
             {text}
           </Button>

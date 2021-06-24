@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 
 // Material UI Components
-import { makeStyles, createStyles }  from '@material-ui/styles/';
+import { makeStyles, createStyles }  from '@material-ui/styles';
 import { Theme } from "@material-ui/core/styles";
 import { useTheme } from '@material-ui/core/styles';
 import { useMemo } from 'react';
