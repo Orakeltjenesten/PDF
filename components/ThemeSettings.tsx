@@ -3,7 +3,7 @@ import { useThemeSettings } from '../hooks/ThemeContext';
 import { ThemeTypes, themesDetails } from '../containers/theme';
 
 // Material-ui
-import { makeStyles, createStyles}  from '@material-ui/styles/';
+import { makeStyles, createStyles}  from '@material-ui/styles';
 import { Theme } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import ToggleButton from '@material-ui/core/ToggleButton';
