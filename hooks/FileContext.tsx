@@ -1,5 +1,5 @@
 import React, { useCallback, useState, createContext, ReactNode} from 'react';
-import { PDFDocument, PDFPage } from "pdf-lib";
+import { PDFDocument, PDFPage, scale } from "pdf-lib";
 
 
 interface ContextProps {
@@ -10,6 +10,33 @@ interface ContextProps {
     deleteFile: (file: File) => void;
 }
 
+async function pdfFromImage(imageFile : File) {
+  let imgPDF : PDFDocument = await PDFDocument.create();
+  let image;
+  if (imageFile.type == "image/png") {
+    image = await imgPDF.embedPng(await imageFile.arrayBuffer());
+  } else {
+    image = await imgPDF.embedJpg(await imageFile.arrayBuffer());
+  }
+  let page = imgPDF.addPage([600, 1000]);
+  let scale = image.scale(1);
+
+  scale = image.scale(Math.min(550/image.width, 950/image.height, 1));
+
+  page.drawImage(image, {
+    x: page.getWidth() / 2 - scale.width / 2,
+    y: page.getHeight() / 2 - scale.height / 2,
+    width: scale.width,
+    height: scale.height,
+  })
+  let imagePDFFile : any = new Blob([await imgPDF.save()], {type: "application/pdf"});
+  imagePDFFile.name = imageFile.name + " as pdf.pdf"
+  imagePDFFile.lastModified = 0;
+  return (imagePDFFile as File);
+}
+
+let contains = (files: File[], file: File) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
+
 const FileContext = createContext<ContextProps | undefined>(undefined)
 
 const FileContextWrapper = ({children }: {children: ReactNode}) => {
@@ -17,39 +44,24 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
 
   const addFiles = useCallback(
     async (newFiles : File[], index?) => {
+      let updatedFiles = Array.from(uploadedFiles);
+      let filesToAdd : File[] = [];
       for (let i=0; i < newFiles.length; i++) {
         if (newFiles[i].type == "image/png" || newFiles[i].type == "image/jpg") {
-          let imgPDF : PDFDocument = await PDFDocument.create();
-          let image;
-          if (newFiles[i].type == "image/png") {
-            image = await imgPDF.embedPng(await newFiles[i].arrayBuffer());
-          } else {
-            image = await imgPDF.embedJpg(await newFiles[i].arrayBuffer());
-          }
-          let page = imgPDF.addPage([600, 1000]);
-          let scale = image.scale(550 / image.width);
-
-          page.drawImage(image, {
-            x: page.getWidth() / 2 - scale.width / 2,
-            y: page.getHeight() / 2 - scale.height / 2,
-            width: scale.width,
-            height: scale.height,
-          })
-          let imagePDFFile : any = new Blob([await imgPDF.save()], {type: "application/pdf"});
-          imagePDFFile.name = newFiles[i].name + " as pdf.pdf"
-          imagePDFFile.lastModified = 0;
-          newFiles.splice(i, 1, (imagePDFFile as File))
+          newFiles.splice(i, 1, await pdfFromImage(newFiles[i]));
+        }
+        if (contains(updatedFiles, newFiles[i])) {
+          alert(newFiles[i].name + " is the name of an existing file - it will not be uploaded."); 
+          newFiles.splice(i, 1); 
+          i--;
         }
       }
-      let updatedFiles = Array.from(uploadedFiles);
-      let contains = (file: File, files: File[]) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
+      
+      
       if (index == undefined) {
-        updatedFiles = updatedFiles.concat(newFiles.filter((file: File) => (!contains(file, uploadedFiles))));
+        updatedFiles = updatedFiles.concat(newFiles);
       } else {
         updatedFiles.splice(index, 0, ...newFiles);
-      }
-      if (updatedFiles.length != uploadedFiles.length + newFiles.length) {
-        alert("It is not allowed to have multiple files with the same name.")
       }
       setUploadedFiles(updatedFiles);
     },
