@@ -111,9 +111,7 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
 
     async componentDidUpdate(prevProps : any) {
       if (this.props.files != null && this.props.files != prevProps.files) {
-        assemblePDF(this.props.files!).then( (file: File) =>  this.setState( {
-          mergedPDF : file
-        }));
+        this.setState( {mergedPDF : await assemblePDF(this.props.files!)})
         
       }
     }

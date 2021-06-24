@@ -10,12 +10,13 @@ import { Theme } from '@material-ui/core/styles';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import Paper from './Paper';
 import React from 'react';
+import { SignalWifi4BarLockSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
       uploadContainer: {
         maxWidth: theme.breakpoints.values.lg,
-      },
+      }
 }));
 
 export type UploadedFile = {

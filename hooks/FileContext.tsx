@@ -124,7 +124,9 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
 }
 
 async function assemblePDF(files : File[]) {
-
+  if (files.length == 0) {
+    return
+  }
   let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
   const merged = await PDFDocument.create();
   for (let i=0; i < pdfs.length; i++) {
