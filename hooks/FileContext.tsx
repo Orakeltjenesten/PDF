@@ -100,4 +100,19 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
   );
 }
 
-export { FileContextWrapper, FileContext };
+async function assemblePDF(files : File[]) {
+  let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
+  const merged = await PDFDocument.create();
+  for (let i=0; i < pdfs.length; i++) {
+    let pages = await merged.copyPages(pdfs[i], pdfs[i].getPageIndices());
+    for (let j=0; j < pages.length; j++) {
+      merged.addPage(pages[j]);
+    }
+  }
+  let blob : any = new Blob([await merged.save({addDefaultPage: false})], {type:"application/pdf"});
+  blob.name = "preview.pdf";
+  blob.lastModified = 0;
+  return blob
+}
+ 
+export { FileContextWrapper, FileContext, assemblePDF };

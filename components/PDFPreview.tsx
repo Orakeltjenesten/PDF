@@ -2,7 +2,7 @@ import React from "react";
 import { Document, Page, pdfjs } from 'react-pdf'
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
-import { FileContext } from "../hooks/FileContext";
+import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { PDFDocument } from "pdf-lib";
 
 
@@ -111,7 +111,7 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
 
     async componentDidUpdate(prevProps : any) {
       if (this.props.files != null && this.props.files != prevProps.files) {
-        let file : File = await this.assemblePDF(this.props.files!)
+        let file : File = await assemblePDF(this.props.files!)
         this.setState( {
           mergedPDF : file
         })
@@ -120,27 +120,11 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
 
     async componentDidMount() {
       if (this.props.files != null) {
-        let file : File = await this.assemblePDF(this.props.files!)
+        let file : File = await assemblePDF(this.props.files!)
         this.setState( {
           mergedPDF : file
         })
       }
-    }
-
-    async assemblePDF(files : File[]) {
-      let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
-      const merged = await PDFDocument.create();
-      for (let i=0; i < pdfs.length; i++) {
-        let pages = await merged.copyPages(pdfs[i], pdfs[i].getPageIndices());
-        for (let j=0; j < pages.length; j++) {
-          merged.addPage(pages[j]);
-        }
-      }
-      let blob : any = new Blob([await merged.save({addDefaultPage: false})], {type:"application/pdf"});
-      blob.name = "preview.pdf";
-      blob.lastModified = 0;
-      return blob
-
     }
 
 

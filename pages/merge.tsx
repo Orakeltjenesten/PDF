@@ -60,7 +60,8 @@ export default function Home() {
                     <MuiContainer className={classes.container} maxWidth={false}>
                         <div className={classes.listView}>
                             <PDFsDisplay />
-                            <SavePDFButton text="Merge" files={fileStore?.files}/>
+                            {fileStore!.files!.length > 0 ? <SavePDFButton text="Merge" files={fileStore?.files}/> : <h2>Upload some files to get started!</h2>}
+                               
                         </div>
                     </MuiContainer>
                     )

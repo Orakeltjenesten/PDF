@@ -63,7 +63,9 @@ export default function Home() {
         </div>
         <FileContext.Consumer>
           {(fileStore) => (
+            
             <MuiContainer className={classes.container} maxWidth={false}>
+              
               <div className={classes.listView}>
                 <UploadButton text="+" />
                 <PDFsDisplay />
@@ -72,7 +74,7 @@ export default function Home() {
               <div className={classes.pdfPreview}>
                 {togglePreview && <PDFPreview files={fileStore?.files}/>}
               </div>
-            </MuiContainer>
+              </MuiContainer>
           )
           }
         </FileContext.Consumer>
