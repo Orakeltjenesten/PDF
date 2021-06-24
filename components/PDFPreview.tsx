@@ -1,8 +1,5 @@
-import { FieldExistsAsNonTerminalError, PDFDocument, toUint8Array } from "pdf-lib";
 import React from "react";
 import { Document, Page, pdfjs } from 'react-pdf'
-import { fileSave } from "browser-fs-access";
-import { ThirtyFpsSelect } from "@material-ui/icons";
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import { FileContext } from "../hooks/FileContext";

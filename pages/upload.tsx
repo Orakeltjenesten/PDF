@@ -1,12 +1,11 @@
 import Head from 'next/head'
 import React from 'react'
+import UploadBox from '../components/UploadBox'
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
-import { Button, Typography } from '@material-ui/core'
-import Logo from '../components/Logo'
-import Link from 'next/link'
+import { Typography } from '@material-ui/core'
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -82,20 +81,11 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <div className={classes.cover}>
-                <div className={classes.img} />
-                <div className={classes.logoWrapper}>
-                    <Logo darkColor='white' lightColor='black'/>
-                </div>
-                <Typography align='center' color='inherit' variant='h3'>
-                Welcome to PDF merger. This is an application where you may quickly upload, organize, split and/or merge your files.
-                </Typography>
-                <div className={classes.btnGroup}>
-                    <Link href="/upload">
-                        <Button className={classes.button} variant='outlined'>
-                            Let's get started!
-                        </Button>
-                    </Link>
-                </div>
+                <UploadBox>
+                    <Typography align='center' color='inherit' variant='h3'>
+                    Last opp filer eller dra dem her.
+                    </Typography>
+                </UploadBox>
             </div>
         </>
     )

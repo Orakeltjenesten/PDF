@@ -80,9 +80,8 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
   );
 
   const reorderFiles = useCallback(
-    
      (from: number, to: number) => {
-      if (from >= 0 && from < uploadedFiles.length && to >= 0 && to < uploadedFiles.length){
+      if(from >= 0 && from < uploadedFiles.length && to >= 0 && to < uploadedFiles.length){
         let newFiles = Array.from(uploadedFiles); // Copy the array, as arrays should not be changed directly
         let [deleted] = newFiles.splice(from, 1);
         newFiles.splice(to, 0, deleted);

@@ -3,7 +3,7 @@ import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
 import { FileContext } from "./FileContextWrapper";
 
-export class SavePDFButton extends React.Component<{text: string}, {}> {
+export class SavePDFButton extends React.Component<{text: string, files?: File[]}, {}> {
     constructor(props: {text: string, files: File[]}) {
       super(props);
       this.getDownload = this.getDownload.bind(this);

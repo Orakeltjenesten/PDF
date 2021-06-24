@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect, Component } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router'
 import classnames from 'classnames';
 import ThemeSettings from './ThemeSettings';
 import Sidebar from './Sidebar';
@@ -95,13 +96,18 @@ export type TopBarItemProps = {
 };
 
 const TopBarItem = ({ text, to }: TopBarItemProps) => {
+  const router = useRouter()
   const classes = useStyles({});
-  //const partial = useMemo(() => location.pathname.substr(0, to.length) === to, [location.pathname, to]);
-  //const equal = useMemo(() => location.pathname === to, [location.pathname, to]);
-  //<Button className={classes.topbarItem}color='inherit' variant={partial ? 'outlined' : 'text'}>{text}</Button>-->
+  const partial = useMemo(() => router.asPath.substr(0, to.length) === to, [router.asPath, to]);
+  const equal = useMemo(() => router.asPath === to, [router.asPath, to]);
+
   return (
       <Link href={to}>
-          <Button className={classes.topbarItem}color='inherit' variant='text'>
+          <Button 
+          className={classes.topbarItem}
+          color='inherit'
+          onClick={equal ? () => window.location.reload() : undefined}
+          variant={partial ? 'outlined' : 'text'}>
             {text}
           </Button>
       </Link>
@@ -146,8 +152,10 @@ const Topbar = ({ variant }: TopbarProps) => {
       position='fixed'>
       <Toolbar disableGutters>
         <div className={classes.toolbar}>
-          <Link href='/index'>
-            <Logo darkColor={'white'} lightColor={'black'} />
+          <Link href="/">
+            <a>
+              <Logo darkColor={'white'} lightColor={'black'} />
+            </a>
           </Link>
           <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
             <div className={classnames(classes.items, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>

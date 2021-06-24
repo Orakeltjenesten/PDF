@@ -1,4 +1,5 @@
-import { useCallback, useState, useLayoutEffect, useContext, createContext, ReactNode } from 'react';
+import { useCallback, useState, useEffect, useContext, createContext, ReactNode } from 'react';
+import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import { getCookie, setCookie } from '../utils/cookie';
 import { getTheme, themes, ThemeTypes } from '../containers/theme';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -14,6 +15,9 @@ interface ContextProps {
 const ThemeContext = createContext<ContextProps | undefined>(undefined);
 
 const ThemeMaker = ({ children }: { children: ReactNode }) => {
+  const [mounted, setMounted] = useState(false);
+
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [selectedTheme, setSelectedTheme] = useState<ThemeTypes>('automatic');
 
@@ -35,6 +39,7 @@ const ThemeMaker = ({ children }: { children: ReactNode }) => {
         setSelectedTheme('automatic');
         setCookie(THEME_COOKIE, 'automatic');
       }
+      setMounted(true);
     },
     [getThemeType],
   );
@@ -49,14 +54,16 @@ const ThemeMaker = ({ children }: { children: ReactNode }) => {
     }
   }, [getThemeType]);
 
-  const themeStore = { getThemeFromStorage: getThemeFromStorage, set: updateTheme };
+  const themeStore = { getThemeFromStorage: getThemeFromStorage, set: updateTheme};
 
-  useLayoutEffect(() => updateTheme(getThemeFromStorage()), [getThemeFromStorage, updateTheme]);
+  useIsomorphicLayoutEffect(() => updateTheme(getThemeFromStorage()), [getThemeFromStorage, updateTheme]);
 
   return (
     <ThemeContext.Provider value={themeStore}>
-      <ThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)}>
-        {children}
+      <ThemeProvider theme={getTheme(selectedTheme, prefersDarkMode)} >
+        <div style={{display: mounted ? 'block' : 'none'}}>
+          {children}
+        </div>
       </ThemeProvider>
     </ThemeContext.Provider>
   );

@@ -1,12 +1,11 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import styles from '../styles/Home.module.css'
-import MuiContainer from '@material-ui/core/Container';
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { FileContext } from '../hooks/FileContext';
+import MuiContainer from '@material-ui/core/Container';
 import { PDFsDisplay } from '../components/PDFsDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
