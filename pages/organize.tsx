@@ -11,6 +11,7 @@ import UploadButton from '../components/UploadButton';
 import { PDFsDisplay } from '../components/PDFsDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -36,14 +37,15 @@ const useStyles = makeStyles((theme: Theme) =>
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          flex: '1'
+          flex: '1',
+          height: '80vh'
       },
     }
 ));
 
 export default function Home() {
   const classes = useStyles();
-
+  const [togglePreview, setTogglePreview] = useState<boolean>(false);
   return (
     <>
       <Head>
@@ -63,11 +65,12 @@ export default function Home() {
           {(fileStore) => (
             <MuiContainer className={classes.container} maxWidth={false}>
               <div className={classes.listView}>
-                <PDFsDisplay />
                 <UploadButton text="+" />
+                <PDFsDisplay />
+                <input type="button" className="button" value="Toggle" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}} />
               </div>
               <div className={classes.pdfPreview}>
-                <PDFPreview files={fileStore?.files}/>
+                {togglePreview && <PDFPreview files={fileStore?.files}/>}
               </div>
             </MuiContainer>
           )

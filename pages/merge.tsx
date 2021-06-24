@@ -30,13 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
         alignItems: 'center',
         justifyContent: 'center',
         flex: '1',
-        maxHeight: '80vh'
-      },
-      pdfPreview: {
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flex: '1'
+        height: '80vh'
       },
     }
 ));
@@ -67,9 +61,6 @@ export default function Home() {
                         <div className={classes.listView}>
                             <PDFsDisplay />
                             <SavePDFButton text="Merge" files={fileStore?.files}/>
-                        </div>
-                        <div className={classes.pdfPreview}>
-                            <PDFPreview files={fileStore?.files}/>
                         </div>
                     </MuiContainer>
                     )

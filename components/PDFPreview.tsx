@@ -118,6 +118,15 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
       }
     }
 
+    async componentDidMount() {
+      if (this.props.files != null) {
+        let file : File = await this.assemblePDF(this.props.files!)
+        this.setState( {
+          mergedPDF : file
+        })
+      }
+    }
+
     async assemblePDF(files : File[]) {
       let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
       const merged = await PDFDocument.create();
