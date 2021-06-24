@@ -69,7 +69,7 @@ export default function Home() {
               <div className={classes.listView}>
                 <UploadButton text="+" />
                 <PDFsDisplay/>
-                <input type="button" className="button" value="Toggle" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}} />
+                <input type="button" className="button" value="Toggle preview" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}} />
               </div>
               <div className={classes.pdfPreview}>
                 {togglePreview && <PDFPreview files={fileStore?.files}/>}
