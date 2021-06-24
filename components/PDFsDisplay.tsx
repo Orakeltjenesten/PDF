@@ -1,7 +1,6 @@
 import React from "react";
 import { DragDropContext, DropResult} from 'react-beautiful-dnd';
 import { Droppable } from "react-beautiful-dnd";
-import { PersonalVideoRounded } from "@material-ui/icons";
 import styles from '../styles/Home.module.css'
 import PDFDisplayEntry from "./PDFDisplayEntry/PDFDisplayEntry";
 import { FileContext } from "../hooks/FileContext";
@@ -25,15 +24,15 @@ export class PDFsDisplay extends React.Component<{}, {}> {
     render() {
       return (
         <FileContext.Consumer>
-        {(context) => (
-          <DragDropContext onDragEnd={(result: DropResult) => {this.onDragEnd(result, context)}}>
+        {(fileStore) => (
+          <DragDropContext onDragEnd={(result: DropResult) => {fileStore?.reorderFiles(result.source.index, result.destination?.index)}}>
             <Droppable droppableId="droppable">
               {(provided, snapshot) => (
                 <div className={styles.pdfList}
                 ref={provided.innerRef} 
                 {...provided.droppableProps}
                 id="entries">
-                {this.pdfList(context)}
+                {this.pdfList(fileStore)}
                 {provided.placeholder}
                 </div>
               )}
