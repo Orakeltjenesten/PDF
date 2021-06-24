@@ -16,7 +16,31 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   const addFiles = useCallback(
-    (newFiles : File[], index?) => {
+    async (newFiles : File[], index?) => {
+      for (let i=0; i < newFiles.length; i++) {
+        if (newFiles[i].type == "image/png" || newFiles[i].type == "image/jpg") {
+          let imgPDF : PDFDocument = await PDFDocument.create();
+          let image;
+          if (newFiles[i].type == "image/png") {
+            image = await imgPDF.embedPng(await newFiles[i].arrayBuffer());
+          } else {
+            image = await imgPDF.embedJpg(await newFiles[i].arrayBuffer());
+          }
+          let page = imgPDF.addPage([600, 1000]);
+          let scale = image.scale(550 / image.width);
+
+          page.drawImage(image, {
+            x: page.getWidth() / 2 - scale.width / 2,
+            y: page.getHeight() / 2 - scale.height / 2,
+            width: scale.width,
+            height: scale.height,
+          })
+          let imagePDFFile : any = new Blob([await imgPDF.save()], {type: "application/pdf"});
+          imagePDFFile.name = newFiles[i].name + " as pdf.pdf"
+          imagePDFFile.lastModified = 0;
+          newFiles.splice(i, 1, (imagePDFFile as File))
+        }
+      }
       let updatedFiles = Array.from(uploadedFiles);
       let contains = (file: File, files: File[]) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
       if (index == undefined) {
@@ -24,7 +48,6 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
       } else {
         updatedFiles.splice(index, 0, ...newFiles);
       }
-      
       if (updatedFiles.length != uploadedFiles.length + newFiles.length) {
         alert("It is not allowed to have multiple files with the same name.")
       }
@@ -101,6 +124,7 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
 }
 
 async function assemblePDF(files : File[]) {
+
   let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
   const merged = await PDFDocument.create();
   for (let i=0; i < pdfs.length; i++) {
@@ -109,6 +133,7 @@ async function assemblePDF(files : File[]) {
       merged.addPage(pages[j]);
     }
   }
+
   let blob : any = new Blob([await merged.save({addDefaultPage: false})], {type:"application/pdf"});
   blob.name = "preview.pdf";
   blob.lastModified = 0;

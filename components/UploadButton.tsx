@@ -8,6 +8,8 @@ export type UploadButtonProps = {
 };
 
 const UploadButton = ({text}: UploadButtonProps) => {
+
+  
   const triggerUpload = (e : SyntheticEvent) => {
     e.preventDefault();
     (document.getElementById('file1') as HTMLElement).click();
@@ -15,6 +17,7 @@ const UploadButton = ({text}: UploadButtonProps) => {
 
   const handleUpload = async (e: React.FormEvent<HTMLInputElement>, uploadAction: ((files: File[]) => void) | undefined) => {
     e.preventDefault();
+    console.log()
     const files : (FileList | null) = (e.target as HTMLInputElement).files;
     if (files != null) {
       for (let i=0; i < files.length; i++) {
@@ -23,9 +26,14 @@ const UploadButton = ({text}: UploadButtonProps) => {
           alert("Invalid input");
           return;
         }
-        let pdf = await PDFDocument.load(await file.arrayBuffer());
-        if (pdf.getPageCount() == 0) {
-          alert("Invalid input: " + file.name);
+        if (file.type == "application/pdf") {
+          let pdf = await PDFDocument.load(await file.arrayBuffer());
+          if (pdf.getPageCount() == 0) {
+            alert("Invalid input: " + file.name);
+            return;
+          }
+        } else if (file.type != "image/png" && file.type != "image/jpeg") {
+          alert("Unsupported filetype.")
           return;
         }
       }
@@ -43,7 +51,7 @@ const UploadButton = ({text}: UploadButtonProps) => {
     <FileContext.Consumer>
     {(fileStore) => (
       <div>
-        <input className="hidden" onChange={(e) => handleUpload(e, fileStore?.addFiles)} type="file" id="file1" multiple accept=".pdf"/>
+        <input className="hidden" onChange={(e) => handleUpload(e, fileStore?.addFiles)} type="file" id="file1" multiple accept=".pdf, .png, .jpg"/>
         <input className="button" type="button" value={text} onClick={triggerUpload}/>
       </div>
   )

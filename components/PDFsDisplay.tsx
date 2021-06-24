@@ -32,12 +32,13 @@ export class PDFsDisplay extends React.Component<{}, {}> {
                 ref={provided.innerRef} 
                 {...provided.droppableProps}
                 id="entries">
-                {(fileStore?.files != null) ? fileStore?.files.map((file : File, index : number) => 
+                {fileStore?.files.map((file : File, index : number) => (
                   <PDFDisplayEntry index={index} file={file} key={file.name} />
-                ) : <p>hi</p>}
+                ))}
                 {provided.placeholder}
                 </div>
-              )}
+              )
+              }
             </Droppable>
           </DragDropContext> 
       )

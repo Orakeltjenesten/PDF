@@ -111,10 +111,10 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
 
     async componentDidUpdate(prevProps : any) {
       if (this.props.files != null && this.props.files != prevProps.files) {
-        let file : File = await assemblePDF(this.props.files!)
-        this.setState( {
+        assemblePDF(this.props.files!).then( (file: File) =>  this.setState( {
           mergedPDF : file
-        })
+        }));
+        
       }
     }
 
@@ -126,16 +126,13 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
         })
       }
     }
-
-
-
     render() {
       const {classes} = this.props;
       return (
         <FileContext.Consumer> 
         { (context: any) => (
         <div className={classes.outer}>
-          <Document className={classes.documentView} loading={"Laster..."} file={this.state.mergedPDF} onLoadSuccess={(pdf) => {this.setState({numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
+          <Document className={classes.documentView} loading={"Loading"} file={this.state.mergedPDF} onLoadSuccess={(pdf) => {this.setState({numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
             
             {this.state.mergedPDF != null && this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
             return <Page className={classes.pdfPage} pageNumber={i+1} key={i}>
