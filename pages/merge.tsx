@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
+import styles from '../styles/Home.module.css'
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';

@@ -3,6 +3,7 @@ import { Document, Page, pdfjs } from 'react-pdf'
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import { FileContext } from "../hooks/FileContext";
+import { PDFDocument } from "pdf-lib";
 
 
 const styles =(theme: Theme) => 

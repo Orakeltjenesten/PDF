@@ -1,7 +1,7 @@
 import { ThemeContext } from "@emotion/react";
 import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
-import { FileContext } from "./FileContextWrapper";
+import { FileContext } from "../hooks/FileContext";
 
 export class SavePDFButton extends React.Component<{text: string, files?: File[]}, {}> {
     constructor(props: {text: string, files: File[]}) {

@@ -2,6 +2,7 @@ import Head from 'next/head'
 import React from 'react'
 
 // Material UI Components
+import styles from '../styles/Home.module.css'
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Button, Typography } from '@material-ui/core'
