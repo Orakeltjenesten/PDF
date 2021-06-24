@@ -8,9 +8,14 @@ import { FileError, FileRejection, useDropzone } from 'react-dropzone';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { createStyles, makeStyles } from '@material-ui/styles';
+import Paper from './Paper';
+import React from 'react';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
+      uploadContainer: {
+        maxWidth: theme.breakpoints.values.lg,
+      },
 }));
 
 export type UploadedFile = {
@@ -19,27 +24,27 @@ export type UploadedFile = {
 };
 
 
-const UploadBox = ({ children }: { children: ReactNode }) => {
-    const [files, setFiles] = useState<UploadedFile[]>([]);
-    const onDrop = useCallback((accFiles:File[], rejFiles: FileRejection[]) => {
-        const mappedAcc = accFiles.map(file => ({file, errors: []}));
-        setFiles((curr) => [...curr, ...mappedAcc, ...rejFiles]);
-    }, []);
-
-  const {getRootProps, getInputProps} = useDropzone({onDrop})
+const UploadBox = () => {
+  const classes = useStyles();
+  const onDrop = useCallback(acceptedFiles => {
+    console.log(acceptedFiles);
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
   return (
-      <>
-        <div {...getRootProps}>
-            <input {...getInputProps()}/>
-
-            <Typography>{JSON.stringify(files)}</Typography>
+    <Paper className={classes.uploadContainer}>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <Typography variant="h2">
+            <a>
+              {
+                isDragActive ? "Drop some files here, or click to select files" : "Drag some files here, or click to select files"
+              }
+            </a>
+          </Typography>
         </div>
-
-        {files.map(fileWrapper => {
-        })}
-      </>
-  );
+    </Paper>
+  )
 };
 
 export default UploadBox;
