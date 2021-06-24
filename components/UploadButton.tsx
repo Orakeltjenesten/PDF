@@ -1,6 +1,5 @@
 import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { FileContext } from "../hooks/FileContext";
 
 
