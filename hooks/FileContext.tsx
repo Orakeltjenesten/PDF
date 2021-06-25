@@ -18,10 +18,10 @@ async function pdfFromImage(imageFile : File) {
   } else {
     image = await imgPDF.embedJpg(await imageFile.arrayBuffer());
   }
-  let page = imgPDF.addPage([600, 1000]);
+  let page = imgPDF.addPage([595, 842]);
   let scale = image.scale(1);
 
-  scale = image.scale(Math.min(550/image.width, 950/image.height, 1));
+  scale = image.scale(Math.min(545/image.width, 792/image.height, 1));
 
   page.drawImage(image, {
     x: page.getWidth() / 2 - scale.width / 2,

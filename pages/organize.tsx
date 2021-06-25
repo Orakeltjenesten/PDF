@@ -12,6 +12,7 @@ import { PDFsDisplay } from '../components/PDFsDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
 import { useState } from 'react';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -69,7 +70,7 @@ export default function Home() {
               <div className={classes.listView}>
                 <UploadButton text="+" />
                 <PDFsDisplay/>
-                <input type="button" className="button" value="Toggle preview" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}} />
+                <Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button>
               </div>
               <div className={classes.pdfPreview}>
                 {togglePreview && <PDFPreview files={fileStore?.files}/>}

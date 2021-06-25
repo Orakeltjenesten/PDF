@@ -1,6 +1,11 @@
 import styles from '../../styles/PDFsDisplayEntry.module.css'
 import { Draggable, DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
 import { FileContext } from "../../hooks/FileContext";
+import React from 'react';
+import { IconButton, ListItem, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import CallSplitIcon from '@material-ui/icons/CallSplit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 interface PDFsDisplayEntryProps {file : File, index: number};
 
@@ -32,15 +37,17 @@ const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
           <Draggable draggableId={props.file.name} index={props.index} key={props.file.name}>
           {(provided, snapshot) => (
             <div ref={provided.innerRef} {...provided.dragHandleProps} 
-              {...provided.draggableProps} className={`${styles.entry} ${snapshot.isDragging ? styles.entryDrag : ''}`}>
-              <div className={styles.text}>
-                <span title={props.file.name}>{props.file.name}</span>
-              </div>
-              <div className={styles.controls}> 
-                <button style={{backgroundColor: getColor(props.file)}} className={styles.downloadButton} onClick={download}>⬇️</button>
-                <button className={styles.splitButton} onClick={(e) => (fileStore?.splitFile(props.file))}>✂️</button>
-                <button className={styles.deleteButton} onClick={(e) => (fileStore?.deleteFile(props.file))}>🗑</button>
-              </div>
+            {...provided.draggableProps} className={`${styles.entry} ${snapshot.isDragging ? styles.entryDrag : ''}`}>
+            <ListItem>
+              <ListItemText primary={props.file.name} title={props.file.name} />
+              <ListItemSecondaryAction>
+                  <IconButton onClick={download}><GetAppIcon /></IconButton>
+                  <IconButton onClick={(e) => (fileStore?.splitFile(props.file))}><CallSplitIcon /></IconButton>
+                  <IconButton onClick={(e) => (fileStore?.deleteFile(props.file))}><DeleteIcon /></IconButton>
+                </ListItemSecondaryAction> 
+                
+            </ListItem>
+            
             </div>
           )}
           </Draggable>

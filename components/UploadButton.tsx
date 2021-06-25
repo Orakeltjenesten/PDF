@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
 import { FileContext } from "../hooks/FileContext";
@@ -52,7 +53,7 @@ const UploadButton = ({text}: UploadButtonProps) => {
     {(fileStore) => (
       <div>
         <input className="hidden" onChange={(e) => handleUpload(e, fileStore?.addFiles)} type="file" id="file1" multiple accept=".pdf, .png, .jpg"/>
-        <input className="button" type="button" value={text} onClick={triggerUpload}/>
+        <Button variant="contained" onClick={triggerUpload}>{text}</Button>
       </div>
   )
     }

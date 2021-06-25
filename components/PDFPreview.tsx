@@ -4,6 +4,7 @@ import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { PDFDocument } from "pdf-lib";
+import { FlutterDashTwoTone } from "@material-ui/icons";
 
 
 const styles =(theme: Theme) => 
@@ -19,7 +20,9 @@ const styles =(theme: Theme) =>
   pdfPage : {
     position: 'relative',
     margin: '7px',
-    border: '1px solid black'
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '3px',
   },
 
   outer : {
@@ -41,13 +44,15 @@ const useStyles = makeStyles((theme: Theme) =>
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        bottom: '0',
+        bottom: '6px',
         left: '0',
         right: '0',
         marginLeft: 'auto',
         marginRight: 'auto',
         padding: '4px',
-        width: '200px'
+        width: '50px',
+        border: '1px solid black',
+        background: 'white'
       },
 
       previewText : {
