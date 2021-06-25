@@ -1,4 +1,5 @@
 import { ThemeContext } from "@emotion/react";
+import { Button } from "@material-ui/core";
 import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
 import { FileContext, assemblePDF } from "../hooks/FileContext";
@@ -39,7 +40,7 @@ export class SavePDFButton extends React.Component<{text: string, files?: File[]
     render() {
       return <FileContext.Consumer>
         {(context) => (
-          <input className="button" type="button" value={this.props.text} onClick={(e) => this.getDownload(e, context)} />
+          <Button variant="contained" onClick={(e) => this.getDownload(e, context)}>{this.props.text}</Button>
       )
         }
       </FileContext.Consumer>
