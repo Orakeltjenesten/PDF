@@ -14,7 +14,8 @@ const styles =(theme: Theme) =>
     maxHeight: '80vh',
     position: 'relative',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 
   pdfPage : {
@@ -22,6 +23,7 @@ const styles =(theme: Theme) =>
     margin: '7px',
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     padding: '3px',
   },
 
@@ -31,7 +33,12 @@ const styles =(theme: Theme) =>
     justifyContent: 'center',
     alignItems: 'center',
     height: '80vh',
-    minWidth: '500px'
+    ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
+      minWidth: '500px'
+    },
+    ['@media (max-width:1000px)']: { // eslint-disable-line no-useless-computed-key
+      maxWidth: '100%'
+    },
   }
 
 });
@@ -61,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        top: '7px',
+        top: '12px',
         left: '0',
         right: '0',
         marginLeft: 'auto',
@@ -69,7 +76,9 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: '4px',
         width: '500px',
         fontSize: '22px',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        color: 'black',
+        maxWidth: '90%'
       },
 
       hidden : {

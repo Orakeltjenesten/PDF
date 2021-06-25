@@ -12,7 +12,11 @@ import { PDFsDisplay } from '../components/PDFsDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
 import { useState } from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+
+
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -22,7 +26,10 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingLeft: theme.spacing(2),
         },
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
+        ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
+          flexDirection: 'row'
+        },
         justifyContent: 'space-evenly',
       },
       listView: {
@@ -39,10 +46,11 @@ const useStyles = makeStyles((theme: Theme) =>
           alignItems: 'center',
           justifyContent: 'center',
           flex: '1',
-          height: '80vh'
+          height: '80vh',
+          margin: '5px',
       },
-    }
-));
+    })
+  );
 
 export default function Home() {
   const classes = useStyles();
@@ -67,14 +75,14 @@ export default function Home() {
             
             <MuiContainer className={classes.container} maxWidth={false}>
               
-              <div className={classes.listView}>
-                <UploadButton text="+" />
-                <PDFsDisplay/>
-                <Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button>
-              </div>
-              <div className={classes.pdfPreview}>
-                {togglePreview && <PDFPreview files={fileStore?.files}/>}
-              </div>
+                <Grid container spacing={1} className={classes.listView}>
+                  <Grid item><UploadButton text="+" /></Grid>
+                  <Grid item><PDFsDisplay/></Grid>
+                  <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button></Grid>
+                </Grid>
+                <MuiContainer className={classes.pdfPreview}>
+                  {togglePreview && <PDFPreview files={fileStore?.files}/>}
+                </MuiContainer>
               </MuiContainer>
           )
           }
