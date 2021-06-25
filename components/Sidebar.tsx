@@ -78,7 +78,7 @@ const Sidebar = ({ items, onClose, open }: IProps) => {
   const classes = useStyles();
   const theme = useTheme();
   return (
-    <Drawer anchor='top' classes={{ paper: classes.sidebar }} onClose={onClose} open={open} style={{ zIndex: theme.zIndex.drawer - 1 }}>
+    <Drawer anchor='top' classes={{ paper: classes.sidebar }} onClose={onClose} open={open} style={{ zIndex: theme.zIndex.drawer + 1 }}>
       <div className={classes.root}>
         {items.map((item, i) => (
           <SidebarItem key={i} {...item} />

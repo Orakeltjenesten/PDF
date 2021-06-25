@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React, {useCallback, useState} from 'react';
 import classnames from 'classnames';
-import { useDropzone } from 'react-dropzone';
+import { FileRejection, useDropzone } from 'react-dropzone';
 import Paper from '../components/Paper';
 import { useFileContext } from '../hooks/FileContext';
 
@@ -18,16 +18,18 @@ import FileIcon from '@material-ui/icons/DescriptionOutlined';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
+        root: {
+            display: 'flex',
+        },
         cover: {
-            position: 'relative',
+            flexGrow: 1,
             color: theme.palette.common.white,
             padding: theme.spacing(2, 2),
-            height: '100vh',
-            width: '100%',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            height: '100vh',
             [theme.breakpoints.down('md')]: {
                 padding: theme.spacing(2, 1)
             },
@@ -37,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexShrink: 0,
         },
         drawerPaper: {
+            paddingTop: theme.spacing(8),
             width: '240px',
         },
         drawerContainer: {
@@ -61,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
             border: theme.spacing(.5) + ' dashed ' + theme.palette.colors.topbar,
             '&:hover': {
                 cursor: 'pointer',
-                
+                background: theme.palette.colors.topbar,
             }
         },
         active: {
@@ -74,18 +77,20 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Home() {
     const classes = useStyles();
     const fileContext = useFileContext();
-    const [rejected, setRejected] = useState<File[] | undefined>(undefined);
+    const [rejected, setRejected] = useState<FileRejection[] | undefined>(undefined);
+    const [hover, setHover] = useState<boolean>(false);
 
     
-    const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-        fileContext.addFiles(acceptedFiles);
+    const toggleHover = (hover: boolean) => {
+        setHover(hover);
+    }
 
-        if(rejectedFiles){
-            setRejected(Array.from([rejected, rejectedFiles]));
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpg, image/png, application/pdf', onDrop: (acceptedFiles, rejectedFiles) => {
+      fileContext.addFiles(acceptedFiles);
+      if(rejected !== undefined && rejectedFiles.length > 0){
+        setRejected(rejectedFiles);
         }
-    }, [])
-
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    }})
     return (
         <>
             <Head>
@@ -93,43 +98,55 @@ export default function Home() {
                 <meta name="PDF Application" content="Upload"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <div className={classes.cover}>
-                <div {...getRootProps()} className={classes.upload}>
-                    <Paper className={classnames(isDragActive ? classes.active : undefined, classes.container)}>
-                        <input {...getInputProps()} />
-                        <FileIcon fontSize='large'/>
-                        <Typography variant="h3" textAlign="center">
-                            {
-                            isDragActive ? "Drop your files here" : "Drag files here, or click to select files"
-                            }
-                        </Typography>
-                    </Paper>
+            <div className={classes.root}>
+                <div className={classes.cover}>
+                    <div onMouseEnter={() => toggleHover(true)} onMouseLeave={() => toggleHover(false)} {...getRootProps()} className={classes.upload}>
+                        <Paper className={classnames(isDragActive ? classes.active : undefined, classes.container)}>
+                            <input {...getInputProps()} />
+                            <FileIcon fontSize='large'/>
+                            <Typography variant="h3" textAlign="center">
+                                {
+                                isDragActive ? "Drop your files here" : hover ? "Click to select files" : "Drag files here, or click to select files"
+                                }
+                            </Typography>
+                        </Paper>
+                    </div>
                 </div>
-            </div>
-            <Drawer
-            className={classes.drawer}
-            variant="permanent"
-            classes={{
-                paper: classes.drawerPaper,
-            }}
-            >
-            <div className={classes.drawerContainer}>
-                <List>
-                {fileContext.files.map((file, index) => (
-                    <ListItem button key={file.name}>
-                    <ListItemIcon>{index % 2 === 0 ? <IMGIcon /> : <PDFIcon />}</ListItemIcon>
-                    <ListItemText primary={file.name} />
-                    </ListItem>
-                ))}
-                </List>
-                <Divider />
-                {rejected !== undefined && rejected.length > 0 && 
-                <List>
-                    
-                </List>
+                {fileContext.files.length > 0 &&
+                    <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                    anchor="right"
+                    >
+                    <div className={classes.drawerContainer}>
+                        <List>
+                        <Typography align='center' variant='h3'>Accepted files</Typography>
+                        {fileContext.files.map((file, index) => (
+                            <ListItem button key={file.name}>
+                            <ListItemIcon>{index % 2 === 0 ? <IMGIcon /> : <PDFIcon />}</ListItemIcon>
+                            <ListItemText primary={file.name} />
+                            </ListItem>
+                        ))}
+                        </List>
+                        <Divider />
+                        {rejected !== undefined && rejected.length > 0 && 
+                        <List>
+                            <Typography align='center' variant='h3'>Rejected files</Typography>
+                            {rejected.map((rejection) => (
+                                <ListItem button key={rejection.file.name}>
+                                <ListItemIcon>{rejection.file.size % 2 === 0 ? <IMGIcon /> : <PDFIcon />}</ListItemIcon>
+                                <ListItemText primary={rejection.file.name} />
+                                </ListItem>
+                            ))}
+                        </List>
+                        }
+                    </div>
+                    </Drawer>
                 }
             </div>
-            </Drawer>
         </>
     )
 }

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.colors.topbar,
         color: theme.palette.text.primary,
         flexGrow: 1,
-        zIndex: theme.zIndex.drawer + 1,
+        zIndex: theme.zIndex.drawer + 2,
       },
       transparentAppBar: {
         backgroundColor: 'transparent',
