@@ -38,8 +38,8 @@ const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
           {(provided, snapshot) => (
             <div ref={provided.innerRef} {...provided.dragHandleProps} 
             {...provided.draggableProps} className={`${styles.entry} ${snapshot.isDragging ? styles.entryDrag : ''}`}>
-            <ListItem>
-              <ListItemText primary={props.file.name} title={props.file.name} />
+            <ListItem ContainerComponent="div">
+              <ListItemText primary={props.file.name} title={props.file.name} style={{paddingRight: '120px'}}/>
               <ListItemSecondaryAction>
                   <IconButton onClick={download}><GetAppIcon /></IconButton>
                   <IconButton onClick={(e) => (fileStore?.splitFile(props.file))}><CallSplitIcon /></IconButton>

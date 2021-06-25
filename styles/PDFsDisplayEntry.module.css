@@ -15,10 +15,6 @@
     background-color: lightcoral;
   }
 
-  .entry:focus {
-    background-color: darkcyan;
-  }
-
   .text {
     overflow: hidden;
     white-space: nowrap;
