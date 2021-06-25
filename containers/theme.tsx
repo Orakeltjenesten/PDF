@@ -148,7 +148,7 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
         '-webkit-backdrop-filter': `blur(5px)`,
       },
       transparent: {
-        background: get<string>({ light: '#f6f5f340', dark: '#61616160' }),
+        background: get<string>({ light: '#f6f5f350', dark: '#61616160' }),
         border: get<string>({ light: '1px solid #d7d7d75c', dark: '1px solid #4545453b' }),
         boxShadow: `0 8px 32px 0 ${get<string>({ light: '#cab2e7', dark: '#26292d' })}52`,
       },
@@ -158,7 +158,7 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
         paper: get<string>({ light: '#f6f5f3', dark: '#232323' }),
       },
       colors: {
-        topbar: get<string>({ light: '#cecef5', dark: '#26292d' }),
+        topbar: get<string>({ light: '#F6F5F3', dark: '#26292d' }),
         gradient: get<string>({ light: 'linear-gradient(to bottom, #adbcdf82, #abc8c073)', dark: 'linear-gradient(to bottom, #160202ab, #07072769)' }),
       },
     },

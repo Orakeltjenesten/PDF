@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
-import { Theme } from "@material-ui/core/styles";
+import { Theme } from "@material-ui/core/styles/";
 import MaterialPaper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme: Theme) => 

@@ -1,5 +1,6 @@
 import React, { useCallback, useState, createContext, ReactNode} from 'react';
 import { PDFDocument, PDFPage, scale } from "pdf-lib";
+import { useContext } from 'react';
 
 
 interface ContextProps {
@@ -153,5 +154,13 @@ async function assemblePDF(files : File[]) {
   blob.lastModified = 0;
   return blob
 }
+
+const useFileContext = () => {
+  const context = useContext(FileContext);
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider');
+  }
+  return context;
+};
  
-export { FileContextWrapper, FileContext, assemblePDF };
+export { FileContextWrapper, FileContext, assemblePDF , useFileContext};
