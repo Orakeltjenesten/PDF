@@ -61,7 +61,6 @@ const SidebarItem = ({ text, to }: SidebarItemProps) => {
         <Button
             className={classes.text}
             fullWidth
-            onClick={to === window.location.pathname ? () => window.location.reload() : undefined}
             variant='text'>
             {text}
         </Button>

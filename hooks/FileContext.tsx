@@ -47,7 +47,7 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
       let updatedFiles = Array.from(uploadedFiles);
       let filesToAdd : File[] = [];
       for (let i=0; i < newFiles.length; i++) {
-        if (newFiles[i].type == "image/png" || newFiles[i].type == "image/jpg") {
+        if (newFiles[i].type == "image/png" || newFiles[i].type == "image/jpeg") {
           newFiles.splice(i, 1, await pdfFromImage(newFiles[i]));
         }
         if (contains(updatedFiles, newFiles[i])) {

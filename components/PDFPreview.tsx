@@ -10,7 +10,8 @@ import { FlutterDashTwoTone } from "@material-ui/icons";
 const styles =(theme: Theme) => 
   createStyles({
   documentView : {
-    overflowY: 'scroll',
+    overflowY: 'auto',
+    overflowX: 'auto',
     maxHeight: '80vh',
     position: 'relative',
     display: 'flex',
@@ -20,11 +21,11 @@ const styles =(theme: Theme) =>
 
   pdfPage : {
     position: 'relative',
-    margin: '7px',
+    margin: '5px',
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
-    padding: '3px',
+    justifyContent: 'center',
+    paddingBottom: '3px',
   },
 
   outer : {
@@ -34,7 +35,8 @@ const styles =(theme: Theme) =>
     alignItems: 'center',
     height: '80vh',
     ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
-      minWidth: '500px'
+      width: '90%',
+      maxWidth: '700px'
     },
     ['@media (max-width:1000px)']: { // eslint-disable-line no-useless-computed-key
       maxWidth: '100%'
@@ -59,7 +61,8 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: '4px',
         width: '50px',
         border: '1px solid black',
-        background: 'white'
+        background: 'white',
+        color: 'black'
       },
 
       previewText : {
@@ -74,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
         marginLeft: 'auto',
         marginRight: 'auto',
         padding: '4px',
-        width: '500px',
+        width: '100%',
         fontSize: '22px',
         backgroundColor: 'white',
         color: 'black',
@@ -83,6 +86,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
       hidden : {
         display: 'none'
+      },
+
+      pageLoading : {
+        position: 'absolute',
+        zIndex: -100
       }
     }));
 
@@ -102,6 +110,15 @@ const PreviewText = (props: {text: string}) => {
   return (
     <div className={classes.previewText}>
         {props.text}
+    </div>
+  )
+}
+
+const PageLoading = (props: {}) => {
+  const classes = useStyles({});
+  return (
+    <div className={classes.pageLoading}>
+        Loading...
     </div>
   )
 }
@@ -143,12 +160,12 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
       return (
         <FileContext.Consumer> 
         { (context: any) => (
-        <div className={classes.outer}>
+        <div className={classes.outer} id="pdfOuter">
           <Document className={classes.documentView} loading={"Loading"} file={this.state.mergedPDF} onLoadSuccess={(pdf) => {this.setState({numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
             
             {this.state.mergedPDF != null && this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
-            return <Page className={classes.pdfPage} pageNumber={i+1} key={i}>
-              
+            return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
+              <PageLoading />
               <PreviewControls page={i+1} />
             </Page>
           }) : <div />}

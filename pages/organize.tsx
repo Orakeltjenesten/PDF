@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
           flexDirection: 'row'
         },
         justifyContent: 'space-evenly',
+        maxHeight: '80vh'
       },
       listView: {
         borderRight: '0',
@@ -39,7 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
         alignItems: 'center',
         justifyContent: 'center',
         flex: '1',
-        maxHeight: '80vh'
+        maxHeight: '80vh',
+        padding: 0
       },
       pdfPreview: {
           display: 'flex',
@@ -48,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
           flex: '1',
           height: '80vh',
           margin: '5px',
+          padding: 0
       },
     })
   );
@@ -75,9 +78,9 @@ export default function Home() {
             
             <MuiContainer className={classes.container} maxWidth={false}>
               
-                <Grid container spacing={1} className={classes.listView}>
+                <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
                   <Grid item><UploadButton text="+" /></Grid>
-                  <Grid item><PDFsDisplay/></Grid>
+                  <Grid item style={{overflowY: 'auto'}}><PDFsDisplay/></Grid>
                   <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button></Grid>
                 </Grid>
                 <MuiContainer className={classes.pdfPreview}>

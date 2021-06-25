@@ -6,6 +6,7 @@ import { IconButton, ListItem, ListItemSecondaryAction, ListItemText } from '@ma
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { PDFDocument } from 'pdf-lib';
 
 interface PDFsDisplayEntryProps {file : File, index: number};
 

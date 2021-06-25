@@ -59,7 +59,8 @@ export default function Home() {
                     {(fileStore) => (
                     <MuiContainer className={classes.container} maxWidth={false}>
                         <div className={classes.listView}>
-                            <PDFsDisplay/>
+                            <div style={{overflowY: 'auto'}}><PDFsDisplay/></div>
+                            
                             {fileStore!.files!.length > 0 ? <SavePDFButton text="Merge" files={fileStore?.files}/> : <h2>Upload some files to get started!</h2>}
                                
                         </div>
@@ -67,7 +68,9 @@ export default function Home() {
                     )
                 }
         </FileContext.Consumer>
-
+        <footer className={styles.footer}>
+            Laget med kjærlighet i Trondheim
+        </footer>
             </main>
         </>
     )
