@@ -21,7 +21,7 @@ export class SavePDFButton extends React.Component<{text: string, files?: Upload
         return
       } else {
         let pdfList : PDFDocument[] = [];
-        const merged : Blob = await assemblePDF(context.files);
+        const merged : Blob = (await assemblePDF(context.files))!.file;
         url = window.URL.createObjectURL(merged);
         name = "merged.pdf"
       }

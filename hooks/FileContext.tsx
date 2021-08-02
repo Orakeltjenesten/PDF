@@ -165,7 +165,7 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
 
 async function assemblePDF(files : UploadedFile[]) {
   if (files.length == 0) {
-    return
+    console.log("SNJFDA")
   }
   let pdfs : PDFDocument[] = files.map((file) => (file.PDF));
   const merged = await PDFDocument.create();
@@ -179,7 +179,7 @@ async function assemblePDF(files : UploadedFile[]) {
   let blob : any = new Blob([await merged.save({addDefaultPage: false})], {type:"application/pdf"});
   blob.name = "preview.pdf";
   blob.lastModified = 0;
-  return blob
+  return new UploadedFile(blob, merged);
 }
 
 const useFileContext = () => {

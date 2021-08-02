@@ -17,7 +17,7 @@ const styles =(theme: Theme) =>
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   pdfPage : {
@@ -130,29 +130,32 @@ interface PDFPreviewProps extends WithStyles<typeof styles> {
   files: UploadedFile[] | undefined
 }
 
-class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | undefined, pageNumber : number, numberPages : number}> {
+class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : UploadedFile | undefined, numberPages : number}> {
     constructor(props: PDFPreviewProps) {
         super(props);
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
         this.state = {
           mergedPDF: undefined,
-          pageNumber: 1,
           numberPages: -1
         }
     }
 
     async componentDidUpdate(prevProps : any) {
       if (this.props.files != null && this.props.files != prevProps.files) {
-        this.setState( {mergedPDF : await assemblePDF(this.props.files!)})
-        
+        let file : UploadedFile = (await assemblePDF(this.props.files!))!
+        this.setState( {
+          mergedPDF : file,
+          numberPages: file.getPageCount()
+        })
       }
     }
 
     async componentDidMount() {
       if (this.props.files != null) {
-        let file : File = await assemblePDF(this.props.files!)
+        let file : UploadedFile = (await assemblePDF(this.props.files!))!
         this.setState( {
-          mergedPDF : file
+          mergedPDF : file,
+          numberPages: file.getPageCount()
         })
       }
     }
@@ -162,7 +165,7 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | un
         <FileContext.Consumer> 
         { (context: any) => (
         <div className={classes.outer} id="pdfOuter">
-          <Document className={classes.documentView} loading={"Loading"} file={this.state.mergedPDF} onLoadSuccess={(pdf) => {this.setState({numberPages : pdf.numPages}); if (pdf.numPages == 0) {alert("Corrupted or empty PDF!")}}} noData="">
+          <Document className={classes.documentView} loading={"Loading"} file={this.state.mergedPDF != null ? this.state.mergedPDF.file : null} noData="">
             
             {this.state.mergedPDF != null && this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
             return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
