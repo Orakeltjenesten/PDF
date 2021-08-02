@@ -6,6 +6,7 @@ import { UploadedFile } from './UploadedFile';
 
 interface ContextProps {
     files: UploadedFile[];
+    index: number;
     addFiles: (files: File[], index?: any) => void;
     splitFile: (uploadedFile: UploadedFile) => void;
     reorderFiles: (a: any, b: any) => void;
@@ -72,7 +73,6 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
       return null;
     }
   }
-
   const addFiles = useCallback(
     async (newFiles : File[], index?) => {
       let updatedFiles = uploadedFiles;
@@ -154,7 +154,7 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
     [uploadedFiles]
   );
 
-  const fileStore = { files: uploadedFiles, addFiles, reorderFiles, splitFile, deleteFile}
+  const fileStore = { files: uploadedFiles, index: 0, addFiles, reorderFiles, splitFile, deleteFile}
 
   return (
     <FileContext.Provider value={fileStore} >

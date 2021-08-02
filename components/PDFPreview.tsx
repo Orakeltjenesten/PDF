@@ -11,8 +11,6 @@ import { UploadedFile } from "../hooks/UploadedFile";
 const styles =(theme: Theme) => 
   createStyles({
   documentView : {
-    overflowY: 'auto',
-    overflowX: 'auto',
     maxHeight: '80vh',
     position: 'relative',
     display: 'flex',
@@ -30,6 +28,8 @@ const styles =(theme: Theme) =>
   },
 
   outer : {
+    overflowY: 'auto',
+    overflowX: 'hidden',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
@@ -131,13 +131,15 @@ interface PDFPreviewProps extends WithStyles<typeof styles> {
 }
 
 class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : UploadedFile | undefined, numberPages : number}> {
-    constructor(props: PDFPreviewProps) {
+  private pdfContainerRef: React.RefObject<HTMLDivElement>;  
+  constructor(props: PDFPreviewProps) {
         super(props);
         pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
         this.state = {
           mergedPDF: undefined,
           numberPages: -1
         }
+        this.pdfContainerRef = React.createRef<HTMLDivElement>();
     }
 
     async componentDidUpdate(prevProps : any) {
@@ -164,9 +166,8 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : UploadedF
       return (
         <FileContext.Consumer> 
         { (context: any) => (
-        <div className={classes.outer} id="pdfOuter">
+        <div className={classes.outer} ref={this.pdfContainerRef} id="pdfOuter">
           <Document className={classes.documentView} loading={"Loading"} file={this.state.mergedPDF != null ? this.state.mergedPDF.file : null} noData="">
-            
             {this.state.mergedPDF != null && this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
             return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
               <PageLoading />
