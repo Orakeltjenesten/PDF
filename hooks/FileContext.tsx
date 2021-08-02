@@ -1,17 +1,18 @@
 import React, { useCallback, useState, createContext, ReactNode} from 'react';
 import { PDFDocument, PDFPage, scale } from "pdf-lib";
 import { useContext } from 'react';
+import { UploadedFile } from './UploadedFile';
 
 
 interface ContextProps {
-    files: File[];
+    files: UploadedFile[];
     addFiles: (files: File[], index?: any) => void;
-    splitFile: (file: File) => void;
+    splitFile: (uploadedFile: UploadedFile) => void;
     reorderFiles: (a: any, b: any) => void;
-    deleteFile: (file: File) => void;
+    deleteFile: (uploadedFile: UploadedFile) => void;
 }
 
-async function pdfFromImage(imageFile : File) {
+async function uploadedFileFromImage(imageFile : File) {
   let imgPDF : PDFDocument = await PDFDocument.create();
   let image;
   if (imageFile.type == "image/png") {
@@ -33,36 +34,61 @@ async function pdfFromImage(imageFile : File) {
   let imagePDFFile : any = new Blob([await imgPDF.save()], {type: "application/pdf"});
   imagePDFFile.name = imageFile.name + " as pdf.pdf"
   imagePDFFile.lastModified = 0;
-  return (imagePDFFile as File);
+  return new UploadedFile(imagePDFFile as File, imgPDF);
 }
 
-let contains = (files: File[], file: File) => (files.filter( (file2: File) => (file2.name == file.name)).length > 0);
+let contains = (files: UploadedFile[], file: File) => (files.filter( (file2: UploadedFile) => (file2.file.name == file.name)).length > 0);
 
 const FileContext = createContext<ContextProps | undefined>(undefined)
 
 const FileContextWrapper = ({children }: {children: ReactNode}) => {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+
+  async function buildUploadedFile(file: File) {
+    if (file == null) {
+      return null;
+    }
+
+    if (contains(uploadedFiles, file)) {
+      alert(file.name + " is the name of an existing file - it will not be uploaded.");
+      return null
+    }
+
+    if (file.type == "image/png" || file.type == "image/jpeg") {
+      let temp = await uploadedFileFromImage(file);
+      if (contains(uploadedFiles, temp.file)) {return null}
+      return temp;
+    }
+
+    else if (file.type == "application/pdf") {
+      let pdf = await PDFDocument.load(await file.arrayBuffer());
+      if (pdf.getPageCount() == 0) {
+        alert("Invalid input: " + file.name);
+        return null;
+      } else {
+        return new UploadedFile(file, pdf);
+      }
+    } else {
+      return null;
+    }
+  }
 
   const addFiles = useCallback(
     async (newFiles : File[], index?) => {
-      let updatedFiles = Array.from(uploadedFiles);
-      let filesToAdd : File[] = [];
+      let updatedFiles = uploadedFiles;
+      let newUploadedFiles: UploadedFile[] = [];
+      let tempFile: UploadedFile | null;
       for (let i=0; i < newFiles.length; i++) {
-        if (newFiles[i].type == "image/png" || newFiles[i].type == "image/jpeg") {
-          newFiles.splice(i, 1, await pdfFromImage(newFiles[i]));
-        }
-        if (contains(updatedFiles, newFiles[i])) {
-          alert(newFiles[i].name + " is the name of an existing file - it will not be uploaded."); 
-          newFiles.splice(i, 1); 
-          i--;
+        tempFile = await buildUploadedFile(newFiles[i]);
+        if (tempFile != null) {
+          newUploadedFiles.push(tempFile);
         }
       }
-      
-      
+
       if (index == undefined) {
-        updatedFiles = updatedFiles.concat(newFiles);
+        updatedFiles = updatedFiles.concat(newUploadedFiles);
       } else {
-        updatedFiles.splice(index, 0, ...newFiles);
+        updatedFiles.splice(index, 0, ...newUploadedFiles);
       }
       setUploadedFiles(updatedFiles);
     },
@@ -70,11 +96,11 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
   );
 
   const deleteFile = useCallback(
-    async (file: File) => {
+    async (uploadedFile: UploadedFile) => {
       let newFiles = Array.from(uploadedFiles);
       
       for (let i = 0; i < newFiles.length; i++) {
-        if (file === newFiles[i]) {
+        if (uploadedFile === newFiles[i]) {
           newFiles.splice(i, 1); 
           break;
         }
@@ -86,10 +112,11 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
   );
 
   const splitFile = useCallback(
-    async (file: File) => {
+    async (uploadedFile: UploadedFile) => {
       let colorNumber = Math.floor(Math.random() * 16777215)
-      let document : PDFDocument = await PDFDocument.load(await file.arrayBuffer());
-      let splits : File[] = [];
+      let document : PDFDocument = uploadedFile.PDF;
+      let file : File = uploadedFile.file;
+      let splits : UploadedFile[] = [];
       let pageDoc : PDFDocument;
       let blob : any;
       if (document.getPageCount() == 1) {
@@ -104,9 +131,9 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
         blob = new Blob([await pageDoc.save()]);
         blob.lastModifiedDate = colorNumber;
         blob.name = "Page " + i.toString() + " of " + file.name;
-        splits.push(blob);
+        splits.push(new UploadedFile(blob, pageDoc));
       }
-      let index =  uploadedFiles.findIndex((f) => (f == file));
+      let index =  uploadedFiles.findIndex((f) => (f.file == file));
       let updatedFiles = Array.from(uploadedFiles);
       updatedFiles.splice(index, 1, ...splits);
 
@@ -136,11 +163,11 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
   );
 }
 
-async function assemblePDF(files : File[]) {
+async function assemblePDF(files : UploadedFile[]) {
   if (files.length == 0) {
     return
   }
-  let pdfs : PDFDocument[] = await Promise.all(files.map(async (file) => PDFDocument.load(await file.arrayBuffer()))); 
+  let pdfs : PDFDocument[] = files.map((file) => (file.PDF));
   const merged = await PDFDocument.create();
   for (let i=0; i < pdfs.length; i++) {
     let pages = await merged.copyPages(pdfs[i], pdfs[i].getPageIndices());

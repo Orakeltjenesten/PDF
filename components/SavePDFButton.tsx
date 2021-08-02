@@ -3,9 +3,10 @@ import { Button } from "@material-ui/core";
 import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
 import { FileContext, assemblePDF } from "../hooks/FileContext";
+import { UploadedFile } from "../hooks/UploadedFile";
 
-export class SavePDFButton extends React.Component<{text: string, files?: File[]}, {}> {
-    constructor(props: {text: string, files: File[]}) {
+export class SavePDFButton extends React.Component<{text: string, files?: UploadedFile[]}, {}> {
+    constructor(props: {text: string, files: UploadedFile[]}) {
       super(props);
       this.getDownload = this.getDownload.bind(this);
     }

@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css'
 import PDFDisplayEntry from "./PDFDisplayEntry/PDFDisplayEntry";
 import { FileContext } from "../hooks/FileContext";
 import { Grid } from "@material-ui/core";
+import { UploadedFile } from "../hooks/UploadedFile";
 
 
 export class PDFsDisplay extends React.Component<{}, {}> {
@@ -30,8 +31,8 @@ export class PDFsDisplay extends React.Component<{}, {}> {
             <Droppable droppableId="droppable">
               {(provided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                {fileStore?.files.map((file : File, index : number) => (
-                  <PDFDisplayEntry index={index} file={file} key={file.name} />
+                {fileStore?.files.map((file : UploadedFile, index : number) => (
+                  <PDFDisplayEntry index={index} file={file.file} key={file.file.name} />
                 ))}
                 {provided.placeholder}
                 </div>

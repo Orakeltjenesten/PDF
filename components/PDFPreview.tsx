@@ -5,6 +5,7 @@ import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/s
 import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { PDFDocument } from "pdf-lib";
 import { FlutterDashTwoTone } from "@material-ui/icons";
+import { UploadedFile } from "../hooks/UploadedFile";
 
 
 const styles =(theme: Theme) => 
@@ -126,7 +127,7 @@ const PageLoading = (props: {}) => {
 
 
 interface PDFPreviewProps extends WithStyles<typeof styles> {
-  files: File[] | undefined
+  files: UploadedFile[] | undefined
 }
 
 class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : File | undefined, pageNumber : number, numberPages : number}> {
