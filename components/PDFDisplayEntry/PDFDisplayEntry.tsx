@@ -7,13 +7,14 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { PDFDocument } from 'pdf-lib';
+import { UploadedFile } from '../../hooks/UploadedFile';
 
-interface PDFsDisplayEntryProps {file : File, index: number};
+interface PDFsDisplayEntryProps {uploadedFile : UploadedFile, index: number};
 
 const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
     function download() {
-      let url = window.URL.createObjectURL(props.file);
-      let name = props.file.name;
+      let url = window.URL.createObjectURL(props.uploadedFile.file);
+      let name = props.uploadedFile.file.name;
       var a = document.createElement("a");
       document.body.appendChild(a);
       a.setAttribute("style", "display: none;");
@@ -35,16 +36,16 @@ const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
     return (
       <FileContext.Consumer>
         {(fileStore) => (
-          <Draggable draggableId={props.file.name} index={props.index} key={props.file.name}>
+          <Draggable draggableId={props.uploadedFile.name} index={props.index} key={props.uploadedFile.name}>
           {(provided, snapshot) => (
             <div ref={provided.innerRef} {...provided.dragHandleProps} 
             {...provided.draggableProps} className={`${styles.entry} ${snapshot.isDragging ? styles.entryDrag : ''}`}>
             <ListItem ContainerComponent="div">
-              <ListItemText primary={props.file.name} title={props.file.name} style={{paddingRight: '120px'}}/>
+              <ListItemText primary={props.uploadedFile.name} title={props.uploadedFile.name} style={{paddingRight: '120px'}}/>
               <ListItemSecondaryAction>
                   <IconButton onClick={download}><GetAppIcon /></IconButton>
-                  <IconButton onClick={(e) => (fileStore?.splitFile(props.file))}><CallSplitIcon /></IconButton>
-                  <IconButton onClick={(e) => (fileStore?.deleteFile(props.file))}><DeleteIcon /></IconButton>
+                  <IconButton onClick={(e) => (fileStore?.splitFile(props.uploadedFile))}><CallSplitIcon /></IconButton>
+                  <IconButton onClick={(e) => (fileStore?.deleteFile(props.uploadedFile))}><DeleteIcon /></IconButton>
                 </ListItemSecondaryAction> 
                 
             </ListItem>

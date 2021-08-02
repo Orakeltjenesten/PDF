@@ -13,8 +13,8 @@ export class PDFsDisplay extends React.Component<{}, {}> {
       super(props);
     }
     pdfList(context: any) {
-      return context.files.map((file : File, index : number) => 
-      <PDFDisplayEntry index={index} file={file} key={file.name} />
+      return context.files.map((uploadedFile : UploadedFile, index : number) => 
+      <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.name} />
       )
     }
     onDragEnd = (result: DropResult, context: any) => {
@@ -31,8 +31,8 @@ export class PDFsDisplay extends React.Component<{}, {}> {
             <Droppable droppableId="droppable">
               {(provided) => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                {fileStore?.files.map((file : UploadedFile, index : number) => (
-                  <PDFDisplayEntry index={index} file={file.file} key={file.file.name} />
+                {fileStore?.files.map((uploadedFile : UploadedFile, index : number) => (
+                  <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.file.name} />
                 ))}
                 {provided.placeholder}
                 </div>

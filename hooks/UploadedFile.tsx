@@ -2,11 +2,13 @@ import { PDFDocument } from "pdf-lib";
 
 class UploadedFile {
     file: File;
+    name: string;
     PDF : PDFDocument;
 
     constructor(file: File, pdf: PDFDocument) {
         this.file = file;
         this.PDF = pdf;
+        this.name = file.name;
     }
 
     getPageCount() {
