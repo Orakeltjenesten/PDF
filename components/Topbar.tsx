@@ -133,7 +133,6 @@ const Topbar = ({ variant }: TopbarProps) => {
 
   const items = [
         { text: 'Upload', to: '/upload' },
-        { text: 'Organize', to: '/organize' },
         { text: 'Merge', to: '/merge' },
         { text: 'Split', to: '/split' }
       ] as Array<TopBarItemProps>;

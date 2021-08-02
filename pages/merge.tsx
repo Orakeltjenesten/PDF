@@ -1,15 +1,21 @@
-import Head from 'next/head';
-import React, { useState } from 'react';
+import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import React from 'react'
+import { FileContext, FileContextWrapper } from "../hooks/FileContext";
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
-import { FileContext } from '../hooks/FileContext';
 import MuiContainer from '@material-ui/core/Container';
+import UploadButton from '../components/UploadButton';
 import { PDFsDisplay } from '../components/PDFsDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
+import { useState } from 'react';
+import { Button, Grid } from '@material-ui/core';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -20,8 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingLeft: theme.spacing(2),
         },
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
+        ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
+          flexDirection: 'row'
+        },
         justifyContent: 'space-evenly',
+        maxHeight: '80vh'
       },
       listView: {
         borderRight: '0',
@@ -30,48 +40,64 @@ const useStyles = makeStyles((theme: Theme) =>
         alignItems: 'center',
         justifyContent: 'center',
         flex: '1',
-        height: '80vh'
+        maxHeight: '80vh',
+        padding: 0
       },
-    }
-));
-
+      pdfPreview: {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: '1',
+          height: '80vh',
+          margin: '5px',
+          padding: 0
+      },
+    })
+  );
 
 export default function Home() {
-    const classes = useStyles();
+  const classes = useStyles();
+  const [togglePreview, setTogglePreview] = useState<boolean>(false);
+  return (
+    <>
+      <Head>
+        <title>PDF TOOL</title>
+        <meta name="PDF Merger" content="Merging PDF" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-    const [mergedFile, setUploadedFiles] = useState<File[]>([]);
+      <main className={styles.main}>
 
-    return (
-        <>
-            <Head>
-                <title>PDF Application - Merge</title>
-                <meta name="PDF Application" content="Merge"/>
-                <link rel="icon" href="/favicon.ico"/>
-            </Head>
-
-            <main className={styles.main}>
-                <div className={styles.header}>
-                    <h1>MERGE</h1>
-                </div>
-
-
-                <FileContext.Consumer>
-                    {(fileStore) => (
-                    <MuiContainer className={classes.container} maxWidth={false}>
-                        <div className={classes.listView}>
-                            <div style={{overflowY: 'auto'}}><PDFsDisplay/></div>
-                            
-                            {fileStore!.files!.length > 0 ? <SavePDFButton text="Merge" files={fileStore?.files}/> : <h2>Upload some files to get started!</h2>}
-                               
-                        </div>
-                    </MuiContainer>
-                    )
-                }
+        <div className={styles.header}>
+          <h1>
+            ORGANIZE
+          </h1>
+        </div>
+        <FileContext.Consumer>
+          {(fileStore) => (
+            
+            <MuiContainer className={classes.container} maxWidth={false}>
+              
+                <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
+                  <Grid item><UploadButton text="+" /></Grid>
+                  <Grid item style={{overflowY: 'auto'}}><PDFsDisplay/></Grid>
+                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text="Merge" files={fileStore?.files}/> : <h2>Upload some files to get started!</h2>}</Grid>
+                  <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button></Grid>
+                </Grid>
+                <MuiContainer className={classes.pdfPreview}>
+                  {togglePreview && <PDFPreview files={fileStore?.files}/>}
+                </MuiContainer>
+              </MuiContainer>
+          )
+          }
         </FileContext.Consumer>
+
+      
+      
         <footer className={styles.footer}>
             Laget med kjærlighet i Trondheim
         </footer>
-            </main>
-        </>
-    )
+      </main>
+    </>
+  )
 }
