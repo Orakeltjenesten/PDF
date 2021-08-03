@@ -166,7 +166,7 @@ const Topbar = ({ variant }: TopbarProps) => {
                 <IconButton className={classes.topbarItem} onClick={() => setSidebarOpen((prev) => !prev)}>
                   {sidebarOpen ? <CloseIcon aria-label='Lukk meny' /> : <MenuIcon aria-label='Åpne meny' />}
                 </IconButton>
-                <Sidebar items={items} onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
+                <Sidebar items={items} onClose={() => setSidebarOpen(false)} open={sidebarOpen && mobile} />
               </Box>
             }
           </div>

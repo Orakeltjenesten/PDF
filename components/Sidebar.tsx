@@ -18,12 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
     overflow: 'auto',
     display: 'grid',
     gridTemplateRows: '1fr 70px',
-    height: 'calc(100% - 64px)',
-    marginTop: 64,
-    [theme.breakpoints.down('xs')]: {
-      height: 'calc(100% - 56px)',
-      marginTop: 56,
-    },
+    height: 'calc(100%)',
   },
   root: {
     padding: theme.spacing(5, 3),
