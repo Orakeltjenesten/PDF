@@ -187,7 +187,6 @@ class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : UploadedF
           }) : <div />}
           
           </Document>
-          <PreviewText text="Preview" />
           </div>
         )}
           </FileContext.Consumer>
