@@ -5,13 +5,14 @@ import React, { SyntheticEvent } from "react";
 import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 
-export class SavePDFButton extends React.Component<{text: string, files?: UploadedFile[]}, {}> {
-    constructor(props: {text: string, files: UploadedFile[]}) {
-      super(props);
-      this.getDownload = this.getDownload.bind(this);
-    }
 
-    async getDownload(e : SyntheticEvent, context: any) {
+interface SavePDFButtonProps {
+  text: string
+}
+
+export const SavePDFButton = (props: SavePDFButtonProps) => {
+
+    async function getDownload(e : SyntheticEvent, context: any) {
       e.preventDefault();
       let url: string;
       let name: string;
@@ -38,15 +39,12 @@ export class SavePDFButton extends React.Component<{text: string, files?: Upload
   
     }
   
-    render() {
-      return <FileContext.Consumer>
-        {(context) => (
-          <Button variant="contained" onClick={(e) => this.getDownload(e, context)}>{this.props.text}</Button>
-      )
-        }
-      </FileContext.Consumer>
-      
-      
+  return <FileContext.Consumer>
+    {(context) => (
+      <Button variant="contained" onClick={(e) => getDownload(e, context)}>{props.text}</Button>
+    )
     }
+  </FileContext.Consumer>
+      
   
   }

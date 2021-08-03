@@ -8,43 +8,37 @@ import { Grid } from "@material-ui/core";
 import { UploadedFile } from "../hooks/UploadedFile";
 
 
-export class PDFsDisplay extends React.Component<{}, {}> {
-    constructor(props: {}) {
-      super(props);
-    }
-    pdfList(context: any) {
-      return context.files.map((uploadedFile : UploadedFile, index : number) => 
-      <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.name} />
-      )
-    }
-    onDragEnd = (result: DropResult, context: any) => {
-      if (result.destination) {
-        context.reorderFiles(result.source.index, result.destination.index);
-      }
-    };
+export const PDFsDisplay = () => {
   
-    render() {
-      return (
-        <FileContext.Consumer>
-        {(fileStore) => (
-          <DragDropContext onDragEnd={(result: DropResult) => {fileStore?.reorderFiles(result.source.index, result.destination?.index)}}>
-            <Droppable droppableId="droppable">
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                {fileStore?.files.map((uploadedFile : UploadedFile, index : number) => (
-                  <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.file.name} />
-                ))}
-                {provided.placeholder}
-                </div>
-              )
-              }
-            </Droppable>
-          </DragDropContext> 
-      )
-        }
-        </FileContext.Consumer>
-      )
+  function pdfList(context: any) {
+    return context.files.map((uploadedFile : UploadedFile, index : number) => 
+    <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.name} />
+    )
+  }
+  const onDragEnd = (result: DropResult, context: any) => {
+    if (result.destination) {
+      context.reorderFiles(result.source.index, result.destination.index);
     }
-      
-      
+  };
+
+  return (
+    <FileContext.Consumer>
+    {(fileStore) => (
+      <DragDropContext onDragEnd={(result: DropResult) => {fileStore?.reorderFiles(result.source.index, result.destination?.index)}}>
+        <Droppable droppableId="droppable">
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+            {fileStore?.files.map((uploadedFile : UploadedFile, index : number) => (
+              <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.file.name} />
+            ))}
+            {provided.placeholder}
+            </div>
+          )
+          }
+        </Droppable>
+      </DragDropContext> 
+  )
+    }
+    </FileContext.Consumer>
+  )
 }

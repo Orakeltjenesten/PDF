@@ -80,7 +80,7 @@ export default function Home() {
               
                 <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
                   <Grid item style={{overflowY: 'auto'}}><PDFsDisplay/></Grid>
-                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text="Merge" files={fileStore?.files}/> : <h2>Upload some files to get started!</h2>}</Grid>
+                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text="Merge" />: <h2>Upload some files to get started!</h2>}</Grid>
                   <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button></Grid>
                 </Grid>
                 <MuiContainer className={classes.pdfPreview}>
