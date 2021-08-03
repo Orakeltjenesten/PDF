@@ -6,11 +6,12 @@ import { UploadedFile } from './UploadedFile';
 
 interface ContextProps {
     files: UploadedFile[];
-    index: number;
+    focusedPage: number | undefined;
     addFiles: (files: File[], index?: any) => void;
     splitFile: (uploadedFile: UploadedFile) => void;
     reorderFiles: (a: any, b: any) => void;
     deleteFile: (uploadedFile: UploadedFile) => void;
+    setPage: (page: number) => void;
 }
 
 async function uploadedFileFromImage(imageFile : File) {
@@ -44,6 +45,7 @@ const FileContext = createContext<ContextProps | undefined>(undefined)
 
 const FileContextWrapper = ({children }: {children: ReactNode}) => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [fP, setFocusedPage] = useState<number>();
 
   async function buildUploadedFile(file: File) {
     if (file == null) {
@@ -154,7 +156,14 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
     [uploadedFiles]
   );
 
-  const fileStore = { files: uploadedFiles, index: 0, addFiles, reorderFiles, splitFile, deleteFile}
+  const setPage = useCallback(
+    (page: number) => {
+      setFocusedPage(page);
+    },
+    [fP]
+  )
+
+  const fileStore = { files: uploadedFiles, focusedPage: fP, addFiles, reorderFiles, splitFile, deleteFile, setPage}
 
   return (
     <FileContext.Provider value={fileStore} >
@@ -164,9 +173,6 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
 }
 
 async function assemblePDF(files : UploadedFile[]) {
-  if (files.length == 0) {
-    console.log("SNJFDA")
-  }
   let pdfs : PDFDocument[] = files.map((file) => (file.PDF));
   const merged = await PDFDocument.create();
   for (let i=0; i < pdfs.length; i++) {
@@ -182,6 +188,14 @@ async function assemblePDF(files : UploadedFile[]) {
   return new UploadedFile(blob, merged);
 }
 
+function getPage(files: UploadedFile[], index: number) {
+  let page: number = 0
+  for (let i=0; i < index; i++) {
+    page += files[i].getPageCount();
+  }
+  return page;
+}
+
 const useFileContext = () => {
   const context = useContext(FileContext);
   if (context === undefined) {
@@ -190,4 +204,4 @@ const useFileContext = () => {
   return context;
 };
  
-export { FileContextWrapper, FileContext, assemblePDF , useFileContext};
+export { FileContextWrapper, FileContext, assemblePDF, getPage, useFileContext};

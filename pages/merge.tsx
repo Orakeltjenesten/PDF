@@ -84,7 +84,7 @@ export default function Home() {
                   <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button></Grid>
                 </Grid>
                 <MuiContainer className={classes.pdfPreview}>
-                  {togglePreview && <PDFPreview files={fileStore?.files}/>}
+                  {togglePreview && <PDFPreview currentPage={fileStore?.focusedPage} files={fileStore?.files}/>}
                 </MuiContainer>
               </MuiContainer>
           )

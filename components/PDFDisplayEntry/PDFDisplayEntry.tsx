@@ -1,6 +1,6 @@
 import styles from '../../styles/PDFsDisplayEntry.module.css'
 import { Draggable, DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
-import { FileContext } from "../../hooks/FileContext";
+import { FileContext, getPage } from "../../hooks/FileContext";
 import React from 'react';
 import { IconButton, ListItem, ListItemSecondaryAction, ListItemText } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -38,7 +38,7 @@ const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
         {(fileStore) => (
           <Draggable draggableId={props.uploadedFile.name} index={props.index} key={props.uploadedFile.name}>
           {(provided, snapshot) => (
-            <div ref={provided.innerRef} {...provided.dragHandleProps} 
+            <div onClick={(e) => {fileStore!.setPage(getPage(fileStore!.files, props.index))}} ref={provided.innerRef} {...provided.dragHandleProps} 
             {...provided.draggableProps} className={`${styles.entry} ${snapshot.isDragging ? styles.entryDrag : ''}`}>
             <ListItem ContainerComponent="div">
               <ListItemText primary={props.uploadedFile.name} title={props.uploadedFile.name} style={{paddingRight: '120px'}}/>
