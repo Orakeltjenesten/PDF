@@ -7,7 +7,7 @@ import { PDFDocument } from "pdf-lib";
 import { FlutterDashTwoTone } from "@material-ui/icons";
 import { UploadedFile } from "../hooks/UploadedFile";
 import { getTypographyUtilityClass } from "@material-ui/core";
-
+import { useTranslation } from "react-i18next";
 
 const styles =(theme: Theme) => 
   createStyles({
@@ -117,10 +117,11 @@ const PreviewText = (props: {text: string}) => {
 }
 
 const PageLoading = (props: {}) => {
+  const { t, i18n } = useTranslation();
   const classes = useStyles({});
   return (
     <div className={classes.pageLoading}>
-        Loading...
+        {t("Loading...")}
     </div>
   )
 }
@@ -133,6 +134,7 @@ interface PDFPreviewProps extends WithStyles<typeof styles> {
 }
 
 const PDFPreview = (props: PDFPreviewProps) => {
+  const { t, i18n } = useTranslation();
   let outerBox = React.createRef<HTMLDivElement>();
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
@@ -160,14 +162,14 @@ const PDFPreview = (props: PDFPreviewProps) => {
       }
     }
   }, [props.currentPage])
-  
+
     const {classes} = props;
     return (
       <FileContext.Consumer> 
       { (context: any) => (
       <div className={classes.outer} id="pdfOuter" ref={outerBox}>
         
-        <Document className={classes.documentView} loading={"Loading"} file={mergedPDF != null ? mergedPDF.file : null} noData="">
+        <Document className={classes.documentView} loading={t("Loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
           {mergedPDF != null && numberPages > 0 ? Array.from(Array(numberPages).keys()).map( (i) => {
           return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
             <PageLoading />

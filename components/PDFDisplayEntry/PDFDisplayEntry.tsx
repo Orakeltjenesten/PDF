@@ -12,6 +12,7 @@ import { UploadedFile } from '../../hooks/UploadedFile';
 interface PDFsDisplayEntryProps {uploadedFile : UploadedFile, index: number};
 
 const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
+  
     function download() {
       let url = window.URL.createObjectURL(props.uploadedFile.file);
       let name = props.uploadedFile.file.name;

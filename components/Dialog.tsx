@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Button, Dialog as MaterialDialog, DialogActions, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
-
+import { useTranslation } from 'react-i18next';
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     contentText: {
@@ -45,6 +45,7 @@ const Dialog = ({
   disabled = false,
 }: DialogProps) => {
   const classes = useStyles();
+  const { t, i18n } = useTranslation();
   return (
     <MaterialDialog
       aria-labelledby='form-dialog-title'
@@ -62,11 +63,11 @@ const Dialog = ({
       )}
       <DialogActions>
         <Button color='primary' onClick={onCancel || onClose} variant='text'>
-          {closeText || 'Lukk'}
+          {closeText || t("Close")}
         </Button>
         {onConfirm && (
           <Button color='primary' disabled={disabled} onClick={onConfirm || onCancel} variant='text'>
-            {confirmText || 'OK'}
+            {confirmText || t("Ok")}
           </Button>
         )}
       </DialogActions>
