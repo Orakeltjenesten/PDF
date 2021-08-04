@@ -17,11 +17,11 @@ const useStyles = makeStyles((theme: Theme) =>
     width: '100vw',
     overflow: 'auto',
     display: 'grid',
-    gridTemplateRows: '1fr 70px',
+    gridTemplateRows: '1fr',
     height: 'calc(100%)',
   },
   root: {
-    padding: theme.spacing(5, 3),
+    padding: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',

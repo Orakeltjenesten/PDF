@@ -143,8 +143,7 @@ const Topbar = ({ variant }: TopbarProps) => {
       color='primary'
       elevation={0}
       position='fixed'>
-      <Toolbar disableGutters>
-        <div className={classes.toolbar}>
+      <Toolbar disableGutters className={classes.toolbar}>
           <Link href="/">
             <a>
               <Logo darkColor={'white'} lightColor={'black'} />
@@ -170,7 +169,6 @@ const Topbar = ({ variant }: TopbarProps) => {
               </Box>
             }
           </div>
-        </div>
       </Toolbar>
     </AppBar>
   );

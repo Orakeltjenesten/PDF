@@ -19,9 +19,6 @@ import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
-        root: {
-            display: 'flex',
-        },
         cover: {
             flexGrow: 1,
             color: theme.palette.common.white,
@@ -38,10 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
         drawer: {
             width: '240px',
             flexShrink: 0,
-        },
-        drawerPaper: {
-            paddingTop: theme.spacing(8),
-            width: '240px',
         },
         drawerContainer: {
             overflow: 'auto',
@@ -100,29 +93,25 @@ export default function Home() {
                 <meta name={t("meta_name")} content={t("upload")}/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <div className={classes.root}>
-                <div className={classes.cover}>
-                    <div onMouseEnter={() => toggleHover(true)} onMouseLeave={() => toggleHover(false)} {...getRootProps()} className={classes.upload}>
-                        <Paper className={classnames(isDragActive ? classes.active : undefined, classes.container)}>
-                            <input {...getInputProps()} />
-                            <FileIcon fontSize='large'/>
-                            <Typography variant="h3" textAlign="center">
-                                {
-                                isDragActive ? t("drop_here") : hover ? t("click_select") : t("drag_or_select")
-                                }
-                            </Typography>
-                        </Paper>
-                    </div>
+            <div className={classes.cover}>
+                <div onMouseEnter={() => toggleHover(true)} onMouseLeave={() => toggleHover(false)} {...getRootProps()} className={classes.upload}>
+                    <Paper className={classnames(isDragActive ? classes.active : undefined, classes.container)}>
+                        <input {...getInputProps()} />
+                        <FileIcon fontSize='large'/>
+                        <Typography variant="h3" textAlign="center">
+                            {
+                            isDragActive ? t("drop_here") : hover ? t("click_select") : t("drag_or_select")
+                            }
+                        </Typography>
+                    </Paper>
                 </div>
-                {fileContext.files.length > 0 &&
-                    <Drawer
-                    className={classes.drawer}
-                    variant="permanent"
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                    anchor="right"
-                    >
+            </div>
+            {fileContext.files.length > 0 &&
+                <Drawer
+                className={classes.drawer}
+                variant="permanent"
+                anchor="left"
+                >
                     <div className={classes.drawerContainer}>
                         <List>
                         <Typography align='center' variant='h3'>{t("accepted_files")}</Typography>
@@ -146,9 +135,8 @@ export default function Home() {
                         </List>
                         }
                     </div>
-                    </Drawer>
-                }
-            </div>
+                </Drawer>
+            }
         </>
     )
 }
