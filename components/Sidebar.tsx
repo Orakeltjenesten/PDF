@@ -17,16 +17,11 @@ const useStyles = makeStyles((theme: Theme) =>
     width: '100vw',
     overflow: 'auto',
     display: 'grid',
-    gridTemplateRows: '1fr 70px',
-    height: 'calc(100% - 64px)',
-    marginTop: 64,
-    [theme.breakpoints.down('xs')]: {
-      height: 'calc(100% - 56px)',
-      marginTop: 56,
-    },
+    gridTemplateRows: '1fr',
+    height: 'calc(100%)',
   },
   root: {
-    padding: theme.spacing(5, 3),
+    padding: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
@@ -78,7 +73,7 @@ const Sidebar = ({ items, onClose, open }: IProps) => {
   const classes = useStyles();
   const theme = useTheme();
   return (
-    <Drawer anchor='top' classes={{ paper: classes.sidebar }} onClose={onClose} open={open} style={{ zIndex: theme.zIndex.drawer + 1 }}>
+    <Drawer anchor='top' classes={{ paper: classes.sidebar }} onClose={onClose} open={open} style={{ zIndex: theme.zIndex.drawer}}>
       <div className={classes.root}>
         {items.map((item, i) => (
           <SidebarItem key={i} {...item} />

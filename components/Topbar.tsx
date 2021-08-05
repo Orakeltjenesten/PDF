@@ -8,6 +8,7 @@ import Logo from './Logo';
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from "@material-ui/core/styles";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.colors.topbar,
         color: theme.palette.text.primary,
         flexGrow: 1,
-        zIndex: theme.zIndex.drawer + 2,
+        zIndex: theme.zIndex.drawer + 1,
       },
       transparentAppBar: {
         backgroundColor: 'transparent',
@@ -49,8 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
         gridTemplateColumns: '120px 1fr auto',
         gap: theme.spacing(3),
         [theme.breakpoints.down('md')]: {
-          padding: theme.spacing(0, 1),
-          gridTemplateColumns: '80px 1fr',
+          gridTemplateColumns: '120px 1fr',
         },
       },
     
@@ -71,14 +71,6 @@ const useStyles = makeStyles((theme: Theme) =>
           display: 'grid',
           justifyContent: 'flex-end',
         },
-      },
-      profileName: {
-        margin: `auto ${theme.spacing(1)}px`,
-        color: theme.palette.common.white,
-        textAlign: 'right',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
       },
       topbarItem: {
         height: 50,
@@ -125,6 +117,8 @@ const Topbar = ({ variant }: TopbarProps) => {
 
   const handleScroll = () => setScrollLength(window.pageYOffset);
 
+  const mobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+
   useEffect(() => {
     window.scrollTo(0, 0);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -143,14 +137,13 @@ const Topbar = ({ variant }: TopbarProps) => {
     <AppBar
       className={classnames(
         classes.appBar,
-        variant !== 'filled' && scrollAtTop && !sidebarOpen && classes.transparentAppBar,
-        (variant === 'filled' || !scrollAtTop) && !sidebarOpen && classes.backdrop,
+        variant !== 'filled' && scrollAtTop && (!sidebarOpen || !mobile) && classes.transparentAppBar,
+        (variant === 'filled' || !scrollAtTop) && (!sidebarOpen || !mobile) && classes.backdrop,
       )}
       color='primary'
       elevation={0}
       position='fixed'>
-      <Toolbar disableGutters>
-        <div className={classes.toolbar}>
+      <Toolbar disableGutters className={classes.toolbar}>
           <Link href="/">
             <a>
               <Logo darkColor={'white'} lightColor={'black'} />
@@ -167,14 +160,15 @@ const Topbar = ({ variant }: TopbarProps) => {
             <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
               <ThemeSettings className={classes.topbarItem} />
             </Box>
-            <Box component='div'>
-              <IconButton sx={{ display: { md: 'none', xs: 'block' } }} className={classes.topbarItem} onClick={() => setSidebarOpen((prev) => !prev)}>
-                {sidebarOpen ? <CloseIcon aria-label='Lukk meny' /> : <MenuIcon aria-label='Åpne meny' />}
-              </IconButton>
-              <Sidebar items={items} onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
-            </Box>
+            {mobile &&
+              <Box component='div'>
+                <IconButton className={classes.topbarItem} onClick={() => setSidebarOpen((prev) => !prev)}>
+                  {sidebarOpen ? <CloseIcon aria-label='Lukk meny' /> : <MenuIcon aria-label='Åpne meny' />}
+                </IconButton>
+                <Sidebar items={items} onClose={() => setSidebarOpen(false)} open={sidebarOpen && mobile} />
+              </Box>
+            }
           </div>
-        </div>
       </Toolbar>
     </AppBar>
   );

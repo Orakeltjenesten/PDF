@@ -97,7 +97,6 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
       MuiCssBaseline: {
         styleOverrides: {
           body: {
-            background: get<string>({ light: 'linear-gradient(45deg, rgba(209,234,235,1) 0%, rgba(207,218,241,1) 100%)', dark: 'linear-gradient(45deg, rgba(72,39,119,1) 0%, rgba(0,80,158,1) 100%)' }),
             // eslint-disable-next-line @typescript-eslint/ban-types
             ...get<object>({ light: {}, dark: darkScrollbar() }),
           },
@@ -134,7 +133,7 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
         contrastText: get<string>({ light: '#ffffff', dark: '#000000' }),
       },
       secondary: {
-        main: get<string>({ light: '#4f5643', dark: '#ffa2cb' }),
+        main: get<string>({ light: '#e1edec', dark: '#465163' }),
       },
       error: {
         main: get<string>({ light: '#F71735', dark: '#ff6060' }),
@@ -154,7 +153,7 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
       },
       borderWidth: '1px',
       background: {
-        default: get<string>({ light: '#FDFFFC', dark: '#121212' }),
+        default: get<string>({ light: 'linear-gradient(45deg, rgba(209,234,235,1) 0%, rgba(207,218,241,1) 100%)', dark: 'linear-gradient(45deg, rgba(72,39,119,1) 0%, rgba(0,80,158,1) 100%)' }),
         paper: get<string>({ light: '#f6f5f3', dark: '#232323' }),
       },
       colors: {
