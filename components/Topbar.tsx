@@ -18,6 +18,7 @@ import { Box } from '@material-ui/core';
 // Assets/Icons
 import MenuIcon from '@material-ui/icons/MenuRounded';
 import CloseIcon from '@material-ui/icons/CloseRounded';
+import useTranslation from 'next-translate/useTranslation';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -117,6 +118,7 @@ export type TopbarProps = {
 };
 
 const Topbar = ({ variant }: TopbarProps) => {
+  const { t } = useTranslation("common");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const classes = useStyles();
   const [scrollLength, setScrollLength] = useState(0);
@@ -132,9 +134,9 @@ const Topbar = ({ variant }: TopbarProps) => {
   const scrollAtTop = useMemo(() => scrollLength < 20, [scrollLength]);
 
   const items = [
-        { text: 'Upload', to: '/upload' },
-        { text: 'Merge', to: '/merge' },
-        { text: 'Split', to: '/split' }
+        { text: t('upload'), to: '/upload' },
+        { text: t('merge'), to: '/merge' },
+        { text: t('split'), to: '/split' }
       ] as Array<TopBarItemProps>;
 
   return (

@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Button, Dialog as MaterialDialog, DialogActions, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
+import useTranslation from 'next-translate/useTranslation';
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     contentText: {
@@ -45,7 +45,7 @@ const Dialog = ({
   disabled = false,
 }: DialogProps) => {
   const classes = useStyles();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <MaterialDialog
       aria-labelledby='form-dialog-title'

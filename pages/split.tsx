@@ -4,7 +4,7 @@ import React from 'react';
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
-import { useTranslation } from 'react-i18next';
+import useTranslation from 'next-translate/useTranslation';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 export default function Home() {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const classes = useStyles();
     return (
         <>

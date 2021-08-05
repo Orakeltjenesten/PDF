@@ -2,7 +2,7 @@ import { ThemeContext } from "@emotion/react";
 import { Button } from "@material-ui/core";
 import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
-import { useTranslation } from "react-i18next";
+import useTranslation from 'next-translate/useTranslation';
 import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 
@@ -13,7 +13,7 @@ interface SavePDFButtonProps {
 }
 
 export const SavePDFButton = (props: SavePDFButtonProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   
   
   async function getDownload(e : SyntheticEvent, context: any) {

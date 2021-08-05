@@ -1,0 +1,13 @@
+{
+    "meta_name": "PDF Program",
+    "welcome_message": "Velkommen til PDF...",
+    "upload": "Last opp",
+    "merge": "Slå sammen",
+    "split": "Del opp",
+    "drag_or_select": "Dra filer hit, eller klikk for å velge filer.",
+    "click_select": "Klikk for å velge filer som skal lastes opp",
+    "drop_here": "Slipp filer her",
+    "accepted_files": "Aksepterte filer",
+    "rejected_files": "Avslåtte filer",
+    "upload_title": "PDF-Verktøy - Last opp"
+}

@@ -1,7 +1,6 @@
 import ServerStyleSheets from '@material-ui/styles/ServerStyleSheets';
 import Document, { Html, Head, Main, NextScript, DocumentContext} from 'next/document'
 import React from 'react';
-import '/language/i18n'
 
 class MyDocument extends Document {
   render() {

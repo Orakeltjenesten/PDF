@@ -14,7 +14,7 @@ import PDFPreview from '../components/PDFPreview';
 import { useState } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { useTranslation } from 'react-i18next';
+import useTranslation from 'next-translate/useTranslation';
 
 
 
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Home() {
 
-  const { t, i18n } = useTranslation();
+  const { t} = useTranslation();
   const classes = useStyles();
   const [togglePreview, setTogglePreview] = useState<boolean>(false);
   return (

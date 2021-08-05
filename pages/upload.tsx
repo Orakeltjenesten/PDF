@@ -14,7 +14,7 @@ import { ListItemIcon } from '@material-ui/core';
 import PDFIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import IMGIcon from '@material-ui/icons/ImageOutlined';
 import FileIcon from '@material-ui/icons/DescriptionOutlined';
-import { useTranslation } from 'react-i18next';
+import useTranslation from 'next-translate/useTranslation';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -80,7 +80,7 @@ export default function Home() {
     const fileContext = useFileContext();
     const [rejected, setRejected] = useState<FileRejection[] | undefined>(undefined);
     const [hover, setHover] = useState<boolean>(false);
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation('common');
 
     
     const toggleHover = (hover: boolean) => {
@@ -96,8 +96,8 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>PDF Application - Upload</title>
-                <meta name={t("PDF Application")} content={t("Upload")}/>
+                <title>{t("upload_title")}</title>
+                <meta name={t("meta_name")} content={t("upload")}/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <div className={classes.root}>
@@ -108,7 +108,7 @@ export default function Home() {
                             <FileIcon fontSize='large'/>
                             <Typography variant="h3" textAlign="center">
                                 {
-                                isDragActive ? t("Drop your files here") : hover ? t("Click to select files") : t("Drag files here, or click to select files")
+                                isDragActive ? t("drop_here") : hover ? t("click_select") : t("drag_or_select")
                                 }
                             </Typography>
                         </Paper>
@@ -125,7 +125,7 @@ export default function Home() {
                     >
                     <div className={classes.drawerContainer}>
                         <List>
-                        <Typography align='center' variant='h3'>{t("Accepted files")}</Typography>
+                        <Typography align='center' variant='h3'>{t("accepted_files")}</Typography>
                         {fileContext.files.map((file, index) => (
                             <ListItem button key={file.name}>
                             <ListItemIcon>{index % 2 === 0 ? <IMGIcon /> : <PDFIcon />}</ListItemIcon>
@@ -136,7 +136,7 @@ export default function Home() {
                         <Divider />
                         {rejected !== undefined && rejected.length > 0 && 
                         <List>
-                            <Typography align='center' variant='h3'>{t("Rejected files")}</Typography>
+                            <Typography align='center' variant='h3'>{t("rejected_files")}</Typography>
                             {rejected.map((rejection) => (
                                 <ListItem button key={rejection.file.name}>
                                 <ListItemIcon>{rejection.file.size % 2 === 0 ? <IMGIcon /> : <PDFIcon />}</ListItemIcon>

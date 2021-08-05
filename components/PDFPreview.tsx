@@ -7,7 +7,7 @@ import { PDFDocument } from "pdf-lib";
 import { FlutterDashTwoTone } from "@material-ui/icons";
 import { UploadedFile } from "../hooks/UploadedFile";
 import { getTypographyUtilityClass } from "@material-ui/core";
-import { useTranslation } from "react-i18next";
+import useTranslation from 'next-translate/useTranslation';
 
 const styles =(theme: Theme) => 
   createStyles({
@@ -117,7 +117,7 @@ const PreviewText = (props: {text: string}) => {
 }
 
 const PageLoading = (props: {}) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const classes = useStyles({});
   return (
     <div className={classes.pageLoading}>
@@ -134,7 +134,7 @@ interface PDFPreviewProps extends WithStyles<typeof styles> {
 }
 
 const PDFPreview = (props: PDFPreviewProps) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   let outerBox = React.createRef<HTMLDivElement>();
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
