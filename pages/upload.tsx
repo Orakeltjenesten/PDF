@@ -15,7 +15,6 @@ import PDFIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import IMGIcon from '@material-ui/icons/ImageOutlined';
 import FileIcon from '@material-ui/icons/DescriptionOutlined';
 import InsertDriveFileOutlinedIcon from '@material-ui/icons/InsertDriveFileOutlined';
-import EditIcon from '@material-ui/icons/Edit';
 import MergeIcon from '@material-ui/icons/MergeType';
 import SplitIcon from '@material-ui/icons/CallSplit';
 import CloseIcon from '@material-ui/icons/Close';
@@ -81,12 +80,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Home() {
     const withLink = (to: string, children: any) => <Link href={to}>{children}</Link>;
 
-    const actions = [
-        { icon: withLink('/organize', <EditIcon />), name: t("organize"},
-        { icon: withLink('/merge', <MergeIcon />), name: t("merge")},
-        { icon: withLink('/split', <SplitIcon />), name: t("split")},
-    ];
-
     const classes = useStyles();
     const fileContext = useFileContext();
     const [accepted, setAccepted] = useState<File[] | undefined>(undefined);
@@ -94,6 +87,11 @@ export default function Home() {
     const [hover, setHover] = useState<boolean>(false);
     const [open, setOpen] = useState(false);
     const { t } = useTranslation('common');
+
+    const actions = [
+        { icon: withLink('/merge', <MergeIcon />), name: t("merge")},
+        { icon: withLink('/split', <SplitIcon />), name: t("split")},
+    ];
 
     const toggleHover = (hover: boolean) => {
         setHover(hover);
@@ -168,7 +166,7 @@ export default function Home() {
                     <>
                         <Divider variant='fullWidth' />
                         <List>
-                            <Typography align='center' variant='h3'>t("accepted_files")</Typography>
+                            <Typography align='center' variant='h3'>{t("accepted_files")}</Typography>
                             {accepted.map((file, index) => (
                                 <ListItem button key={file.name}>
                                     <ListItemIcon>{file.type === 'image/*' ? <IMGIcon/> : file.type === 'application/pdf' ? <PDFIcon/> : <InsertDriveFileOutlinedIcon/>}</ListItemIcon>
@@ -182,7 +180,7 @@ export default function Home() {
                     <>
                         <Divider variant='fullWidth' />
                         <List>
-                            <Typography align='center' variant='h3'>t("rejected_files")</Typography>
+                            <Typography align='center' variant='h3'>{t("rejected_files")}</Typography>
                             {rejected.map((fileRejection, index) => (
                                 <ListItem button key={fileRejection.file.name}>
                                     <ListItemIcon><ErrorIcon/></ListItemIcon>
