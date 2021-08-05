@@ -14,13 +14,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 export default function Home() {
-    const { t } = useTranslation();
+    const { t } = useTranslation("common");
     const classes = useStyles();
     return (
         <>
             <Head>
-                <title>{t("PDF Application - Split")}</title>
-                <meta name="PDF Application" content="Split"/>
+                <title>{t("split_title")}</title>
+                <meta name={t("meta_name")} content="Split"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
         </>

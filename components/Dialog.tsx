@@ -45,7 +45,7 @@ const Dialog = ({
   disabled = false,
 }: DialogProps) => {
   const classes = useStyles();
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   return (
     <MaterialDialog
       aria-labelledby='form-dialog-title'
@@ -63,11 +63,11 @@ const Dialog = ({
       )}
       <DialogActions>
         <Button color='primary' onClick={onCancel || onClose} variant='text'>
-          {closeText || t("Close")}
+          {closeText || t("close")}
         </Button>
         {onConfirm && (
           <Button color='primary' disabled={disabled} onClick={onConfirm || onCancel} variant='text'>
-            {confirmText || t("Ok")}
+            {confirmText || t("ok")}
           </Button>
         )}
       </DialogActions>

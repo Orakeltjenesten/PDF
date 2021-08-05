@@ -58,14 +58,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Home() {
 
-  const { t} = useTranslation();
+  const { t} = useTranslation("common");
   const classes = useStyles();
   const [togglePreview, setTogglePreview] = useState<boolean>(false);
   return (
     <>
       <Head>
-        <title>PDF TOOL</title>
-        <meta name={t("PDF Merger")} content={t("MERGING PDF")} />
+        <title>{t("merge_title")}</title>
+        <meta name={t("meta_name")} content={t("meta_description")} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -73,7 +73,7 @@ export default function Home() {
 
         <div className={styles.header}>
           <h1>
-            {t("ORGANIZE")}
+            {t("merge")}
           </h1>
         </div>
         <FileContext.Consumer>
@@ -83,8 +83,8 @@ export default function Home() {
               
                 <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
                   <Grid item style={{overflowY: 'auto'}}><PDFsDisplay/></Grid>
-                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text={t("MERGE")} />: <h2>{t("Upload some files to get started!")}</h2>}</Grid>
-                  <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>{t("Toggle preview")}</Button></Grid>
+                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text={t("merge")} />: <h2>{t("upload_some_files")}</h2>}</Grid>
+                  <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>{t("toggle_preview")}</Button></Grid>
                 </Grid>
                 <MuiContainer className={classes.pdfPreview}>
                   {togglePreview && <PDFPreview currentPage={fileStore?.focusedPage} files={fileStore?.files}/>}
@@ -97,7 +97,7 @@ export default function Home() {
       
       
         <footer className={styles.footer}>
-            {t("Made with love in Trondheim")}
+            {t("with_love")}
         </footer>
       </main>
     </>

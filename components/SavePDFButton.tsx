@@ -13,7 +13,7 @@ interface SavePDFButtonProps {
 }
 
 export const SavePDFButton = (props: SavePDFButtonProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   
   
   async function getDownload(e : SyntheticEvent, context: any) {
@@ -22,7 +22,7 @@ export const SavePDFButton = (props: SavePDFButtonProps) => {
     let name: string;
 
     if (context.files == null || context.files.length == 0) {
-      alert(t("No files were uploaded."))
+      alert(t("no_files_error"))
       return
     } else {
       let pdfList : PDFDocument[] = [];

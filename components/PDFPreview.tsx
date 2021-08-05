@@ -117,11 +117,11 @@ const PreviewText = (props: {text: string}) => {
 }
 
 const PageLoading = (props: {}) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   const classes = useStyles({});
   return (
     <div className={classes.pageLoading}>
-        {t("Loading...")}
+        {t("loading")}
     </div>
   )
 }
@@ -134,7 +134,7 @@ interface PDFPreviewProps extends WithStyles<typeof styles> {
 }
 
 const PDFPreview = (props: PDFPreviewProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("common");
   let outerBox = React.createRef<HTMLDivElement>();
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
@@ -157,7 +157,6 @@ const PDFPreview = (props: PDFPreviewProps) => {
       if (outerBox.current != null) {
         let outer: HTMLDivElement = outerBox.current;
         let doc: HTMLDivElement = (outer.firstChild as HTMLDivElement);
-        console.log("hello")
         doc!.children.item(props.currentPage)?.scrollIntoView();
       }
     }
@@ -169,7 +168,7 @@ const PDFPreview = (props: PDFPreviewProps) => {
       { (context: any) => (
       <div className={classes.outer} id="pdfOuter" ref={outerBox}>
         
-        <Document className={classes.documentView} loading={t("Loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
+        <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
           {mergedPDF != null && numberPages > 0 ? Array.from(Array(numberPages).keys()).map( (i) => {
           return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
             <PageLoading />

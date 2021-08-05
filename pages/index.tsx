@@ -75,12 +75,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 export default function Home() {
-    const { t } = useTranslation();
+    const { t } = useTranslation("common");
     const classes = useStyles();
     return (
         <>
             <Head>
-                <title>PDF Application - Upload</title>
+                <title>{t("index_title")}</title>
                 <meta name={t("meta_name")} content={t("upload")}/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
@@ -95,7 +95,7 @@ export default function Home() {
                 <div className={classes.btnGroup}>
                     <Link href="/upload">
                         <Button className={classes.button} variant='outlined'>
-                            {t("Let's get started!")}
+                            {t("get_started")}
                         </Button>
                     </Link>
                 </div>
