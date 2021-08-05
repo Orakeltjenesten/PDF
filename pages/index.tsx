@@ -8,6 +8,7 @@ import { Theme } from "@material-ui/core/styles";
 import { Button, Typography } from '@material-ui/core'
 import Logo from '../components/Logo'
 import Link from 'next/link'
+import useTranslation from 'next-translate/useTranslation';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -74,12 +75,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 export default function Home() {
+    const { t } = useTranslation("common");
     const classes = useStyles();
     return (
         <>
             <Head>
-                <title>PDF Application - Upload</title>
-                <meta name="PDF Application" content="Upload"/>
+                <title>{t("index_title")}</title>
+                <meta name={t("meta_name")} content={t("upload")}/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <div className={classes.cover}>
@@ -88,12 +90,12 @@ export default function Home() {
                     <Logo darkColor='white' lightColor='black'/>
                 </div>
                 <Typography align='center' color='inherit' variant='h3'>
-                Welcome to PDF merger. This is an application where you may quickly upload, organize, split and/or merge your files.
+                {t("welcome_message")}
                 </Typography>
                 <div className={classes.btnGroup}>
                     <Link href="/upload">
                         <Button className={classes.button} variant='outlined'>
-                            Let's get started!
+                            {t("get_started")}
                         </Button>
                     </Link>
                 </div>

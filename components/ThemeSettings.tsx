@@ -15,6 +15,7 @@ import LightIcon from '@material-ui/icons/WbSunnyRounded';
 
 // Project components
 import Dialog from './Dialog';
+import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -34,6 +35,7 @@ type ThemeSettingsProps = {
 };
 
 function ThemeSettings({ className, classNameIcon }: ThemeSettingsProps) {
+  const { t } = useTranslation("common");
   const themeSettings = useThemeSettings();
   const [open, setOpen] = useState(false);
   const [themeName, setThemeName] = useState(themeSettings.getThemeFromStorage());
@@ -52,7 +54,7 @@ function ThemeSettings({ className, classNameIcon }: ThemeSettingsProps) {
       <IconButton aria-label='Endre fargetema' className={className} onClick={() => setOpen(true)}>
         <LightIcon className={classNameIcon} />
       </IconButton>
-      <Dialog fullWidth={false} maxWidth={false} onClose={() => setOpen(false)} open={open} titleText='Tema'>
+      <Dialog fullWidth={false} maxWidth={false} onClose={() => setOpen(false)} open={open} titleText={t('theme')}>
         <ToggleButtonGroup aria-label='Tema' className={classes.group} exclusive onChange={changeTheme} orientation='vertical' value={themeName}>
           {themesDetails.map((theme) => (
             <ToggleButton aria-label={theme.name} key={theme.key} value={theme.key}>

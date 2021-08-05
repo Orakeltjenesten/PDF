@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Document, Page, pdfjs } from 'react-pdf'
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
@@ -7,7 +7,7 @@ import { PDFDocument } from "pdf-lib";
 import { FlutterDashTwoTone } from "@material-ui/icons";
 import { UploadedFile } from "../hooks/UploadedFile";
 import { getTypographyUtilityClass } from "@material-ui/core";
-
+import useTranslation from 'next-translate/useTranslation';
 
 const styles =(theme: Theme) => 
   createStyles({
@@ -117,10 +117,11 @@ const PreviewText = (props: {text: string}) => {
 }
 
 const PageLoading = (props: {}) => {
+  const { t } = useTranslation("common");
   const classes = useStyles({});
   return (
     <div className={classes.pageLoading}>
-        Loading...
+        {t("loading")}
     </div>
   )
 }
@@ -132,66 +133,54 @@ interface PDFPreviewProps extends WithStyles<typeof styles> {
   currentPage: number | undefined
 }
 
-class PDFPreview extends React.Component<PDFPreviewProps, {mergedPDF : UploadedFile | undefined, numberPages : number}> {
-  private outerBox: React.RefObject<HTMLDivElement>;
-  constructor(props: PDFPreviewProps) {
-        super(props);
-        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-        this.state = {
-          mergedPDF: undefined,
-          numberPages: -1
-        }
-        this.outerBox = React.createRef<HTMLDivElement>();
-    }
-
-    async componentDidUpdate(prevProps : any) {
-      if (this.props.files != null && this.props.files != prevProps.files) {
-        let file : UploadedFile = (await assemblePDF(this.props.files!))!
-        this.setState( {
-          mergedPDF : file,
-          numberPages: file.getPageCount()
-        })
-      }
-      if (this.props.currentPage != null && this.props.currentPage != prevProps.currentPage) {
-        if (this.outerBox.current != null) {
-          let outer: HTMLDivElement = this.outerBox.current;
-          let doc: HTMLDivElement = (outer.firstChild as HTMLDivElement);
-          doc!.children.item(this.props.currentPage)?.scrollIntoView();
-        }
-      }
-    }
-
-    async componentDidMount() {
-      if (this.props.files != null) {
-        let file : UploadedFile = (await assemblePDF(this.props.files!))!
-        this.setState( {
-          mergedPDF : file,
-          numberPages: file.getPageCount()
-        })
-      }
-    }
-
-    render() {
-      const {classes} = this.props;
-      return (
-        <FileContext.Consumer> 
-        { (context: any) => (
-        <div className={classes.outer} id="pdfOuter" ref={this.outerBox}>
-          
-          <Document className={classes.documentView} loading={"Loading"} file={this.state.mergedPDF != null ? this.state.mergedPDF.file : null} noData="">
-            {this.state.mergedPDF != null && this.state.numberPages > 0 ? Array.from(Array(this.state.numberPages).keys()).map( (i) => {
-            return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
-              <PageLoading />
-              <PreviewControls page={i+1} />
-            </Page>
-          }) : <div />}
-          
-          </Document>
-          </div>
-        )}
-          </FileContext.Consumer>
-      )
-    }
+const PDFPreview = (props: PDFPreviewProps) => {
+  const { t } = useTranslation("common");
+  let outerBox = React.createRef<HTMLDivElement>();
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+  const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
+  const [numberPages, setNumberPages] = useState(-1);
+  
+  async function makePreview() {
+    let file : UploadedFile = (await assemblePDF(props.files!))!
+    setMergedPDF(file);
+    setNumberPages(file.getPageCount());
   }
+
+  useEffect(() => {
+    if (props.files != null) {
+      makePreview();   
+    }
+  }, [props.files])
+
+  useEffect(() => {
+    if (props.currentPage != null) {
+      if (outerBox.current != null) {
+        let outer: HTMLDivElement = outerBox.current;
+        let doc: HTMLDivElement = (outer.firstChild as HTMLDivElement);
+        doc!.children.item(props.currentPage)?.scrollIntoView();
+      }
+    }
+  }, [props.currentPage])
+
+    const {classes} = props;
+    return (
+      <FileContext.Consumer> 
+      { (context: any) => (
+      <div className={classes.outer} id="pdfOuter" ref={outerBox}>
+        
+        <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
+          {mergedPDF != null && numberPages > 0 ? Array.from(Array(numberPages).keys()).map( (i) => {
+          return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
+            <PageLoading />
+            <PreviewControls page={i+1} />
+          </Page>
+        }) : <div />}
+        
+        </Document>
+        </div>
+      )}
+        </FileContext.Consumer>
+  )
+}
 
   export default withStyles(styles)(PDFPreview);

@@ -14,6 +14,7 @@ import PDFPreview from '../components/PDFPreview';
 import { useState } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useTranslation from 'next-translate/useTranslation';
 
 
 
@@ -56,13 +57,15 @@ const useStyles = makeStyles((theme: Theme) =>
   );
 
 export default function Home() {
+
+  const { t} = useTranslation("common");
   const classes = useStyles();
   const [togglePreview, setTogglePreview] = useState<boolean>(false);
   return (
     <>
       <Head>
-        <title>PDF TOOL</title>
-        <meta name="PDF Merger" content="Merging PDF" />
+        <title>{t("merge_title")}</title>
+        <meta name={t("meta_name")} content={t("meta_description")} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -70,7 +73,7 @@ export default function Home() {
 
         <div className={styles.header}>
           <h1>
-            ORGANIZE
+            {t("merge")}
           </h1>
         </div>
         <FileContext.Consumer>
@@ -80,8 +83,8 @@ export default function Home() {
               
                 <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
                   <Grid item style={{overflowY: 'auto'}}><PDFsDisplay/></Grid>
-                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text="Merge" files={fileStore?.files}/> : <h2>Upload some files to get started!</h2>}</Grid>
-                  <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>Toggle preview</Button></Grid>
+                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text={t("merge")} />: <h2>{t("upload_some_files")}</h2>}</Grid>
+                  <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>{t("toggle_preview")}</Button></Grid>
                 </Grid>
                 <MuiContainer className={classes.pdfPreview}>
                   {togglePreview && <PDFPreview currentPage={fileStore?.focusedPage} files={fileStore?.files}/>}
@@ -94,7 +97,7 @@ export default function Home() {
       
       
         <footer className={styles.footer}>
-            Laget med kjærlighet i Trondheim
+            {t("with_love")}
         </footer>
       </main>
     </>
