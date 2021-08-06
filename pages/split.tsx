@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
         },
-        maxHeight: '80vh'
+        maxHeight: '80vh',
+        overflowY: "scroll"
       }
     })
   );
@@ -88,7 +89,7 @@ export default function Home() {
                 </div>
 
                 <MuiContainer className={classes.container} maxWidth={false}>
-                    <SplitGrid uploadedFiles={pages} />
+                    <SplitGrid className={classes.splitGrid} uploadedFiles={pages} />
                 </MuiContainer>
         
                 <footer className={styles.footer}>
