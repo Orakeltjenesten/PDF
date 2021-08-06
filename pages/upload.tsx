@@ -21,6 +21,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import NextIcon from '@material-ui/icons/NavigateNextTwoTone';
 import Link from 'next/link';
 import ErrorIcon from '@material-ui/icons/ErrorOutlineTwoTone';
+import { PDFDocument } from 'pdf-lib';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -105,19 +106,41 @@ export default function Home() {
         setOpen(true);
     };
     
-    function customValdidator(file: File) {
-        if (fileContext.files.map(file => file.name).includes(file.name)) {
+    async function validate(file: File) {
+        if (fileContext.files.map(file => file.name).includes(file.name) || 
+        fileContext.files.map(file => file.name).includes(file.name + " as pdf.pdf")) {
           return {
             code: t("duplicate_file_code"),
             message: t("already_uploaded_error_message"),
           };
         }
+        if (file.type == "application/pdf") {
+            let pdf = await PDFDocument.load(await file.arrayBuffer());
+            if (pdf.getPageCount() == 0) {
+                return {
+                    code: t("invalid_file_code"),
+                    message: t("invalid_error_message"),
+                  };
+            }
+        }
 
         return null
       }
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpg, image/png, application/pdf', validator: customValdidator, onDrop: (acceptedFiles, rejectedFiles) => {
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpg, image/png, application/pdf', onDrop: async (files) => {
+        let rejectedFiles: FileRejection[] = [];
+        let acceptedFiles: File[] = [];
+        for (let i=0; i < files.length; i++) {
+            let error_message = await validate(files[i]);
+            if (error_message != null) {
+                rejectedFiles.push({file: files[i], errors: [error_message]});
+            } else {
+                acceptedFiles.push(files[i]);
+            }
+        }
+        
         fileContext.addFiles(acceptedFiles);
+
         if(acceptedFiles.length > 0){
             if(!accepted){
                 setAccepted(acceptedFiles);

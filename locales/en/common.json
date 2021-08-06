@@ -24,6 +24,12 @@
     "toggle_preview": "Toggle preview",
     "with_love": "Made with love in Trondheim",
     "duplicate_file_code": "Existing file error",
-    "already_uploaded_error_message": "A file with the same name has already been uploaded"
+    "already_uploaded_error_message": "A file with the same name has already been uploaded",
+    "invalid_file_code": "Corrupt file error.",
+    "invalid_error_message": "The file is corrupt.",
+    "is_existing": " is the name of an existing file. Duplicate file names are not allowed.",
+    "invalid_input": "Invalid input: ",
+    "upload_success": "Successfully uploaded!",
+    "upload_errors": "One or more files did not successfully upload."
 
 }

@@ -24,5 +24,11 @@
     "toggle_preview": "Forhåndsvisning",
     "with_love": "Laget med kjærlighet i Trondheim",
     "duplicate_file_code": "Existerende fil error",
-    "already_uploaded_error_message": "En fil ved dette navnet har allerede blit opplastet"
+    "already_uploaded_error_message": "En fil ved dette navnet har allerede blit opplastet",
+    "invalid_file_code": "Korrupt fil error",
+    "invalid_error_message": "Filen er korrupt.",
+    "is_existing": " er navnet på en eksisterende fil. Filer med samme navn er ikke lov.",
+    "invalid_input": "Ugyldig fil: ",
+    "upload_success": "Opplasting vellykket!",
+    "upload_errors": "En eller flere filer ble ikke lastet opp."
 }

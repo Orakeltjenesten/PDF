@@ -2,9 +2,11 @@ import React, { useCallback, useState, createContext, ReactNode} from 'react';
 import { PDFDocument, PDFPage, scale } from "pdf-lib";
 import { useContext } from 'react';
 import { UploadedFile } from './UploadedFile';
+import { useAlert } from './AlertContext';
+import useTranslation from 'next-translate/useTranslation';
 
 
-interface ContextProps {
+interface FileContextProps {
     files: UploadedFile[];
     focusedPage: number | undefined;
     addFiles: (files: File[], index?: any) => void;
@@ -41,40 +43,46 @@ async function uploadedFileFromImage(imageFile : File) {
 
 let contains = (files: UploadedFile[], file: File) => (files.filter( (file2: UploadedFile) => (file2.file.name == file.name)).length > 0);
 
-const FileContext = createContext<ContextProps | undefined>(undefined)
+const FileContext = createContext<FileContextProps | undefined>(undefined)
 
 const FileContextWrapper = ({children }: {children: ReactNode}) => {
+  const { t } = useTranslation("common");
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [fP, setFocusedPage] = useState<number>();
+  const {showPopup} = useAlert()
 
   async function buildUploadedFile(file: File) {
+    
     if (file == null) {
       return null;
     }
 
     if (contains(uploadedFiles, file)) {
-      alert(file.name + " is the name of an existing file - it will not be uploaded.");
+      showPopup(t("upload_errors"), "warning");
       return null
     }
 
     if (file.type == "image/png" || file.type == "image/jpeg") {
       let temp = await uploadedFileFromImage(file);
-      if (contains(uploadedFiles, temp.file)) {return null}
+      if (contains(uploadedFiles, temp.file)) {showPopup(t("upload_errors"), "warning"); return null}
+      //showPopup(t("upload_success"), "success"); Dette funker ikke da det kan oppstå feil og suksesser i samme opplastning
       return temp;
     }
 
     else if (file.type == "application/pdf") {
       let pdf = await PDFDocument.load(await file.arrayBuffer());
       if (pdf.getPageCount() == 0) {
-        alert("Invalid input: " + file.name);
+        showPopup(t("upload_errors"), "warning");
         return null;
       } else {
+        //showPopup(t("upload_success"), "success");
         return new UploadedFile(file, pdf);
       }
     } else {
       return null;
     }
   }
+  
   const addFiles = useCallback(
     async (newFiles : File[], index?) => {
       let updatedFiles = uploadedFiles;
@@ -199,7 +207,7 @@ function getPage(files: UploadedFile[], index: number) {
 const useFileContext = () => {
   const context = useContext(FileContext);
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error('useTheme must be used within a ThemeProvider'); //what
   }
   return context;
 };
