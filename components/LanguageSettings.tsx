@@ -15,6 +15,9 @@ import LanguageIcon from '@material-ui/icons/Language';
 
 // Project components
 import Dialog from './Dialog';
+import { getCookie, setCookie } from '../utils/cookie';
+
+const languageCookie = "NEXT_LOCALE";
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -49,7 +52,7 @@ function LanguageSettings({ className, classNameIcon }: LanguageSettingsProps) {
         return;
     }
 
-    localStorage.setItem('lang', language);
+    setCookie(languageCookie, language);
     setLanguage(language);
   };
 
