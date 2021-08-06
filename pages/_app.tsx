@@ -7,6 +7,8 @@ import Topbar from '../components/Topbar';
 import { CssBaseline } from '@material-ui/core';
 import { FileContextWrapper } from '../hooks/FileContext';
 import Layout from '../components/Layout';
+import { AlertContextWrapper } from '../hooks/AlertContext';
+import { PopupNotification } from '../components/PopupNotification';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -19,12 +21,16 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ThemeMaker>
+      <AlertContextWrapper>
         <FileContextWrapper>
-          <CssBaseline />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </FileContextWrapper>
+            <PopupNotification />
+            <CssBaseline />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </FileContextWrapper>
+        </AlertContextWrapper>
+        
       </ThemeMaker>
 
     </>
