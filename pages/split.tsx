@@ -89,7 +89,7 @@ export default function Home() {
                 </div>
 
                 <MuiContainer className={classes.container} maxWidth={false}>
-                    <SplitGrid className={classes.splitGrid} uploadedFiles={pages} />
+                    <SplitGrid uploadedFiles={pages} />
                 </MuiContainer>
         
                 <footer className={styles.footer}>
