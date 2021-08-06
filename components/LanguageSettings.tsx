@@ -1,6 +1,6 @@
 import { MouseEvent as ReactMouseEvent, useState } from 'react';
-import { useThemeSettings } from '../hooks/ThemeContext';
-import { ThemeTypes, themesDetails } from '../containers/theme';
+import useTranslation from 'next-translate/useTranslation';
+import setLanguage from 'next-translate/setLanguage';
 
 // Material-ui
 import { makeStyles, createStyles}  from '@material-ui/styles';
@@ -9,16 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import ToggleButton from '@material-ui/core/ToggleButton';
 import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
 import IconButton from '@material-ui/core/IconButton';
-
-// Icons
-import LightIcon from '@material-ui/icons/WbSunnyRounded';
-import DarkIcon from '@material-ui/icons/Brightness3Rounded';
+import NorwegianSkiing from '@material-ui/icons/DownhillSkiing';
+import EnglishTea from '@material-ui/icons/EmojiFoodBeverage';
+import LanguageIcon from '@material-ui/icons/Language';
 
 // Project components
 import Dialog from './Dialog';
-import useTranslation from 'next-translate/useTranslation';
-import setLanguage from 'next-translate/setLanguage'
-
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -38,32 +34,37 @@ type LanguageSettingsProps = {
 };
 
 function LanguageSettings({ className, classNameIcon }: LanguageSettingsProps) {
-  const { t } = useTranslation("common");
-  const themeSettings = useThemeSettings();
+  const { t, lang } = useTranslation("common");
+
+  const languageDetails = [
+    { key: 'no', name: t('norwegian'), icon: NorwegianSkiing},
+    { key: 'en', name: t('english'), icon: EnglishTea},
+  ] as const;
+
   const [open, setOpen] = useState(false);
-  const [themeName, setThemeName] = useState(themeSettings.getThemeFromStorage());
   const classes = useStyles();
 
-  const changeTheme = (e: ReactMouseEvent<HTMLElement, MouseEvent>, newThemeName: ThemeTypes) => {
-    if (newThemeName) {
-      setThemeName(newThemeName);
-      themeSettings.set(newThemeName);
-
+  const changeLanguage = (e: ReactMouseEvent<HTMLElement, MouseEvent>, language: string) => {
+    if(!window){
+        return;
     }
+
+    localStorage.setItem('lang', language);
+    setLanguage(language);
   };
 
   return (
     <>
-      <IconButton aria-label='Endre fargetema' className={className} onClick={() => setOpen(true)}>
-        {themeName === 'light' ? <LightIcon className={classNameIcon} /> : <DarkIcon className={classNameIcon}/>}
+      <IconButton aria-label={t('change_language')} className={className} onClick={() => setOpen(true)}>
+        <LanguageIcon className={classNameIcon} />
       </IconButton>
-      <Dialog fullWidth={false} maxWidth={false} onClose={() => setOpen(false)} open={open} titleText={t('theme')}>
-        <ToggleButtonGroup aria-label='Tema' className={classes.group} exclusive onChange={changeTheme} orientation='vertical' value={themeName}>
-          {themesDetails.map((theme) => (
-            <ToggleButton aria-label={theme.name} key={theme.key} value={theme.key}>
-              <theme.icon />
+      <Dialog fullWidth={false} maxWidth={false} onClose={() => setOpen(false)} open={open} titleText={t('language')}>
+        <ToggleButtonGroup aria-label={t('language')} className={classes.group} exclusive onChange={changeLanguage} orientation='vertical' value={lang}>
+          {languageDetails.map((language) => (
+            <ToggleButton aria-label={language.name} key={language.key} value={language.key}>
+              <language.icon />
               <Typography className={classes.groupButton} variant='subtitle2'>
-                {theme.name}
+                {language.name}
               </Typography>
             </ToggleButton>
           ))}

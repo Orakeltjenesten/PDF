@@ -9,6 +9,8 @@ import { Theme } from "@material-ui/core/styles";
 
 // Project components
 import ThemeSettings from './ThemeSettings';
+import React from 'react';
+import LanguageSettings from './LanguageSettings';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -78,6 +80,9 @@ const Sidebar = ({ items, onClose, open }: IProps) => {
         {items.map((item, i) => (
           <SidebarItem key={i} {...item} />
         ))}
+        <div className={classes.icon}>
+          <LanguageSettings className={classes.text} classNameIcon={classes.classNameIcon} />
+        </div>
         <div className={classes.icon}>
           <ThemeSettings className={classes.text} classNameIcon={classes.classNameIcon} />
         </div>

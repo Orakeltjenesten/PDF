@@ -3,8 +3,8 @@ import darkScrollbar from '@material-ui/core/darkScrollbar';
 
 // Icons
 import DarkIcon from '@material-ui/icons/Brightness3Outlined';
-import AutomaticIcon from '@material-ui/icons/PhonelinkSetupOutlined';;
-import LightIcon from '@material-ui/icons/WbSunnyOutlined';;
+import AutomaticIcon from '@material-ui/icons/PhonelinkSetupOutlined';
+import LightIcon from '@material-ui/icons/WbSunnyOutlined';
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
