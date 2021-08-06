@@ -24,8 +24,8 @@ export type SplitGridProps = {
 const SplitGrid = ({ uploadedFiles, className }: SplitGridProps) => {
   const classes = useStyles();
   return (
-    <Grid container className={classes.root} spacing={2}>
-      <Grid container item xs={12} spacing={2}>
+    <Grid container className={classes.root} spacing={2} alignItems="center" justifyContent="center">
+      <Grid container item xs={12} spacing={2} alignItems="center" justifyContent="center">
           {uploadedFiles.map((uploadedFile, index) => (
             <Grid key={uploadedFile.name} item>
               <PDFSplitDisplayEntry uploadedFiles={uploadedFiles} uploadedFile={uploadedFile} index={index}></PDFSplitDisplayEntry>
