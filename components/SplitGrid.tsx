@@ -31,7 +31,7 @@ const SplitGrid = ({ files, className }: SplitGridProps) => {
         <Grid container justifyContent="center" spacing={2}>
           {files.map((file) => (
             <Grid key={file.name} item>
-              <Card className={classes.paper} />
+              <Card className={classes.paper}>{file.name}</Card>
             </Grid>
           ))}
         </Grid>

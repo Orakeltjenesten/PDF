@@ -140,7 +140,7 @@ const FileContextWrapper = ({children }: {children: ReactNode}) => {
 
         blob = new Blob([await pageDoc.save()]);
         blob.lastModifiedDate = colorNumber;
-        blob.name = "Page " + i.toString() + " of " + file.name;
+        blob.name = "Page " + (i+1).toString() + " of " + file.name;
         splits.push(new UploadedFile(blob, pageDoc));
       }
       let index =  uploadedFiles.findIndex((f) => (f.file == file));
