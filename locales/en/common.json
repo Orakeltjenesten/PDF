@@ -30,6 +30,10 @@
     "is_existing": " is the name of an existing file. Duplicate file names are not allowed.",
     "invalid_input": "Invalid input: ",
     "upload_success": "Successfully uploaded!",
-    "upload_errors": "One or more files did not successfully upload."
+    "upload_errors": "One or more files did not successfully upload.",
+    "language": "Language",
+    "change_language": "Change language",
+    "norwegian": "Norwegian",
+    "english": "English"
 
 }

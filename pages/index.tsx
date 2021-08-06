@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         cover: {
             position: 'relative',
-            color: theme.palette.common.white,
+            color: theme.palette.primary.light,
             height: '100vh',
             width: '100%',
             display: 'flex',
@@ -49,8 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
             gridTemplateColumns: 'auto auto',
         },
         button: {
-            color: theme.palette.common.white,
-            borderColor: theme.palette.common.white,
         },
         logoWrapper: {
             display: 'flex',
