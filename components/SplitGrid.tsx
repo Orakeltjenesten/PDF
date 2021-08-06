@@ -13,11 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       root: {
         flexGrow: 1,
-      },
-      paper: {
-        height: 280,
-        width: 200,
-      },
+      }
 }));
 
 export type SplitGridProps = {
@@ -30,11 +26,9 @@ const SplitGrid = ({ uploadedFiles, className }: SplitGridProps) => {
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid container item xs={12} spacing={2}>
-          {uploadedFiles.map((uploadedFile) => (
+          {uploadedFiles.map((uploadedFile, index) => (
             <Grid key={uploadedFile.name} item>
-              <Paper className={classes.paper}>
-                <PDFSplitDisplayEntry uploadedFile={uploadedFile} index={0}></PDFSplitDisplayEntry>
-              </Paper>
+              <PDFSplitDisplayEntry uploadedFiles={uploadedFiles} uploadedFile={uploadedFile} index={index}></PDFSplitDisplayEntry>
             </Grid>
           ))}
       </Grid>

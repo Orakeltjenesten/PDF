@@ -3,10 +3,11 @@ import { Document, Page, pdfjs } from 'react-pdf'
 import MuiContainer from '@material-ui/core/Container';
 import { UploadedFile } from '../hooks/UploadedFile';
 import useTranslation from "next-translate/useTranslation";
-import { Card } from '@material-ui/core';
+import { Button, Card, Checkbox, Grid, IconButton } from '@material-ui/core';
+import CallSplitIcon from '@material-ui/icons/CallSplit';
 
 
-interface PDFsDisplayEntryProps {uploadedFile : UploadedFile, index: number};
+interface PDFsDisplayEntryProps {uploadedFiles: UploadedFile[], uploadedFile : UploadedFile, index: number};
 
 const PDFSplitDisplayEntry = (props: PDFsDisplayEntryProps) => {
   const { t } = useTranslation("common");
@@ -30,9 +31,18 @@ const PDFSplitDisplayEntry = (props: PDFsDisplayEntryProps) => {
 
 
   return (
+    <Grid container alignItems="center">
+      <Grid item>
         <Document loading={t("loading")} file={props.uploadedFile.file} noData="">
           <Page pageNumber={1} width={200}/>
         </Document>
+      </Grid>
+      { (props.index != props.uploadedFiles.length-1) &&
+      <Grid item>
+        <Checkbox checkedIcon={<CallSplitIcon />} />
+      </Grid>
+      }
+    </Grid>
   );
 }
 
