@@ -1,41 +1,39 @@
-import { Draggable, DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
-import { FileContext, getPage } from "../hooks/FileContext";
-import React from 'react';
-import { createStyles, IconButton, ListItem, ListItemSecondaryAction, ListItemText, Theme } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf'
 import MuiContainer from '@material-ui/core/Container';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import CallSplitIcon from '@material-ui/icons/CallSplit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { PDFDocument } from 'pdf-lib';
 import { UploadedFile } from '../hooks/UploadedFile';
-import PDFPreview from './PDFPreview';
-import { makeStyles, WithStyles } from '@material-ui/styles';
+import useTranslation from "next-translate/useTranslation";
+import { Card } from '@material-ui/core';
 
 
 interface PDFsDisplayEntryProps {uploadedFile : UploadedFile, index: number};
 
 const PDFSplitDisplayEntry = (props: PDFsDisplayEntryProps) => {
-    function download() {
-      let url = window.URL.createObjectURL(props.uploadedFile.file);
-      let name = props.uploadedFile.file.name;
-      var a = document.createElement("a");
-      document.body.appendChild(a);
-      a.setAttribute("style", "display: none;");
-  
-      // Set its download and href attributes accordingly to filename and URL of file
-      a.download = name;
-      a.href = url!;
-      a.click();
-      a.remove();
-    }
+  const { t } = useTranslation("common");
+  function download() {
+    let url = window.URL.createObjectURL(props.uploadedFile.file);
+    let name = props.uploadedFile.file.name;
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.setAttribute("style", "display: none;");
 
-
-    return (
-
-          <MuiContainer>
-              <PDFPreview files={[props.uploadedFile]} currentPage={0}></PDFPreview>
-          </MuiContainer>
-    );
+    // Set its download and href attributes accordingly to filename and URL of file
+    a.download = name;
+    a.href = url!;
+    a.click();
+    a.remove();
   }
+  
+  useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+  }, [])
+
+
+  return (
+        <Document loading={t("loading")} file={props.uploadedFile.file} noData="">
+          <Page pageNumber={1} width={200}/>
+        </Document>
+  );
+}
 
 export default PDFSplitDisplayEntry;

@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles/";
 import MaterialPaper from '@material-ui/core/Paper';
-import { Card, FormLabel, Grid } from '@material-ui/core';
+import { Card, FormLabel, Grid, Paper } from '@material-ui/core';
 import PDFSplitDisplayEntry from './PDFSplitDisplayEntry';
 import { UploadedFile } from '../hooks/UploadedFile';
 
@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
         flexGrow: 1,
       },
       paper: {
-        height: 140,
-        width: 100,
+        height: 280,
+        width: 200,
       },
 }));
 
@@ -28,15 +28,15 @@ export type SplitGridProps = {
 const SplitGrid = ({ uploadedFiles, className }: SplitGridProps) => {
   const classes = useStyles();
   return (
-    <Grid container className={classnames(classes.root, className)} spacing={2}>
-      <Grid item xs={12}>
-        <Grid container justifyContent="center" spacing={2}>
+    <Grid container className={classes.root} spacing={2}>
+      <Grid container item xs={12} spacing={2}>
           {uploadedFiles.map((uploadedFile) => (
-            <Card className={classes.paper}>
-              <PDFSplitDisplayEntry uploadedFile={uploadedFile} index={0}></PDFSplitDisplayEntry>
-            </Card>
+            <Grid key={uploadedFile.name} item>
+              <Paper className={classes.paper}>
+                <PDFSplitDisplayEntry uploadedFile={uploadedFile} index={0}></PDFSplitDisplayEntry>
+              </Paper>
+            </Grid>
           ))}
-        </Grid>
       </Grid>
     </Grid>
   );
