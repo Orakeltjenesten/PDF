@@ -11,7 +11,9 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
       wrapper: {
         background: theme.palette.background.default,
+        minHeight: '100vh',
       },
+      offset: theme.mixins.toolbar,
     })
 );
 export default function Layout({children} : {children: ReactNode}) {
@@ -19,6 +21,7 @@ export default function Layout({children} : {children: ReactNode}) {
   return (
     <div className={classes.wrapper}>
       <Topbar variant='dynamic'/>
+      <div className={classes.offset}></div>
       <main>{children}</main>
     </div>
   )

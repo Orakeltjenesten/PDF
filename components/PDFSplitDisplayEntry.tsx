@@ -31,14 +31,14 @@ const PDFSplitDisplayEntry = (props: PDFsDisplayEntryProps) => {
 
 
   return (
-    <Grid container alignItems="center">
-      <Grid item>
+    <Grid container alignItems="center" justifyContent="center">
+      <Grid item xs={12} sm={10}>
         <Document loading={t("loading")} file={props.uploadedFile.file} noData="">
-          <Page pageNumber={1} width={200}/>
+          <Page pageNumber={1}/>
         </Document>
       </Grid>
       { (props.index != props.uploadedFiles.length-1) &&
-      <Grid item>
+      <Grid item xs={12} sm={2}>
         <Checkbox checkedIcon={<CallSplitIcon />} />
       </Grid>
       }
