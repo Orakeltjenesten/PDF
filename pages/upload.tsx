@@ -128,7 +128,7 @@ export default function Home() {
         return null
       }
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpg, image/png, application/pdf', onDrop: async (files) => {
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpeg, image/png, application/pdf', onDrop: async (files) => {
         let rejectedFiles: FileRejection[] = [];
         let acceptedFiles: File[] = [];
         for (let i=0; i < files.length; i++) {

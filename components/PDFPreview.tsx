@@ -34,14 +34,15 @@ const styles =(theme: Theme) =>
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
     height: '80vh',
-    ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
+    ['@media (min-width:1000px)']: {
       width: '90%',
       maxWidth: '700px'
     },
-    ['@media (max-width:1000px)']: { // eslint-disable-line no-useless-computed-key
-      maxWidth: '100%'
+    ['@media (max-width:1000px)']: { 
+      maxWidth: '100%',
+      width: '80%',
+      height: '40vh'
     },
   }
 

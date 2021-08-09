@@ -42,7 +42,10 @@ const useStyles = makeStyles((theme: Theme) =>
         justifyContent: 'center',
         flex: '1',
         maxHeight: '80vh',
-        padding: 0
+        padding: 0,
+        ['@media (max-width:1000px)']: { // eslint-disable-line no-useless-computed-key
+          height: '40vh'
+        },
       },
       pdfPreview: {
           display: 'flex',
