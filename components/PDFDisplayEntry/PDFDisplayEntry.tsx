@@ -37,10 +37,10 @@ const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
             <ListItem ContainerComponent="div">
               <ListItemText primary={props.uploadedFile.name} title={props.uploadedFile.name} style={{paddingRight: '120px'}}/>
               <ListItemSecondaryAction>
-                  <IconButton onClick={download}><GetAppIcon /></IconButton>
-                  <IconButton onClick={(e) => (fileStore?.splitFile(props.uploadedFile))}><CallSplitIcon /></IconButton>
-                  <IconButton onClick={(e) => (fileStore?.deleteFile(props.uploadedFile))}><DeleteIcon /></IconButton>
-                </ListItemSecondaryAction> 
+                <IconButton onClick={download}><GetAppIcon /></IconButton>
+                <IconButton onClick={(e) => (fileStore?.splitFile(props.uploadedFile))}><CallSplitIcon /></IconButton>
+                <IconButton onClick={(e) => (fileStore?.deleteFile(props.uploadedFile))}><DeleteIcon /></IconButton>
+              </ListItemSecondaryAction> 
                 
             </ListItem>
             
