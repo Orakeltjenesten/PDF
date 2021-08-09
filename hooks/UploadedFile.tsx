@@ -4,11 +4,14 @@ class UploadedFile {
     file: File;
     name: string;
     PDF : PDFDocument;
+    uuid: string;
 
     constructor(file: File, pdf: PDFDocument) {
         this.file = file;
         this.PDF = pdf;
         this.name = file.name;
+        this.uuid = (Math.random() * 10**12).toString() + (Math.random() * 10**12).toString()
+        console.log(this.uuid)
     }
 
     getPageCount() {

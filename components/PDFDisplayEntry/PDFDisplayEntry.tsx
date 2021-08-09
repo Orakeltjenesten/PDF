@@ -27,17 +27,10 @@ const PDFDisplayEntry = (props: PDFsDisplayEntryProps) => {
       a.remove();
     }
 
-    function getColor(file: File) {
-      if ((file as any).lastModifiedDate == null) {
-        return "0";
-      }
-      return '#' + (file as any).lastModifiedDate.toString(16);
-    }
-
     return (
       <FileContext.Consumer>
         {(fileStore) => (
-          <Draggable draggableId={props.uploadedFile.name} index={props.index} key={props.uploadedFile.name}>
+          <Draggable draggableId={props.uploadedFile.uuid} index={props.index} key={props.uploadedFile.uuid}>
           {(provided, snapshot) => (
             <div onClick={(e) => {fileStore!.setPage(getPage(fileStore!.files, props.index))}} ref={provided.innerRef} {...provided.dragHandleProps} 
             {...provided.draggableProps} className={`${styles.entry} ${snapshot.isDragging ? styles.entryDrag : ''}`}>

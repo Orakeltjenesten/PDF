@@ -103,18 +103,9 @@ const PreviewControls = (props: {page: number}) => {
   const classes = useStyles({});
     return (
       <div className={classes.controls}>
-        {props.page}
+        {props.page+1}
       </div>
     )
-}
-
-const PreviewText = (props: {text: string}) => {
-  const classes = useStyles({});
-  return (
-    <div className={classes.previewText}>
-        {props.text}
-    </div>
-  )
 }
 
 const PageLoading = (props: {}) => {
@@ -137,7 +128,10 @@ interface PDFPreviewProps extends WithStyles<typeof styles> {
 const PDFPreview = (props: PDFPreviewProps) => {
   const { t } = useTranslation("common");
   let outerBox = React.createRef<HTMLDivElement>();
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+  // loads something necessary to render pdf
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`; 
+
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
   const [numberPages, setNumberPages] = useState(-1);
   
@@ -147,13 +141,13 @@ const PDFPreview = (props: PDFPreviewProps) => {
     setNumberPages(file.getPageCount());
   }
 
-  useEffect(() => {
+  useEffect(() => { // re-renders the preview when the order of files update
     if (props.files != null) {
       makePreview();   
     }
   }, [props.files])
 
-  useEffect(() => {
+  useEffect(() => { // changes the focused page; snaps to the file that is clicked on
     if (props.currentPage != null) {
       if (outerBox.current != null) {
         let outer: HTMLDivElement = outerBox.current;
@@ -170,10 +164,10 @@ const PDFPreview = (props: PDFPreviewProps) => {
       <div className={classes.outer} id="pdfOuter" ref={outerBox}>
         
         <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
-          {mergedPDF != null && numberPages > 0 ? Array.from(Array(numberPages).keys()).map( (i) => {
+          {(mergedPDF != null && numberPages > 0) ? Array.from(Array(numberPages).keys()).map( (i) => {
           return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
             <PageLoading />
-            <PreviewControls page={i+1} />
+            <PreviewControls page={i} />
           </Page>
         }) : <div />}
         
