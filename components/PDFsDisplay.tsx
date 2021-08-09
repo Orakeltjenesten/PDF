@@ -29,7 +29,7 @@ export const PDFsDisplay = () => {
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
             {fileStore?.files.map((uploadedFile : UploadedFile, index : number) => (
-              <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.file.name} />
+              <PDFDisplayEntry index={index} uploadedFile={uploadedFile} key={uploadedFile.uuid} />
             ))}
             {provided.placeholder}
             </div>
