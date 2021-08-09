@@ -27,7 +27,7 @@ const SplitGrid = ({ uploadedFiles, className }: SplitGridProps) => {
     <Grid container className={classes.root} spacing={2} alignItems="center" justifyContent="center">
       <Grid container item xs={12} spacing={2} alignItems="center" justifyContent="center">
           {uploadedFiles.map((uploadedFile, index) => (
-            <Grid key={uploadedFile.name} item>
+            <Grid key={uploadedFile.uuid} item>
               <PDFSplitDisplayEntry uploadedFiles={uploadedFiles} uploadedFile={uploadedFile} index={index}></PDFSplitDisplayEntry>
             </Grid>
           ))}

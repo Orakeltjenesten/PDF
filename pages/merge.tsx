@@ -8,7 +8,7 @@ import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import MuiContainer from '@material-ui/core/Container';
 import UploadButton from '../components/UploadButton';
-import { PDFsDisplay } from '../components/PDFsDisplay';
+import { PDFListDisplay } from '../components/PDFListDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
 import { useState } from 'react';
@@ -79,13 +79,14 @@ export default function Home() {
             {t("merge")}
           </h1>
         </div>
+
         <FileContext.Consumer>
           {(fileStore) => (
             
             <MuiContainer className={classes.container} maxWidth={false}>
               
                 <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
-                  <Grid item style={{overflowY: 'auto'}}><PDFsDisplay/></Grid>
+                  <Grid item style={{overflowY: 'auto'}}><PDFListDisplay/></Grid>
                   <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text={t("merge")} />: <h2>{t("upload_some_files")}</h2>}</Grid>
                   <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>{t("toggle_preview")}</Button></Grid>
                 </Grid>

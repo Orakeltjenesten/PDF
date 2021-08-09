@@ -8,7 +8,7 @@ import { Grid } from "@material-ui/core";
 import { UploadedFile } from "../hooks/UploadedFile";
 
 
-export const PDFsDisplay = () => {
+export const PDFListDisplay = () => {
   
   function pdfList(context: any) {
     return context.files.map((uploadedFile : UploadedFile, index : number) => 
