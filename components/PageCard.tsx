@@ -1,8 +1,7 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
-import { Document, Page, pdfjs } from 'react-pdf'
-import Masonry, {MasonryProps} from 'react-masonry-css';
-import { Card, CardActionArea, CardContent, CardMedia, Link, Typography, useTheme } from '@material-ui/core';
+import { Document, Page, pdfjs } from 'react-pdf';
+import { Card, CardActionArea, CardContent, CardMedia, Divider } from '@material-ui/core';
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
@@ -16,8 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
         boxShadow: 'none',
         borderRadius: '0',
         display: 'flex',
-        width: '100%',
-        maxWidth: '300px',
       },
       fullHeight: {
         height: '100%',
@@ -26,20 +23,16 @@ const useStyles = makeStyles((theme: Theme) =>
         marginBottom: theme.spacing(3),
       },
       splitContainer: {
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        height: '70%',
       },
-      splitArea: {
-        textAlign: 'center',
-        transform: 'rotate(90deg)',
-      },
-      pdf: {
-        width: '200px',
+      divider: {
+        borderRight: '4px dashed',
       },
       selected: {
         background: 'none',
+      },
+      halfWidth: {
+        height: '40%',
       }
       
 }));
@@ -66,13 +59,15 @@ const PageCard = ({file, pageNumber, last, fullHeight, gutterBottom}: PageProps)
 
   return (
     <Card className={classnames(classes.root, fullHeight && classes.fullHeight, gutterBottom && classes.gutterBottom, selected && classes.selected)}>
-        <Document className={classes.pdf} file={file.file} noData="">
-            <Page width={200} pageNumber={pageNumber}/>
-        </Document>
+        <CardMedia>
+          <Document file={file.file} noData="">
+              <Page width={selected ? 250 : 200} pageNumber={pageNumber}/>
+          </Document>
+        </CardMedia>
         {!last && 
           <CardActionArea onClick={toggleSelected} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <CardContent className={classnames(classes.splitContainer)}>
-              <Typography className={classes.splitArea} variant='h5' noWrap>{(hover || selected) ? '---': '--------'}</Typography>
+            <CardContent className={classnames(classes.splitContainer, (hover || selected) && classes.halfWidth)}>
+              <Divider orientation='vertical' className={classnames(classes.divider)} />
             </CardContent>
           </CardActionArea>
         }

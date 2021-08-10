@@ -24,8 +24,18 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
       },
+      list: {
+        display: 'flex',
+        width: '100vw',
+        overflowY: 'hidden',
+        whiteSpace: 'nowrap',
+        padding: theme.spacing(6, 6, 0, 6),
+      },
+      dragEntry: {
+          width: '300px',
+      },
       dragging: {
-          backgroundColor: 'grey',
+          backgroundColor: theme.palette.transparent.background,
       }
     })
   );
@@ -74,15 +84,11 @@ export default function Home() {
 
     }, [fileContext.files]) // runs when fileContext.files updates
 
-    const reorderFiles = (source: number, target?: number) => {
-        if(target){
-            if(source >= 0 && source < pages.length && target >= 0 && target < pages.length){
-                let newFiles = Array.from(pages); // Copy the array, as arrays should not be changed directly
-                let [deleted] = newFiles.splice(source, 1);
-                newFiles.splice(target, 0, deleted);
-                setPages(newFiles);
-              }
-        }
+    const reorderFiles = (source: number, target: number) => {
+        let newFiles = Array.from(pages); // Copy the array, as arrays should not be changed directly
+        let [deleted] = newFiles.splice(source, 1);
+        newFiles.splice(target, 0, deleted);
+        setPages(newFiles);
     }
     return (
         <>
@@ -94,27 +100,25 @@ export default function Home() {
             <Typography align='center' color='inherit' variant='h2'>
                 {t("split")}
             </Typography>
-            <Box className={classes.container} display="flex" flexDirection="row" flexWrap="wrap" justifyContent="center">
-                <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination?.index)}}>
-                    <Droppable droppableId="droppable">
-                        {(provided) => (
-                        <div ref={provided.innerRef} {...provided.droppableProps}>
-                            {pages.map((page, index) => (
-                                <Draggable draggableId={page.name} index={index} key={page.name} >
-                                    {(provided, snapshot) => (
-                                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
-                                            <PageCard file={page} pageNumber={1} gutterBottom />
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                        )
-                        }
-                    </Droppable>
-                </DragDropContext>
-            </Box>
+            <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
+                <Droppable droppableId="droppable" direction="horizontal">
+                    {(provided) => (
+                    <Box component="div" ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
+                        {pages.map((page, index) => (
+                            <Draggable draggableId={page.name} index={index} key={page.name} >
+                                {(provided, snapshot) => (
+                                    <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragEntry, snapshot.isDragging && classes.dragging)}>
+                                        <PageCard file={page} pageNumber={1} last={index === pages.length-1}/>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </Box>
+                    )
+                    }
+                </Droppable>
+            </DragDropContext>
             <footer>
                 {t("with_love")}
             </footer>
