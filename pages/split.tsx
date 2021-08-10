@@ -23,8 +23,18 @@ const useStyles = makeStyles((theme: Theme) =>
         paddingRight: theme.spacing(2),
         paddingLeft: theme.spacing(2),
       },
+      list: {
+        display: 'flex',
+        width: '100vw',
+        overflowY: 'hidden',
+        whiteSpace: 'nowrap',
+        padding: theme.spacing(6, 6, 0, 6),
+      },
+      dragEntry: {
+          width: '300px',
+      },
       dragging: {
-          backgroundColor: 'grey',
+          backgroundColor: theme.palette.transparent.background,
       }
     })
   );
@@ -73,15 +83,11 @@ export default function Home() {
 
     }, [fileContext.files]) // runs when fileContext.files updates
 
-    const reorderFiles = (source: number, target?: number) => {
-        if(target){
-            if(source >= 0 && source < pages.length && target >= 0 && target < pages.length){
-                let newFiles = Array.from(pages); // Copy the array, as arrays should not be changed directly
-                let [deleted] = newFiles.splice(source, 1);
-                newFiles.splice(target, 0, deleted);
-                setPages(newFiles);
-              }
-        }
+    const reorderFiles = (source: number, target: number) => {
+        let newFiles = Array.from(pages); // Copy the array, as arrays should not be changed directly
+        let [deleted] = newFiles.splice(source, 1);
+        newFiles.splice(target, 0, deleted);
+        setPages(newFiles);
     }
     return (
         <>
@@ -90,23 +96,31 @@ export default function Home() {
                 <meta name={t("meta_name")} content="Split"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-
-            <main className={styles.main}>
-
-                <div className={styles.header}>
-                    <h1>
-                        {t("split")}
-                    </h1>
-                </div>
-
-                <MuiContainer className={classes.container} maxWidth={false}>
-                    <SplitGrid uploadedFiles={pages} />
-                </MuiContainer> 
-        
-                <footer className={styles.footer}>
-                    {t("with_love")}
-                </footer>
-            </main>
+            <Typography align='center' color='inherit' variant='h2'>
+                {t("split")}
+            </Typography>
+            <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
+                <Droppable droppableId="droppable" direction="horizontal">
+                    {(provided) => (
+                    <Box component="div" ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
+                        {pages.map((page, index) => (
+                            <Draggable draggableId={page.name} index={index} key={page.name} >
+                                {(provided, snapshot) => (
+                                    <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragEntry, snapshot.isDragging && classes.dragging)}>
+                                        <PageCard file={page} pageNumber={1} last={index === pages.length-1}/>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </Box>
+                    )
+                    }
+                </Droppable>
+            </DragDropContext>
+            <footer>
+                {t("with_love")}
+            </footer>
             
         </>
     )
