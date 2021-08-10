@@ -8,7 +8,6 @@ import { FileContext, useFileContext } from '../hooks/FileContext';
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import useTranslation from 'next-translate/useTranslation';
-import { Container, Grid } from '@material-ui/core';
 import SplitGrid from '../components/SplitGrid';
 import MuiContainer from '@material-ui/core/Container';
 import { UploadedFile } from '../hooks/UploadedFile';

@@ -1,12 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from 'react-pdf'
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import { FileContext, assemblePDF } from "../hooks/FileContext";
-import { PDFDocument } from "pdf-lib";
-import { FlutterDashTwoTone } from "@material-ui/icons";
 import { UploadedFile } from "../hooks/UploadedFile";
-import { getTypographyUtilityClass } from "@material-ui/core";
 import useTranslation from 'next-translate/useTranslation';
 
 const styles =(theme: Theme) => 
