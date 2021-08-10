@@ -6,45 +6,6 @@ import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 import useTranslation from 'next-translate/useTranslation';
 
-const styles =(theme: Theme) => 
-  createStyles({
-  documentView : {
-    maxHeight: '80vh',
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-
-  pdfPage : {
-    position: 'relative',
-    margin: '5px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: '3px',
-  },
-
-  outer : {
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'center',
-    height: '80vh',
-    ['@media (min-width:1000px)']: {
-      width: '90%',
-      maxWidth: '700px'
-    },
-    ['@media (max-width:1000px)']: { 
-      maxWidth: '100%',
-      width: '80%',
-      height: '40vh'
-    },
-  }
-
-});
-
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
       controls : {
@@ -91,8 +52,42 @@ const useStyles = makeStyles((theme: Theme) =>
       pageLoading : {
         position: 'absolute',
         zIndex: -100
+      },
+      documentView : {
+        maxHeight: '80vh',
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      },
+    
+      pdfPage : {
+        position: 'relative',
+        margin: '5px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: '3px',
+      },
+    
+      outer : {
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        height: '80vh',
+        ['@media (min-width:1000px)']: {
+          width: '90%',
+          maxWidth: '700px'
+        },
+        ['@media (max-width:1000px)']: { 
+          maxWidth: '100%',
+          width: '80%',
+          height: '40vh'
+        }
       }
-    }));
+}));
 
 
 
@@ -105,33 +100,23 @@ const PreviewControls = (props: {page: number}) => {
     )
 }
 
-const PageLoading = (props: {}) => {
-  const { t } = useTranslation("common");
-  const classes = useStyles({});
-  return (
-    <div className={classes.pageLoading}>
-        {t("loading")}
-    </div>
-  )
-}
 
 
-
-interface PDFPreviewProps extends WithStyles<typeof styles> {
+interface PDFPreviewProps {
   files: UploadedFile[] | undefined,
   currentPage: number | undefined
 }
 
 const PDFPreview = (props: PDFPreviewProps) => {
-  const { t } = useTranslation("common");
-  let outerBox = React.createRef<HTMLDivElement>();
-
   // loads something necessary to render pdf
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`; 
 
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
   const [numberPages, setNumberPages] = useState(-1);
-  
+  const classes = useStyles({});
+  const { t } = useTranslation("common");
+  let outerBox = React.createRef<HTMLDivElement>();
+
   async function makePreview() {
     let file : UploadedFile = (await assemblePDF(props.files!))!
     setMergedPDF(file);
@@ -153,26 +138,22 @@ const PDFPreview = (props: PDFPreviewProps) => {
       }
     }
   }, [props.currentPage])
-
-    const {classes} = props;
-    return (
-      <FileContext.Consumer> 
+  
+  return (
+    <FileContext.Consumer> 
       { (context: any) => (
-      <div className={classes.outer} id="pdfOuter" ref={outerBox}>
-        
-        <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
-          {(mergedPDF != null && numberPages > 0) ? Array.from(Array(numberPages).keys()).map( (i) => {
-          return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
-            <PageLoading />
-            <PreviewControls page={i} />
-          </Page>
-        }) : <div />}
-        
-        </Document>
+        <div className={classes.outer} id="pdfOuter" ref={outerBox}>
+          <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
+            {(mergedPDF != null && numberPages > 0) ? Array.from(Array(numberPages).keys()).map( (i) => {
+              return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
+                <PreviewControls page={i} />
+              </Page>
+            }) : <div />}
+          </Document>
         </div>
       )}
-        </FileContext.Consumer>
+    </FileContext.Consumer>
   )
 }
 
-  export default withStyles(styles)(PDFPreview);
+  export default PDFPreview;
