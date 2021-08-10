@@ -63,7 +63,7 @@ export default function Home() {
 
   const { t} = useTranslation("common");
   const classes = useStyles();
-  const [togglePreview, setTogglePreview] = useState<boolean>(false);
+  const [togglePreview, setTogglePreview] = useState<boolean>(true);
   return (
     <>
       <Head>
@@ -86,9 +86,11 @@ export default function Home() {
             <MuiContainer className={classes.container} maxWidth={false}>
               
                 <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
-                  <Grid item style={{overflowY: 'auto'}}><PDFListDisplay/></Grid>
-                  <Grid item>{fileStore!.files!.length > 0 ? <SavePDFButton text={t("merge")} />: <h2>{t("upload_some_files")}</h2>}</Grid>
-                  <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>{t("toggle_preview")}</Button></Grid>
+                  {fileStore!.files!.length > 0 ? <>
+                    <Grid item style={{overflowY: 'auto'}}><PDFListDisplay/></Grid>
+                    <Grid item> <SavePDFButton text={t("merge")} /></Grid>
+                    <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>{t("toggle_preview")}</Button></Grid>
+                  </> : <h2>{t("upload_some_files")}</h2>}
                 </Grid>
                 <MuiContainer className={classes.pdfPreview}>
                   {togglePreview && <PDFPreview currentPage={fileStore?.focusedPage} files={fileStore?.files}/>}
