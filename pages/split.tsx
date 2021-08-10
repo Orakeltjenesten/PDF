@@ -91,33 +91,23 @@ export default function Home() {
                 <meta name={t("meta_name")} content="Split"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <Typography align='center' color='inherit' variant='h2'>
-                {t("split")}
-            </Typography>
-            <Box className={classes.container} display="flex" flexDirection="row" flexWrap="wrap" justifyContent="center">
-                <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination?.index)}}>
-                    <Droppable droppableId="droppable">
-                        {(provided) => (
-                        <div ref={provided.innerRef} {...provided.droppableProps}>
-                            {pages.map((page, index) => (
-                                <Draggable draggableId={page.name} index={index} key={page.name} >
-                                    {(provided, snapshot) => (
-                                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
-                                            <PageCard file={page} pageNumber={1} gutterBottom />
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                        )
-                        }
-                    </Droppable>
-                </DragDropContext>
-            </Box>
-            <footer>
-                {t("with_love")}
-            </footer>
+
+            <main className={styles.main}>
+
+                <div className={styles.header}>
+                    <h1>
+                        {t("split")}
+                    </h1>
+                </div>
+
+                <MuiContainer className={classes.container} maxWidth={false}>
+                    <SplitGrid uploadedFiles={pages} />
+                </MuiContainer> 
+        
+                <footer className={styles.footer}>
+                    {t("with_love")}
+                </footer>
+            </main>
             
         </>
     )

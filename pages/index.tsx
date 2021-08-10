@@ -6,7 +6,7 @@ import styles from '../styles/Home.module.css'
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Button, Typography } from '@material-ui/core'
-import Logo from '../components/Logo'
+import Logo from '../components/globals/Logo'
 import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation';
 
