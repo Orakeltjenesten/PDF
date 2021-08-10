@@ -1,6 +1,6 @@
 import { MouseEvent as ReactMouseEvent, useState } from 'react';
-import { useThemeSettings } from '../hooks/ThemeContext';
-import { ThemeTypes, themesDetails } from '../containers/theme';
+import { useThemeSettings } from '../../hooks/ThemeContext';
+import { ThemeTypes, themesDetails } from '../../containers/theme';
 
 // Material-ui
 import { makeStyles, createStyles}  from '@material-ui/styles';

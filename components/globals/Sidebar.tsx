@@ -6,9 +6,9 @@ import { useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import { Theme } from "@material-ui/core/styles";
+import ThemeSettings from './ThemeSettings'
 
 // Project components
-import ThemeSettings from './ThemeSettings';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({

@@ -90,7 +90,7 @@ export default function Home() {
 
                 <MuiContainer className={classes.container} maxWidth={false}>
                     <SplitGrid uploadedFiles={pages} />
-                </MuiContainer>
+                </MuiContainer> 
         
                 <footer className={styles.footer}>
                     {t("with_love")}
