@@ -7,6 +7,8 @@ import { Card, CardActionArea, CardContent, CardMedia, Divider } from '@material
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles/";
 import { UploadedFile } from '../hooks/UploadedFile';
+import { useTheme } from '@material-ui/core';
+
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -48,11 +50,14 @@ export type PageProps = {
 const PageCard = ({file, pageNumber, last, fullHeight, gutterBottom}: PageProps) => {
   const classes = useStyles();
   const [hover, setHover] = useState<boolean>(false);
+  const [size, setSize] = useState<number>(200);
   const [selected, setSelected] = useState<boolean>(false);
+  const theme = useTheme();
 
   const toggleSelected = () => {
     setSelected(!selected);
   }
+
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
   }, [])
@@ -61,7 +66,7 @@ const PageCard = ({file, pageNumber, last, fullHeight, gutterBottom}: PageProps)
     <Card className={classnames(classes.root, fullHeight && classes.fullHeight, gutterBottom && classes.gutterBottom, selected && classes.selected)}>
         <CardMedia>
           <Document file={file.file} noData="">
-              <Page width={selected ? 250 : 200} pageNumber={pageNumber}/>
+              <Page width={250} pageNumber={pageNumber}/>
           </Document>
         </CardMedia>
         {!last && 

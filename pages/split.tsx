@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import classnames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
 import { FileContext, useFileContext } from '../hooks/FileContext';
 
@@ -16,6 +16,7 @@ import { PDFDocument, PDFPage } from 'pdf-lib';
 import MasonryGrid from '../components/MasonaryGrid';
 import PageCard from '../components/PageCard';
 import { fileSave } from 'browser-fs-access';
+import { useHorizontalScroll } from '../hooks/HorizontalScroll';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -47,6 +48,7 @@ export default function Home() {
     const fileContext = useFileContext();
     const [pages, setPages] = useState<UploadedFile[]>([]);
     const theme = useTheme();
+    const scrollRef = useHorizontalScroll();
 
     async function appendSplittedPages(files: UploadedFile[]) {
         let newPages: UploadedFile[] = [];
@@ -103,18 +105,20 @@ export default function Home() {
             <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
                 <Droppable droppableId="droppable" direction="horizontal">
                     {(provided) => (
-                    <Box component="div" ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
-                        {pages.map((page, index) => (
-                            <Draggable draggableId={page.name} index={index} key={page.name} >
-                                {(provided, snapshot) => (
-                                    <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragEntry, snapshot.isDragging && classes.dragging)}>
-                                        <PageCard file={page} pageNumber={1} last={index === pages.length-1}/>
-                                    </div>
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </Box>
+                    <div ref={scrollRef}>
+                        <Box component="div" id="horizontalScroll" ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
+                            {pages.map((page, index) => (
+                                <Draggable draggableId={page.name} index={index} key={page.name} >
+                                    {(provided, snapshot) => (
+                                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragEntry, snapshot.isDragging && classes.dragging)}>
+                                            <PageCard file={page} pageNumber={1} last={index === pages.length-1}/>
+                                        </div>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </Box>
+                    </div>
                     )
                     }
                 </Droppable>
