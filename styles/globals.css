@@ -15,21 +15,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-.button {
-  border: 0px;
-  border-radius: 7px;
-  width: 300px;
-  margin: 30px 4px;
-  font-size: 32px;
-  padding: 20px;
-  font-weight: bold;
-}
-.button:hover {
-  border: 2px solid black;
-  margin: 28px -2px;
-}
-
-.hidden {
-  display: none;
-}

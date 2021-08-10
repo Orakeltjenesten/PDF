@@ -1,19 +1,17 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React from 'react'
-import { FileContext, FileContextWrapper } from "../hooks/FileContext";
+import { FileContext } from "../hooks/FileContext";
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import MuiContainer from '@material-ui/core/Container';
-import UploadButton from '../components/UploadButton';
 import { PDFListDisplay } from '../components/PDFListDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
 import { useState } from 'react';
 import { Button, Grid } from '@material-ui/core';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import useTranslation from 'next-translate/useTranslation';
 
 
