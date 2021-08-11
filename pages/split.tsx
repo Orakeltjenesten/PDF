@@ -9,8 +9,7 @@ import styles from '../styles/Home.module.css'
 import { makeStyles, createStyles }  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import useTranslation from 'next-translate/useTranslation';
-import { Box, Button, Container, Grid, Typography, useTheme } from '@material-ui/core';
-import MuiContainer from '@material-ui/core/Container';
+import { Box, Button, Typography } from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
 import { PDFDocument, PDFPage } from 'pdf-lib';
 import PageCard from '../components/PageCard';
@@ -176,42 +175,32 @@ export default function Home() {
                 <meta name={t("meta_name")} content="Split"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <main className={styles.main}>
-                <MuiContainer>
-                    <Typography align='center' color='inherit' variant='h2'>
-                        {t("split")}
-                    </Typography>
-                </MuiContainer>
-
-                <div className={classes.splitPanel}>
-                    <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
-                        <Droppable droppableId="droppable" direction="horizontal">
-                            {(provided) => (
-                            <div ref={scrollRef}>
-                                <Box component="div" alignItems="center" id="horizontalScroll" ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
-                                    {pages.map((page, index) => (
-                                        <Draggable draggableId={page.uuid} index={index} key={page.uuid} >
-                                            {(provided, snapshot) => (
-                                                <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
-                                                    <PageCard index={index} setSplitAt={setSplitAt} file={page} pageNumber={1} last={snapshot.isDragging || index === pages.length-1} />
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </Box>
-                            </div>
-                            )
-                            }
-                        </Droppable>
-                    </DragDropContext>
-                    <Button onClick={downloadSplits}>{t("download_splits")}</Button>
-                    
-                </div>
-                <footer className={styles.footer}>
-                    {t("with_love")}
-                </footer>
-            </main>
+            <Typography align='center' color='inherit' variant='h2'>
+                {t("split")}
+            </Typography>
+            <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
+                <Droppable droppableId="droppable" direction="horizontal">
+                    {(provided) => (
+                    <Box id={horizontalScrollId} onWheel={handleWheelEvent} ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
+                        {pages.map((page, index) => (
+                            <Draggable draggableId={page.name} index={index} key={page.name} >
+                                {(provided, snapshot) => (
+                                    <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
+                                        <PageCard setSplitAt={setSplitAt} index={index} file={page} pageNumber={1} last={index === pages.length-1}/>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </Box>
+                    )
+                    }
+                </Droppable>
+            </DragDropContext>
+            <Button onClick={downloadSplits}>{t("download_splits")}</Button>
+            <footer>
+                {t("with_love")}
+            </footer>
             
         </>
     )
