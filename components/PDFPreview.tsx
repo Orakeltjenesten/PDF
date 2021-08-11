@@ -78,8 +78,8 @@ const useStyles = makeStyles((theme: Theme) =>
         justifyContent: 'center',
         height: '80vh',
         ['@media (min-width:1000px)']: {
-          width: '90%',
-          maxWidth: '700px'
+          width: '80%',
+          maxWidth: '600px'
         },
         ['@media (max-width:1000px)']: { 
           maxWidth: '100%',

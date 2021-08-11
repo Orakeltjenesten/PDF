@@ -68,6 +68,19 @@ const useStyles = makeStyles((theme: Theme) =>
             gap: theme.spacing(2),
             paddingTop: theme.spacing(2),
         },
+
+        acceptedFiles: {
+            maxHeight: theme.spacing(32),
+            overflowY: 'scroll',
+            overflowX: 'hidden',
+        },
+
+        rejectedFiles: {
+            maxHeight: theme.spacing(32),
+            overflowY: 'auto',
+            overflowX: 'hidden',
+        },
+
         speedDial: {
             position: 'fixed',
             '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
@@ -190,7 +203,7 @@ export default function Home() {
                     {accepted && accepted.length > 0 &&
                     <>
                         <Divider variant='fullWidth' />
-                        <List>
+                        <List className={classes.acceptedFiles}>
                             <Typography align='center' variant='h3'>{t("accepted_files")}</Typography>
                             {accepted.map((file, index) => (
                                 <ListItem button key={file.name}>
@@ -204,7 +217,7 @@ export default function Home() {
                     {rejected && rejected.length > 0 &&
                     <>
                         <Divider variant='fullWidth' />
-                        <List>
+                        <List className={classes.rejectedFiles}>
                             <Typography align='center' variant='h3'>{t("rejected_files")}</Typography>
                             {rejected.map((fileRejection, index) => (
                                 <ListItem button key={fileRejection.file.name}>
