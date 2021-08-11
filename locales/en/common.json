@@ -34,6 +34,8 @@
     "language": "Language",
     "change_language": "Change language",
     "norwegian": "Norwegian",
-    "english": "English"
+    "english": "English",
+    "download_splits": "Download splits",
+    "split_files_downloaded": "Files were downloaded!"
 
 }

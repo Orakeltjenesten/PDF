@@ -11,7 +11,6 @@ class UploadedFile {
         this.PDF = pdf;
         this.name = file.name;
         this.uuid = (Math.random() * 10**12).toString() + (Math.random() * 10**12).toString()
-        console.log(this.uuid)
     }
 
     getPageCount() {
