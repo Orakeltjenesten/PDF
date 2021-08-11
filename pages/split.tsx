@@ -1,22 +1,17 @@
 import Head from 'next/head';
 import classnames from 'classnames';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
-import { FileContext, useFileContext } from '../hooks/FileContext';
+import React, { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { useFileContext } from '../hooks/FileContext';
 
 // Material UI Components
-import { makeStyles, createStyles}  from '@material-ui/styles/';
+import { makeStyles, createStyles }  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import useTranslation from 'next-translate/useTranslation';
-import { Box, Container, Grid, Typography, useTheme } from '@material-ui/core';
-import SplitGrid from '../components/SplitGrid';
-import MuiContainer from '@material-ui/core/Container';
+import { Box, Typography } from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
 import { PDFDocument, PDFPage } from 'pdf-lib';
-import MasonryGrid from '../components/MasonaryGrid';
 import PageCard from '../components/PageCard';
-import { fileSave } from 'browser-fs-access';
-import { useHorizontalScroll } from '../hooks/HorizontalScroll';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -28,15 +23,23 @@ const useStyles = makeStyles((theme: Theme) =>
       list: {
         display: 'flex',
         width: '100vw',
+        overflowX: 'hidden',
         overflowY: 'hidden',
         whiteSpace: 'nowrap',
         padding: theme.spacing(6, 6, 0, 6),
+        '&:hover': {
+            overflowX: 'auto',
+        }
       },
       dragEntry: {
           width: '300px',
       },
       dragging: {
           backgroundColor: theme.palette.transparent.background,
+      },
+      wrapper: { 
+          overflowX: 'auto',
+          whiteSpace: 'nowrap',
       }
     })
   );
@@ -47,8 +50,6 @@ export default function Home() {
     const classes = useStyles();
     const fileContext = useFileContext();
     const [pages, setPages] = useState<UploadedFile[]>([]);
-    const theme = useTheme();
-    const scrollRef = useHorizontalScroll();
 
     async function appendSplittedPages(files: UploadedFile[]) {
         let newPages: UploadedFile[] = [];
@@ -86,6 +87,20 @@ export default function Home() {
 
     }, [fileContext.files]) // runs when fileContext.files updates
 
+    const horizontalScrollId = 'horizontalScroll';
+    const handleWheelEvent = (e: any) => {
+        e.preventDefault()
+        var container = document.getElementById(horizontalScrollId)
+        if(container){
+            var containerScrollPosition = container.scrollLeft;
+            container.scrollTo({
+                top: 0,
+                left: containerScrollPosition + (e.deltaY * 3),
+                behavior: 'smooth',
+            })
+        }
+    };
+
     const reorderFiles = (source: number, target: number) => {
         let newFiles = Array.from(pages); // Copy the array, as arrays should not be changed directly
         let [deleted] = newFiles.splice(source, 1);
@@ -105,20 +120,18 @@ export default function Home() {
             <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
                 <Droppable droppableId="droppable" direction="horizontal">
                     {(provided) => (
-                    <div ref={scrollRef}>
-                        <Box component="div" id="horizontalScroll" ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
-                            {pages.map((page, index) => (
-                                <Draggable draggableId={page.name} index={index} key={page.name} >
-                                    {(provided, snapshot) => (
-                                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragEntry, snapshot.isDragging && classes.dragging)}>
-                                            <PageCard file={page} pageNumber={1} last={index === pages.length-1}/>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </Box>
-                    </div>
+                    <Box id={horizontalScrollId} onWheel={handleWheelEvent} ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
+                        {pages.map((page, index) => (
+                            <Draggable draggableId={page.name} index={index} key={page.name} >
+                                {(provided, snapshot) => (
+                                    <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragEntry, snapshot.isDragging && classes.dragging)}>
+                                        <PageCard file={page} pageNumber={1} last={index === pages.length-1}/>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </Box>
                     )
                     }
                 </Droppable>
