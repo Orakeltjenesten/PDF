@@ -30,5 +30,7 @@
     "is_existing": " er navnet på en eksisterende fil. Filer med samme navn er ikke lov.",
     "invalid_input": "Ugyldig fil: ",
     "upload_success": "Opplasting vellykket!",
-    "upload_errors": "En eller flere filer ble ikke lastet opp."
+    "upload_errors": "En eller flere filer ble ikke lastet opp.",
+    "download_splits": "Last ned oppdelte",
+    "split_files_downloaded": "Filer ble lastet ned!"
 }

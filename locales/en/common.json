@@ -30,6 +30,8 @@
     "is_existing": " is the name of an existing file. Duplicate file names are not allowed.",
     "invalid_input": "Invalid input: ",
     "upload_success": "Successfully uploaded!",
-    "upload_errors": "One or more files did not successfully upload."
+    "upload_errors": "One or more files did not successfully upload.",
+    "download_splits": "Download splits",
+    "split_files_downloaded": "Files were downloaded!"
 
 }

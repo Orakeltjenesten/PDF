@@ -8,15 +8,19 @@ import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles/";
 import { UploadedFile } from '../hooks/UploadedFile';
 import { useTheme } from '@material-ui/core';
+import { useAlert } from '../hooks/AlertContext';
 
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
       root: {
-        backgroundColor: 'rgba(255,255,255,0.6)',
+        background: 'none',
         boxShadow: 'none',
         borderRadius: '0',
         display: 'flex',
+      },
+      backgroundColoring: {
+        backgroundColor: 'rgba(220, 220, 220, 1)',
       },
       fullHeight: {
         height: '100%',
@@ -25,41 +29,52 @@ const useStyles = makeStyles((theme: Theme) =>
         marginBottom: theme.spacing(3),
       },
       splitContainer: {
+        display: 'flex',
+        justifyContent: 'center',
         height: '70%',
+        width: theme.spacing(6),
+      },
+      splitContainerSelected: {
+        width: theme.spacing(12),
       },
       divider: {
         borderRight: '4px dashed',
       },
+      dividerSelected: {
+        borderRight: 'none',
+      },
       selected: {
         background: 'none',
       },
-      halfWidth: {
-        height: '40%',
+      splitContainerHover: {
+        height: '40%'
       }
       
 }));
 
 export type PageProps = {
+  index: number;
   file: UploadedFile;
   pageNumber: number;
   last?: boolean;
   fullHeight?: boolean;
   gutterBottom?: boolean;
-};
+  setSplitAt: (index: number, split: boolean) => void;
+}
 
-const PageCard = ({file, pageNumber, last, fullHeight, gutterBottom}: PageProps) => {
+const PageCard = ({index, file, pageNumber, last, fullHeight, gutterBottom, setSplitAt}: PageProps) => {
   const classes = useStyles();
   const [hover, setHover] = useState<boolean>(false);
-  const [size, setSize] = useState<number>(200);
+  const [size, setSize] = useState<number>(600);
   const [selected, setSelected] = useState<boolean>(false);
   const theme = useTheme();
   
   window.addEventListener('resize', () => {
     if(window.innerWidth > theme.breakpoints.values.lg){
-      setSize(400);
+      setSize(600);
     }
     else if(window.innerWidth > theme.breakpoints.values.sm){
-      setSize(250);
+      setSize(500);
     }
   }); 
 
@@ -72,16 +87,16 @@ const PageCard = ({file, pageNumber, last, fullHeight, gutterBottom}: PageProps)
   }, [])
 
   return (
-    <Card className={classnames(classes.root, fullHeight && classes.fullHeight, gutterBottom && classes.gutterBottom, selected && classes.selected)}>
+    <Card className={classnames(classes.root, fullHeight && classes.fullHeight, gutterBottom && classes.gutterBottom, selected && classes.selected, !last && classes.backgroundColoring)}>
         <CardMedia>
           <Document file={file.file} noData="">
-              <Page width={size} pageNumber={pageNumber}/>
+              <Page height={size} pageNumber={pageNumber}/>
           </Document>
         </CardMedia>
         {!last && 
-          <CardActionArea onClick={toggleSelected} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-            <CardContent className={classnames(classes.splitContainer, (hover || selected) && classes.halfWidth)}>
-              <Divider orientation='vertical' className={classnames(classes.divider)} />
+          <CardActionArea onClick={() => {setSplitAt(index, !selected); toggleSelected();}} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+            <CardContent className={classnames(classes.splitContainer, hover && classes.splitContainerHover, selected && classes.splitContainerSelected)}>
+              <Divider orientation='vertical' className={classnames(classes.divider, selected && classes.dividerSelected)} />
             </CardContent>
           </CardActionArea>
         }
