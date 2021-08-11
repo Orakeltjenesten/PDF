@@ -13,6 +13,7 @@ import PDFPreview from '../components/PDFPreview';
 import { useState } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import useTranslation from 'next-translate/useTranslation';
+import { PageTitle } from '../components/PageTitle';
 
 
 
@@ -64,33 +65,23 @@ export default function Home() {
   const [togglePreview, setTogglePreview] = useState<boolean>(true);
   return (
     <>
-      <Head>
-        <title>{t("merge_title")}</title>
-        <meta name={t("meta_name")} content={t("meta_description")} />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
 
-        <div className={styles.header}>
-          <h1>
-            {t("merge")}
-          </h1>
-        </div>
+      <PageTitle text="merge" />
 
         <FileContext.Consumer>
           {(fileStore) => (
             
             <MuiContainer className={classes.container} maxWidth={false}>
-              
+                {fileStore!.files!.length > 0 ? <>
                 <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
-                  {fileStore!.files!.length > 0 ? <>
                     <Grid item style={{overflowY: 'auto'}}><PDFListDisplay/></Grid>
                     <Grid item> <SavePDFButton text={t("merge")} /></Grid>
                     <Grid item><Button variant="contained" onClick={(e) => {e.preventDefault(); setTogglePreview(!togglePreview)}}>{t("toggle_preview")}</Button></Grid>
-                  </> : <h2>{t("upload_some_files")}</h2>}
                 </Grid>
                 <MuiContainer className={classes.pdfPreview}>
                   {togglePreview && <PDFPreview currentPage={fileStore?.focusedPage} files={fileStore?.files}/>}
                 </MuiContainer>
+                </> : <h2>{t("upload_some_files")}</h2>}
               </MuiContainer>
           )
           }

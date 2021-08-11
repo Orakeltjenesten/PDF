@@ -30,8 +30,11 @@ const useStyles = makeStyles((theme: Theme) =>
         flexDirection: 'column',
         alignItems: 'center',
         alignContent: 'space-between',
-        justifyContent: 'space-between',
-      }
+        justifyContent: 'center',
+      },
+      downloadButton: {
+          marginTop: theme.spacing(3),
+      },
     })
   );
 
@@ -156,9 +159,12 @@ export default function Home() {
             
             <Box className={classes.splitContent}>
                 <PageTitle text="split" />
+                {(fileContext.files.length > 0) ? (<>
+                
                 <PageCardDroppable reorderFiles={reorderFiles} handleWheelEvent={handleWheelEvent} horizontalScrollId={horizontalScrollId} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
                 
-                <Button onClick={downloadSplits}>{t("download_splits")}</Button>
+                <Button onClick={downloadSplits} className={classes.downloadButton}>{t("download_splits")}</Button>
+                </>) : <h2>{t("upload_some_files")}</h2>}
             </Box>
             
         </>
