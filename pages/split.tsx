@@ -8,7 +8,7 @@ import { assemblePDF, useFileContext } from '../hooks/FileContext';
 import { makeStyles, createStyles }  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import useTranslation from 'next-translate/useTranslation';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
 import { PDFDocument, PDFPage } from 'pdf-lib';
 import PageCard from '../components/PageCard';
@@ -189,6 +189,7 @@ export default function Home() {
                     }
                 </Droppable>
             </DragDropContext>
+            <Button onClick={downloadSplits}>{t("download_splits")}</Button>
             <footer>
                 {t("with_love")}
             </footer>
