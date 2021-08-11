@@ -1,9 +1,6 @@
 import Head from 'next/head';
-import classnames from 'classnames';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable, DropResult} from 'react-beautiful-dnd';
-import { assemblePDF, FileContext, useFileContext } from '../hooks/FileContext';
-import styles from '../styles/Home.module.css'
+import React, { useEffect, useState } from 'react';
+import { assemblePDF, useFileContext } from '../hooks/FileContext';
 
 // Material UI Components
 import { makeStyles, createStyles }  from '@material-ui/styles/';
@@ -12,30 +9,13 @@ import useTranslation from 'next-translate/useTranslation';
 import { Box, Button, Typography } from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
 import { PDFDocument, PDFPage } from 'pdf-lib';
-import PageCard from '../components/PageCard';
-import { fileSave } from 'browser-fs-access';
-import { useHorizontalScroll } from '../hooks/HorizontalScroll';
-import { LegendToggleTwoTone } from '@material-ui/icons';
 import { useAlert } from '../hooks/AlertContext';
-import { NONAME } from 'dns';
+import { PageCardDroppable } from '../containers/PageCardDroppable';
+import { PageTitle } from '../components/PageTitle';
 
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
-      list: {
-        display: 'flex',
-        width: '100vw',
-        overflowX: 'hidden',
-        overflowY: 'hidden',
-        whiteSpace: 'nowrap',
-        padding: theme.spacing(6, 6, 0, 6),
-        '&:hover': {
-            overflowX: 'auto',
-        }
-      },
-      dragging: {
-          background: 'none',
-      },
       wrapper: { 
           overflowX: 'auto',
           whiteSpace: 'nowrap',
@@ -173,30 +153,11 @@ export default function Home() {
                 <meta name={t("meta_name")} content="Split"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-
+            
             <Box className={classes.splitContent}>
-                <Typography align='center' color='inherit' variant='h2'>
-                    {t("split")}
-                </Typography>
-                <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
-                    <Droppable droppableId="droppable" direction="horizontal">
-                        {(provided) => (
-                        <Box id={horizontalScrollId} onWheel={handleWheelEvent} ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
-                            {pages.map((page, index) => (
-                                <Draggable draggableId={page.name} index={index} key={page.name} >
-                                    {(provided, snapshot) => (
-                                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
-                                            <PageCard setSplitAt={setSplitAt} index={index} file={page} pageNumber={1} last={snapshot.isDragging || index === pages.length-1}/>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </Box>
-                        )
-                        }
-                    </Droppable>
-                </DragDropContext>
+                <PageTitle text="split" />
+                <PageCardDroppable reorderFiles={reorderFiles} handleWheelEvent={handleWheelEvent} horizontalScrollId={horizontalScrollId} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
+                
                 <Button onClick={downloadSplits}>{t("download_splits")}</Button>
             </Box>
             
