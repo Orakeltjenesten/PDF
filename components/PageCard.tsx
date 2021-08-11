@@ -53,6 +53,15 @@ const PageCard = ({file, pageNumber, last, fullHeight, gutterBottom}: PageProps)
   const [size, setSize] = useState<number>(200);
   const [selected, setSelected] = useState<boolean>(false);
   const theme = useTheme();
+  
+  window.addEventListener('resize', () => {
+    if(window.innerWidth > theme.breakpoints.values.lg){
+      setSize(400);
+    }
+    else if(window.innerWidth > theme.breakpoints.values.sm){
+      setSize(250);
+    }
+  }); 
 
   const toggleSelected = () => {
     setSelected(!selected);
@@ -66,7 +75,7 @@ const PageCard = ({file, pageNumber, last, fullHeight, gutterBottom}: PageProps)
     <Card className={classnames(classes.root, fullHeight && classes.fullHeight, gutterBottom && classes.gutterBottom, selected && classes.selected)}>
         <CardMedia>
           <Document file={file.file} noData="">
-              <Page width={250} pageNumber={pageNumber}/>
+              <Page width={size} pageNumber={pageNumber}/>
           </Document>
         </CardMedia>
         {!last && 
