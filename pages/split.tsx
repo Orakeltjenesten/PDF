@@ -17,6 +17,7 @@ import { fileSave } from 'browser-fs-access';
 import { useHorizontalScroll } from '../hooks/HorizontalScroll';
 import { LegendToggleTwoTone } from '@material-ui/icons';
 import { useAlert } from '../hooks/AlertContext';
+import { NONAME } from 'dns';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -46,8 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
         }
       },
       dragging: {
-          //backgroundColor: theme.palette.transparent.background,
-          background: 'none'
+          background: 'none',
       },
       splitPanel: {
           display: 'flex',
@@ -186,7 +186,7 @@ export default function Home() {
                             <Draggable draggableId={page.name} index={index} key={page.name} >
                                 {(provided, snapshot) => (
                                     <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
-                                        <PageCard setSplitAt={setSplitAt} index={index} file={page} pageNumber={1} last={index === pages.length-1}/>
+                                        <PageCard setSplitAt={setSplitAt} index={index} file={page} pageNumber={1} last={snapshot.isDragging || index === pages.length-1}/>
                                     </div>
                                 )}
                             </Draggable>
