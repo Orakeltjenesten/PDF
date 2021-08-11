@@ -70,8 +70,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-
         <div className={styles.header}>
           <h1>
             {t("merge")}
@@ -97,13 +95,7 @@ export default function Home() {
           )
           }
         </FileContext.Consumer>
-
-      
-      
-        <footer className={styles.footer}>
-            {t("with_love")}
-        </footer>
-      </main>
+¨¨
     </>
   )
 }

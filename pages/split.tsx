@@ -22,19 +22,6 @@ import { NONAME } from 'dns';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
-        container: {
-            [theme.breakpoints.down('xl')]: {
-            paddingRight: theme.spacing(2),
-            paddingLeft: theme.spacing(2),
-            },
-            display: 'flex',
-            flexDirection: 'column',
-            ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
-              flexDirection: 'row'
-            },
-            justifyContent: 'space-evenly',
-            maxHeight: '80vh'
-          },
       list: {
         display: 'flex',
         width: '100vw',
@@ -49,10 +36,21 @@ const useStyles = makeStyles((theme: Theme) =>
       dragging: {
           background: 'none',
       },
-      splitPanel: {
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+      wrapper: { 
+          overflowX: 'auto',
+          whiteSpace: 'nowrap',
+      },
+      splitContent: {
+        [theme.breakpoints.down('xl')]: {
+            paddingRight: theme.spacing(2),
+            paddingLeft: theme.spacing(2),
+        },
+        height: '80vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        alignContent: 'space-between',
+        justifyContent: 'space-between',
       }
     })
   );
@@ -175,32 +173,32 @@ export default function Home() {
                 <meta name={t("meta_name")} content="Split"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
-            <Typography align='center' color='inherit' variant='h2'>
-                {t("split")}
-            </Typography>
-            <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
-                <Droppable droppableId="droppable" direction="horizontal">
-                    {(provided) => (
-                    <Box id={horizontalScrollId} onWheel={handleWheelEvent} ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
-                        {pages.map((page, index) => (
-                            <Draggable draggableId={page.name} index={index} key={page.name} >
-                                {(provided, snapshot) => (
-                                    <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
-                                        <PageCard setSplitAt={setSplitAt} index={index} file={page} pageNumber={1} last={snapshot.isDragging || index === pages.length-1}/>
-                                    </div>
-                                )}
-                            </Draggable>
-                        ))}
-                        {provided.placeholder}
-                    </Box>
-                    )
-                    }
-                </Droppable>
-            </DragDropContext>
-            <Button onClick={downloadSplits}>{t("download_splits")}</Button>
-            <footer>
-                {t("with_love")}
-            </footer>
+
+            <Box className={classes.splitContent}>
+                <Typography align='center' color='inherit' variant='h2'>
+                    {t("split")}
+                </Typography>
+                <DragDropContext onDragEnd={(result: DropResult) => {reorderFiles(result.source.index, result.destination!.index)}}>
+                    <Droppable droppableId="droppable" direction="horizontal">
+                        {(provided) => (
+                        <Box id={horizontalScrollId} onWheel={handleWheelEvent} ref={provided.innerRef} {...provided.droppableProps} className={classes.list}>
+                            {pages.map((page, index) => (
+                                <Draggable draggableId={page.name} index={index} key={page.name} >
+                                    {(provided, snapshot) => (
+                                        <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
+                                            <PageCard setSplitAt={setSplitAt} index={index} file={page} pageNumber={1} last={snapshot.isDragging || index === pages.length-1}/>
+                                        </div>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </Box>
+                        )
+                        }
+                    </Droppable>
+                </DragDropContext>
+                <Button onClick={downloadSplits}>{t("download_splits")}</Button>
+            </Box>
             
         </>
     )
