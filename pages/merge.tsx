@@ -66,8 +66,7 @@ export default function Home() {
   return (
     <>
 
-      <PageTitle text="merge" />
-
+        <PageTitle text="merge" />
         <FileContext.Consumer>
           {(fileStore) => (
             
