@@ -3,15 +3,6 @@
   flex-direction: row;
   align-items: center;
 }
-
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 95vh;
-  padding-top: 50px;
-}
 .listView {
   flex: 1;
   display: flex;
