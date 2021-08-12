@@ -60,7 +60,7 @@ interface PDFPreviewProps {
 const PDFPreview = (props: PDFPreviewProps) => {
   // loads something necessary to render pdf
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`; 
-
+  const scroller = React.createRef<VariableSizeList>();
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
   const [numberPages, setNumberPages] = useState(0);
   const [pageSizes, setPageSizes] = useState(new Array<number>());
@@ -88,13 +88,9 @@ const PDFPreview = (props: PDFPreviewProps) => {
   }, [props.files])
 
   useEffect(() => { // changes the focused page; snaps to the file that is clicked on
-    if (props.currentPage != null) {
-      if (outerBox.current != null) {
-        let outer: HTMLDivElement = outerBox.current;
-        let doc: HTMLDivElement = (outer.firstChild as HTMLDivElement);
-        doc!.children.item(props.currentPage)?.scrollIntoView();
-      }
-    }
+    if (props.currentPage != null && scroller.current != null) {
+      scroller.current!.scrollToItem(props.currentPage, "center");
+    } 
   }, [props.currentPage])
 
   useEffect(() => {
@@ -107,7 +103,7 @@ const PDFPreview = (props: PDFPreviewProps) => {
   return (
         <div className={classes.root} id="pdfOuter" ref={outerBox}>
           <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
-          <List height={window.innerHeight * 0.8} width={width} itemSize={(i) => {return (width-32)*pageSizes[i]+8}} itemCount={numberPages}>
+          <VariableSizeList ref={scroller} height={window.innerHeight * 0.8} width={width} itemSize={(i) => {return (width-32)*pageSizes[i]+8}} itemCount={numberPages}>
               { ({style, index}) => (
                 <div style={style}>
                 <Page className={classes.pdfPage} pageNumber={index+1} key={index} width={width-32}> 
@@ -115,7 +111,7 @@ const PDFPreview = (props: PDFPreviewProps) => {
                 </Page>
                 </div>
             )}
-            </List>
+            </VariableSizeList>
           </Document>
         </div>
   )
