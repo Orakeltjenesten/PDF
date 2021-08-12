@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import classnames from 'classnames';
 import { FileRejection, useDropzone } from 'react-dropzone';
 import Paper from '../components/Paper';
@@ -7,7 +7,7 @@ import { useFileContext } from '../hooks/FileContext';
 import useTranslation from 'next-translate/useTranslation';
 
 // Material UI Components
-import { makeStyles, createStyles}  from '@material-ui/styles/';
+import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Typography, List, ListItem, ListItemText, Divider, Container, SpeedDial, SpeedDialIcon, SpeedDialAction, Backdrop } from '@material-ui/core'
 import { ListItemIcon } from '@material-ui/core';
@@ -24,32 +24,35 @@ import ErrorIcon from '@material-ui/icons/ErrorOutlineTwoTone';
 import { PDFDocument } from 'pdf-lib';
 
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            flex: 1,
             display: 'flex',
             gap: theme.spacing(2),
             flexDirection: 'column',
             alignItems: 'center',
-            background: theme.palette.transparent.boxShadow,
+            justifyContent: 'center',
+            padding: theme.spacing(2, 4),
             color: theme.palette.text.primary,
-            padding: theme.spacing(32, 4, 4, 4),
             [theme.breakpoints.down('md')]: {
-                padding: theme.spacing(16, 2),
+                padding: theme.spacing(2, 2),
             },
-            minHeight: '100vh',
         },
         uploadWrapper: {
             justifyContent: 'center',
             width: '100%',
             maxWidth: theme.breakpoints.values.lg,
-          },
+        },
+        noFiles: {
+
+        },
         upload: {
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'column',
             justifyContent: 'center',
-            padding: theme.spacing(10,5),
+            padding: theme.spacing(10, 5),
             overflow: 'hidden',
             height: theme.spacing(40),
             border: theme.spacing(.5) + ' dashed ' + theme.palette.colors.topbar,
@@ -88,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
     }
-));
+    ));
 
 
 export default function Home() {
@@ -103,8 +106,8 @@ export default function Home() {
     const { t } = useTranslation('common');
 
     const actions = [
-        { icon: withLink('/merge', <MergeIcon />), name: t("merge")},
-        { icon: withLink('/split', <SplitIcon />), name: t("split")},
+        { icon: withLink('/merge', <MergeIcon />), name: t("merge") },
+        { icon: withLink('/split', <SplitIcon />), name: t("split") },
     ];
 
     const toggleHover = (hover: boolean) => {
@@ -118,14 +121,14 @@ export default function Home() {
     const handleOpen = () => {
         setOpen(true);
     };
-    
+
     async function validate(file: File) {
-        if (fileContext.files.map(file => file.name).includes(file.name) || 
-        fileContext.files.map(file => file.name).includes(file.name + " as pdf.pdf")) {
-          return {
-            code: t("duplicate_file_code"),
-            message: t("already_uploaded_error_message"),
-          };
+        if (fileContext.files.map(file => file.name).includes(file.name) ||
+            fileContext.files.map(file => file.name).includes(file.name + " as pdf.pdf")) {
+            return {
+                code: t("duplicate_file_code"),
+                message: t("already_uploaded_error_message"),
+            };
         }
         if (file.type == "application/pdf") {
             let pdf = await PDFDocument.load(await file.arrayBuffer());
@@ -133,122 +136,124 @@ export default function Home() {
                 return {
                     code: t("invalid_file_code"),
                     message: t("invalid_error_message"),
-                  };
+                };
             }
         }
 
         return null
-      }
+    }
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/jpeg, image/png, application/pdf', onDrop: async (files) => {
-        let rejectedFiles: FileRejection[] = [];
-        let acceptedFiles: File[] = [];
-        for (let i=0; i < files.length; i++) {
-            let error_message = await validate(files[i]);
-            if (error_message != null) {
-                rejectedFiles.push({file: files[i], errors: [error_message]});
-            } else {
-                acceptedFiles.push(files[i]);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        accept: 'image/jpeg, image/png, application/pdf', onDrop: async (files) => {
+            let rejectedFiles: FileRejection[] = [];
+            let acceptedFiles: File[] = [];
+            for (let i = 0; i < files.length; i++) {
+                let error_message = await validate(files[i]);
+                if (error_message != null) {
+                    rejectedFiles.push({ file: files[i], errors: [error_message] });
+                } else {
+                    acceptedFiles.push(files[i]);
+                }
             }
-        }
-        
-        fileContext.addFiles(acceptedFiles);
 
-        if(acceptedFiles.length > 0){
-            if(!accepted){
-                setAccepted(acceptedFiles);
+            fileContext.addFiles(acceptedFiles);
+
+            if (acceptedFiles.length > 0) {
+                if (!accepted) {
+                    setAccepted(acceptedFiles);
+                }
+                else {
+                    setAccepted(accepted.concat(acceptedFiles));
+                }
             }
-            else{
-                setAccepted(accepted.concat(acceptedFiles));
+            if (rejectedFiles.length > 0) {
+                if (!rejected) {
+                    setRejected(rejectedFiles);
+                }
+                else {
+                    const currentRejections = rejected;
+                    const currentRejectionsNames = currentRejections.map(fileRejection => fileRejection.file.name);
+                    rejectedFiles.forEach(fileRejection => {
+                        if (!currentRejectionsNames.includes(fileRejection.file.name)) {
+                            currentRejections.push(fileRejection);
+                        }
+                    })
+                    setRejected(currentRejections);
+                }
             }
         }
-        if(rejectedFiles.length > 0){
-            if(!rejected){
-                setRejected(rejectedFiles);
-            }
-            else{
-                const currentRejections = rejected;
-                const currentRejectionsNames = currentRejections.map(fileRejection => fileRejection.file.name);
-                rejectedFiles.forEach(fileRejection => {
-                    if(!currentRejectionsNames.includes(fileRejection.file.name)){
-                        currentRejections.push(fileRejection);
-                    }
-                })
-                setRejected(currentRejections);
-            }
-        }
-    }})
+    })
     return (
         <>
             <Head>
                 <title>{t("upload_title")}</title>
-                <meta name={t("meta_name")} content={t("upload")}/>
-                <link rel="icon" href="/favicon.ico"/>
+                <meta name={t("meta_name")} content={t("upload")} />
+                <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className={classes.root}>
+            <main className={classes.root}>
                 <div onMouseEnter={() => toggleHover(true)} onMouseLeave={() => toggleHover(false)} {...getRootProps()} className={classes.uploadWrapper}>
                     <Paper className={classnames(isDragActive ? classes.active : undefined, classes.upload)}>
                         <input {...getInputProps()} />
-                        <FileIcon fontSize='large'/>
+                        <FileIcon fontSize='large' />
                         <Typography variant="h3" textAlign="center">
                             {
-                            isDragActive ? t("drop_here") : hover ? t("click_select") : t("drag_or_select")
+                                isDragActive ? t("drop_here") : hover ? t("click_select") : t("drag_or_select")
                             }
                         </Typography>
                     </Paper>
                 </div>
                 <Container className={classes.filesWrapper} maxWidth='lg'>
                     {accepted && accepted.length > 0 &&
-                    <>
-                        <Divider variant='fullWidth' />
-                        <List className={classes.acceptedFiles}>
-                            <Typography align='center' variant='h3'>{t("accepted_files")}</Typography>
-                            {accepted.map((file, index) => (
-                                <ListItem button key={file.name}>
-                                    <ListItemIcon>{file.type === 'image/*' ? <IMGIcon/> : file.type === 'application/pdf' ? <PDFIcon/> : <InsertDriveFileOutlinedIcon/>}</ListItemIcon>
-                                    <ListItemText primary={file.name}/>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </>
+                        <>
+                            <Divider variant='fullWidth' />
+                            <List className={classes.acceptedFiles}>
+                                <Typography align='center' variant='h3'>{t("accepted_files")}</Typography>
+                                {accepted.map((file, index) => (
+                                    <ListItem button key={file.name}>
+                                        <ListItemIcon>{file.type === 'image/*' ? <IMGIcon /> : file.type === 'application/pdf' ? <PDFIcon /> : <InsertDriveFileOutlinedIcon />}</ListItemIcon>
+                                        <ListItemText primary={file.name} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </>
                     }
                     {rejected && rejected.length > 0 &&
-                    <>
-                        <Divider variant='fullWidth' />
-                        <List className={classes.rejectedFiles}>
-                            <Typography align='center' variant='h3'>{t("rejected_files")}</Typography>
-                            {rejected.map((fileRejection, index) => (
-                                <ListItem button key={fileRejection.file.name}>
-                                    <ListItemIcon><ErrorIcon/></ListItemIcon>
-                                    <ListItemText primary={fileRejection.file.name} secondary={fileRejection.errors[0].message}/>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </>
+                        <>
+                            <Divider variant='fullWidth' />
+                            <List className={classes.rejectedFiles}>
+                                <Typography align='center' variant='h3'>{t("rejected_files")}</Typography>
+                                {rejected.map((fileRejection, index) => (
+                                    <ListItem button key={fileRejection.file.name}>
+                                        <ListItemIcon><ErrorIcon /></ListItemIcon>
+                                        <ListItemText primary={fileRejection.file.name} secondary={fileRejection.errors[0].message} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </>
                     }
                 </Container>
                 <Backdrop open={open} />
                 <SpeedDial
-                ariaLabel="SpeedDial openIcon example"
-                className={classes.speedDial}
-                hidden={fileContext.files.length == 0}
-                icon={<SpeedDialIcon icon={<NextIcon />} openIcon={<CloseIcon />}/>}
-                onClose={handleClose}
-                onOpen={handleOpen}
-                open={open}
-                direction='up'
+                    ariaLabel="SpeedDial openIcon example"
+                    className={classes.speedDial}
+                    hidden={fileContext.files.length == 0}
+                    icon={<SpeedDialIcon icon={<NextIcon />} openIcon={<CloseIcon />} />}
+                    onClose={handleClose}
+                    onOpen={handleOpen}
+                    open={open}
+                    direction='up'
                 >
                     {actions.map((action) => (
                         <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipOpen
-                        tooltipTitle={action.name}
-                        onClick={handleClose}
+                            key={action.name}
+                            icon={action.icon}
+                            tooltipOpen
+                            tooltipTitle={action.name}
+                            onClick={handleClose}
                         />
                     ))}
                 </SpeedDial>
-            </div>
+            </main>
         </>
     )
 }
