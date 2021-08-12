@@ -13,19 +13,17 @@ const useStyles = makeStyles((theme: Theme) =>
       list: {
         display: 'flex',
         width: '100vw',
-        overflowX: 'hidden',
+        overflowX: 'auto',
         overflowY: 'hidden',
         whiteSpace: 'nowrap',
+        visibility: 'hidden',
         padding: theme.spacing(6, 6, 0, 6),
         '&:hover': {
-            overflowX: 'auto',
-        },
-        [theme.breakpoints.up('lg')]:  {
-            maxHeight: 600,
-        },
-        [theme.breakpoints.down('lg')]: {
-            maxHeight: 500,
-        },
+            visibility: 'visible',
+        }
+      },
+      item: {
+        visibility: 'visible',
       },
       dragging: {
           background: 'none',
@@ -54,7 +52,7 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
                 {pages.map((page, index) => (
                     <Draggable draggableId={page.name} index={index} key={page.name} >
                         {(provided, snapshot) => (
-                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(snapshot.isDragging && classes.dragging)}>
+                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.item, snapshot.isDragging && classes.dragging)}>
                                 <PageCard setSplitAt={setSplitAt} index={index} file={page} pageNumber={1} last={snapshot.isDragging || index === pages.length-1}/>
                             </div>
                         )}
