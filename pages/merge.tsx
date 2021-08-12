@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import React from 'react'
-import { FileContext } from "../hooks/FileContext";
+import { FileContext, useFileContext } from "../hooks/FileContext";
 
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
@@ -16,22 +16,16 @@ import useTranslation from 'next-translate/useTranslation';
 import { PageTitle } from '../components/PageTitle';
 
 
-
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flex: 1,
-      [theme.breakpoints.down('xl')]: {
-        paddingRight: theme.spacing(2),
-        paddingLeft: theme.spacing(2),
+      display: 'grid',
+      gap: theme.spacing(2),
+      gridTemplateColumns: '1fr 1fr',
+      [theme.breakpoints.down('lg')]: {
+        gridTemplateColumns: '1fr',
       },
-      display: 'flex',
-      flexDirection: 'column',
-      ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
-        flexDirection: 'row',
-      },
-      justifyContent: 'space-evenly',
     },
     listView: {
       borderRight: '0',
@@ -39,20 +33,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      flex: '1',
-      maxHeight: '80vh',
       padding: 0,
-      ['@media (max-width:1000px)']: { // eslint-disable-line no-useless-computed-key
-        height: '40vh'
-      },
     },
     pdfPreview: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      flex: '1',
-      height: '80vh',
-      margin: '5px',
       padding: 0
     },
   })
@@ -63,29 +49,28 @@ export default function Home() {
   const { t } = useTranslation("common");
   const classes = useStyles();
   const [togglePreview, setTogglePreview] = useState<boolean>(true);
+  const fileContext = useFileContext();
+
   return (
     <>
-
+      <Head>
+        <title>{t("merge_title")}</title>
+        <meta name={t("meta_name")} content={t("merge")} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <PageTitle text="merge" />
-      <FileContext.Consumer>
-        {(fileStore) => (
-
-          <MuiContainer className={classes.root} maxWidth={false}>
-            {fileStore!.files!.length > 0 ? <>
-              <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
-                <Grid item style={{ overflowY: 'auto' }}><PDFListDisplay /></Grid>
-                <Grid item> <SavePDFButton text={t("merge")} /></Grid>
-                <Grid item><Button variant="contained" onClick={(e) => { e.preventDefault(); setTogglePreview(!togglePreview) }}>{t("toggle_preview")}</Button></Grid>
-              </Grid>
-              <MuiContainer className={classes.pdfPreview}>
-                {togglePreview && <PDFPreview currentPage={fileStore?.focusedPage} files={fileStore?.files} />}
-              </MuiContainer>
-            </> : <h2>{t("upload_some_files")}</h2>}
+      <main className={classes.root}>
+        {fileContext.files.length > 0 ? <>
+          <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
+            <Grid item style={{ overflowY: 'auto' }}><PDFListDisplay /></Grid>
+            <Grid item> <SavePDFButton text={t("merge")} /></Grid>
+            <Grid item><Button variant="contained" onClick={(e) => { e.preventDefault(); setTogglePreview(!togglePreview) }}>{t("toggle_preview")}</Button></Grid>
+          </Grid>
+          <MuiContainer className={classes.pdfPreview}>
+            {togglePreview && <PDFPreview currentPage={fileContext.focusedPage} files={fileContext.files} />}
           </MuiContainer>
-        )
-        }
-      </FileContext.Consumer>
-      ¨¨
+        </> : <h2>{t("upload_some_files")}</h2>}
+      </main>
     </>
   )
 }

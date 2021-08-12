@@ -6,7 +6,7 @@ import { assemblePDF, useFileContext } from '../hooks/FileContext';
 import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import useTranslation from 'next-translate/useTranslation';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
 import { PDFDocument, PDFPage } from 'pdf-lib';
 import { useAlert } from '../hooks/AlertContext';
@@ -25,8 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            alignContent: 'space-between',
-            justifyContent: 'space-between',
+            justifyContent: 'center',
         },
         downloadButton: {
             marginTop: theme.spacing(3),
@@ -131,8 +130,7 @@ export default function Home() {
             var containerScrollPosition = container.scrollLeft;
             container.scrollTo({
                 top: 0,
-                left: containerScrollPosition + (e.deltaY * 3),
-                behavior: 'smooth',
+                left: containerScrollPosition + (e.deltaY),
             })
         }
     };
@@ -150,12 +148,10 @@ export default function Home() {
                 <meta name={t("meta_name")} content="Split" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+            <PageTitle text="split" />
             <main className={classes.root}>
-                <PageTitle text="split" />
                 {(fileContext.files.length > 0) ? (<>
-
                     <PageCardDroppable reorderFiles={reorderFiles} handleWheelEvent={handleWheelEvent} horizontalScrollId={horizontalScrollId} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
-
                     <Button onClick={downloadSplits} className={classes.downloadButton}>{t("download_splits")}</Button>
                 </>) : <h2>{t("upload_some_files")}</h2>}
             </main>

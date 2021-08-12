@@ -5,90 +5,38 @@ import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/s
 import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 import useTranslation from 'next-translate/useTranslation';
+import Paper from "./Paper";
 import { VariableSizeList as List } from 'react-window';
 import { setLineWidth } from "pdf-lib";
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
+      root : {
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        width: '100%',
+      },
       controls : {
         position: 'absolute',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'center',
-        bottom: '6px',
-        left: '0',
-        right: '0',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        padding: '4px',
-        width: '50px',
-        border: '1px solid black',
-        background: 'white',
-        color: 'black'
-      },
-
-      previewText : {
-        border: '1px solid black',
-        position: 'absolute',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        top: '12px',
-        left: '0',
-        right: '0',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        padding: '4px',
-        width: '100%',
-        fontSize: '22px',
+        bottom: theme.spacing(1),
+        padding: theme.spacing(1,2),
         backgroundColor: 'white',
         color: 'black',
-        maxWidth: '90%'
-      },
-
-      hidden : {
-        display: 'none'
-      },
-
-      pageLoading : {
-        position: 'absolute',
-        zIndex: -100
       },
       documentView : {
         maxHeight: '80vh',
-        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
       },
-    
       pdfPage : {
-        position: 'relative',
-        margin: '5px',
+        margin: theme.spacing(2),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         paddingBottom: '3px',
       },
-    
-      outer : {
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'center',
-        height: '80vh',
-        ['@media (min-width:1000px)']: {
-          width: '80%',
-          maxWidth: '600px'
-        },
-        ['@media (max-width:1000px)']: { 
-          maxWidth: '100%',
-          width: '80%',
-          height: '40vh'
-        }
-      }
 }));
 
 
@@ -96,9 +44,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const PreviewControls = (props: {page: number}) => {
   const classes = useStyles({});
     return (
-      <div className={classes.controls}>
+      <Paper className={classes.controls} noPadding>
         {props.page+1}
-      </div>
+      </Paper>
     )
 }
 
@@ -157,7 +105,7 @@ const PDFPreview = (props: PDFPreviewProps) => {
 
   
   return (
-        <div className={classes.outer} id="pdfOuter" ref={outerBox}>
+        <div className={classes.root} id="pdfOuter" ref={outerBox}>
           <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
           <List height={window.innerHeight * 0.8} width={width} itemSize={(i) => {return (width-32)*pageSizes[i]+8}} itemCount={numberPages}>
               { ({style, index}) => (
