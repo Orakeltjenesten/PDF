@@ -7,7 +7,8 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from "@material-ui/core/styles";
 import React, { ReactNode } from "react";
 import useTranslation from "next-translate/useTranslation";
-import { autocompleteClasses } from "@material-ui/core";
+import { autocompleteClasses, Divider } from "@material-ui/core";
+import Footer from "../Footer";
 import { Head } from "next/document";
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -16,34 +17,21 @@ const useStyles = makeStyles((theme: Theme) =>
         display: 'flex',
         flexDirection: 'column',
         background: theme.palette.background.default,
-        height: '100vh',
+        minHeight: '100vh',
       },
       offset: theme.mixins.toolbar,
-      
-      footer: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '4px',
-        marginTop: 'auto',
-      }
-      
     })
     
 );
 export default function Layout({children} : {children: ReactNode}) {
     const classes = useStyles();
-    const {t} = useTranslation("common");
   return (
     <>
     <div className={classes.wrapper}>
       <Topbar variant='dynamic'/>
-      <div className={classes.offset}></div>
-      <main>{children}</main>
-
-      <footer className={classes.footer}>
-        {t("with_love")}
-      </footer>
+      <div className={classes.offset}/>
+      {children}
+      <Footer />
     </div>
     </>
   )
