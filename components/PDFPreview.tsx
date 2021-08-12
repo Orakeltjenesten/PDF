@@ -6,7 +6,7 @@ import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 import useTranslation from 'next-translate/useTranslation';
 import Paper from "./Paper";
-import { VariableSizeList as List } from 'react-window';
+import { VariableSizeList } from 'react-window';
 import { setLineWidth } from "pdf-lib";
 
 const useStyles = makeStyles((theme: Theme) => 
