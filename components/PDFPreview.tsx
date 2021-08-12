@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from 'react-pdf'
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 import useTranslation from 'next-translate/useTranslation';
+import { VariableSizeList as List } from 'react-window';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -112,13 +113,20 @@ const PDFPreview = (props: PDFPreviewProps) => {
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`; 
 
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
-  const [numberPages, setNumberPages] = useState(-1);
+  const [numberPages, setNumberPages] = useState(0);
+  const [pageSizes, setPageSizes] = useState(new Array<number>());
   const classes = useStyles({});
   const { t } = useTranslation("common");
   let outerBox = React.createRef<HTMLDivElement>();
 
   async function makePreview() {
     let file : UploadedFile = (await assemblePDF(props.files!))!
+    let newPageSizes : number[] = [];
+    for (let i=0; i < file.getPageCount(); i++) {
+      newPageSizes.push( (file.getPage(i).getHeight()) / file.getPage(i).getWidth() );
+    }
+    console.log(newPageSizes);
+    setPageSizes(newPageSizes);
     setMergedPDF(file);
     setNumberPages(file.getPageCount());
   }
@@ -138,17 +146,22 @@ const PDFPreview = (props: PDFPreviewProps) => {
       }
     }
   }, [props.currentPage])
+
   
   return (
     <FileContext.Consumer> 
       { (context: any) => (
         <div className={classes.outer} id="pdfOuter" ref={outerBox}>
           <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
-            {(mergedPDF != null && numberPages > 0) ? Array.from(Array(numberPages).keys()).map( (i) => {
-              return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
-                <PreviewControls page={i} />
-              </Page>
-            }) : <div />}
+          <List height={window.innerHeight * 0.8} width={document.getElementById("pdfOuter")!.offsetWidth} itemSize={(i) => {return (document.getElementById("pdfOuter")!.offsetWidth-32)*pageSizes[i]+8}} itemCount={numberPages}>
+              { ({style, index}) => (
+                <div style={style}>
+                <Page className={classes.pdfPage} pageNumber={index+1} key={index} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
+                <PreviewControls page={index} />
+                </Page>
+                </div>
+            )}
+            </List>
           </Document>
         </div>
       )}

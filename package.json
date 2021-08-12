@@ -14,6 +14,7 @@
     "@material-ui/core": "^5.0.0-beta.2",
     "@material-ui/icons": "^5.0.0-beta.1",
     "@material-ui/styles": "^5.0.0-beta.2",
+    "@react-pdf/renderer": "https://gitpkg.now.sh/kidroca/react-pdf/packages/renderer?2fa4df0056a7c7c1dda69538e2ab8a874b1a5d5b",
     "@types/react-beautiful-dnd": "^13.1.1",
     "@types/react-pdf": "^5.0.5",
     "@types/wicg-file-system-access": "^2020.9.2",
@@ -31,14 +32,15 @@
     "react-dropzone": "^11.3.4",
     "react-masonry-css": "^1.0.16",
     "react-pdf": "^5.3.2",
+    "react-window": "^1.8.6",
     "universal-cookie": "^4.0.4",
-    "use-isomorphic-layout-effect": "^1.1.1",
-    "@react-pdf/renderer": "https://gitpkg.now.sh/kidroca/react-pdf/packages/renderer?2fa4df0056a7c7c1dda69538e2ab8a874b1a5d5b"
+    "use-isomorphic-layout-effect": "^1.1.1"
   },
   "devDependencies": {
     "@ijsto/eslint-config": "^4.1.6",
     "@types/node": "^15.14.7",
     "@types/react": "^17.0.15",
+    "@types/react-window": "^1.8.5",
     "eslint": "^7.32.0",
     "jest": "^27.0.6",
     "typescript": "^4.3.5"
