@@ -127,7 +127,6 @@ const PDFPreview = (props: PDFPreviewProps) => {
     for (let i=0; i < file.getPageCount(); i++) {
       newPageSizes.push( (file.getPage(i).getHeight()) / file.getPage(i).getWidth() );
     }
-    console.log(newPageSizes);
     setPageSizes(newPageSizes);
     setMergedPDF(file);
     setNumberPages(file.getPageCount());
