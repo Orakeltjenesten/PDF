@@ -19,7 +19,13 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: theme.spacing(6, 6, 0, 6),
         '&:hover': {
             overflowX: 'auto',
-        }
+        },
+        [theme.breakpoints.up('lg')]:  {
+            maxHeight: 600,
+        },
+        [theme.breakpoints.down('lg')]: {
+            maxHeight: 500,
+        },
       },
       dragging: {
           background: 'none',
