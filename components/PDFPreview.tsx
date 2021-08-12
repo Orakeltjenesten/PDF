@@ -6,6 +6,7 @@ import { FileContext, assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 import useTranslation from 'next-translate/useTranslation';
 import { VariableSizeList as List } from 'react-window';
+import { setLineWidth } from "pdf-lib";
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -115,6 +116,7 @@ const PDFPreview = (props: PDFPreviewProps) => {
   const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
   const [numberPages, setNumberPages] = useState(0);
   const [pageSizes, setPageSizes] = useState(new Array<number>());
+  const [width, setWidth] = useState(0);
   const classes = useStyles({});
   const { t } = useTranslation("common");
   let outerBox = React.createRef<HTMLDivElement>();
@@ -147,16 +149,20 @@ const PDFPreview = (props: PDFPreviewProps) => {
     }
   }, [props.currentPage])
 
+  useEffect(() => {
+    if (outerBox.current != null) {
+    setWidth(outerBox.current.offsetWidth);
+    }
+  }, [outerBox])
+
   
   return (
-    <FileContext.Consumer> 
-      { (context: any) => (
         <div className={classes.outer} id="pdfOuter" ref={outerBox}>
           <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
-          <List height={window.innerHeight * 0.8} width={document.getElementById("pdfOuter")!.offsetWidth} itemSize={(i) => {return (document.getElementById("pdfOuter")!.offsetWidth-32)*pageSizes[i]+8}} itemCount={numberPages}>
+          <List height={window.innerHeight * 0.8} width={width} itemSize={(i) => {return (width-32)*pageSizes[i]+8}} itemCount={numberPages}>
               { ({style, index}) => (
                 <div style={style}>
-                <Page className={classes.pdfPage} pageNumber={index+1} key={index} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
+                <Page className={classes.pdfPage} pageNumber={index+1} key={index} width={width-32}> 
                 <PreviewControls page={index} />
                 </Page>
                 </div>
@@ -164,8 +170,6 @@ const PDFPreview = (props: PDFPreviewProps) => {
             </List>
           </Document>
         </div>
-      )}
-    </FileContext.Consumer>
   )
 }
 
