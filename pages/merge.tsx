@@ -20,12 +20,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flex: 1,
-      display: 'grid',
-      gap: theme.spacing(2),
-      gridTemplateColumns: '1fr 1fr',
-      [theme.breakpoints.down('lg')]: {
-        gridTemplateColumns: '1fr',
-      },
     },
     listView: {
       borderRight: '0',
@@ -34,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       justifyContent: 'center',
       padding: 0,
+    },
+    wrapper: {
+
     },
     pdfPreview: {
       display: 'flex',
@@ -60,16 +57,22 @@ export default function Home() {
       </Head>
       <PageTitle text="merge" />
       <main className={classes.root}>
-        {fileContext.files.length > 0 ? <>
-          <Grid container wrap="nowrap" direction="column" spacing={1} className={classes.listView}>
-            <Grid item style={{ overflowY: 'auto' }}><PDFListDisplay /></Grid>
-            <Grid item> <SavePDFButton text={t("merge")} /></Grid>
-            <Grid item><Button variant="contained" onClick={(e) => { e.preventDefault(); setTogglePreview(!togglePreview) }}>{t("toggle_preview")}</Button></Grid>
+        <MuiContainer maxWidth='xl'>
+          {fileContext.files.length > 0 ?
+          <Grid container className={classes.wrapper}>
+            <Grid container item xs={12} lg={6} spacing={1}>
+              <Grid item xs={12} style={{ overflowY: 'auto' }}><PDFListDisplay /></Grid>
+              <Grid item> <SavePDFButton text={t("merge")} /></Grid>
+              <Grid item><Button variant="contained" onClick={(e) => { e.preventDefault(); setTogglePreview(!togglePreview) }}>{t("toggle_preview")}</Button></Grid>
+            </Grid>
+            <Grid item xs={12} lg={6}>
+              <MuiContainer className={classes.pdfPreview}>
+                {togglePreview && <PDFPreview currentPage={fileContext.focusedPage} files={fileContext.files} />}
+              </MuiContainer>
+            </Grid>
           </Grid>
-          <MuiContainer className={classes.pdfPreview}>
-            {togglePreview && <PDFPreview currentPage={fileContext.focusedPage} files={fileContext.files} />}
-          </MuiContainer>
-        </> : <h2>{t("upload_some_files")}</h2>}
+          : <h2>{t("upload_some_files")}</h2>}
+        </MuiContainer>
       </main>
     </>
   )

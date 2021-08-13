@@ -15,7 +15,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 
 // Project components
 import Dialog from './Dialog';
-import { getCookie, setCookie } from '../utils/cookie';
+import { setCookie } from '../../utils/cookie';
 
 const languageCookie = "NEXT_LOCALE";
 
