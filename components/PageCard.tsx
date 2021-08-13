@@ -60,9 +60,10 @@ export type PageProps = {
   fullHeight?: boolean;
   gutterBottom?: boolean;
   setSplitAt: (index: number, split: boolean) => void;
+  splits: number[];
 }
 
-const PageCard = ({index, file, pageNumber, last, fullHeight, gutterBottom, setSplitAt}: PageProps) => {
+const PageCard = ({index, file, pageNumber, last, fullHeight, gutterBottom, setSplitAt, splits}: PageProps) => {
   const classes = useStyles();
   const [hover, setHover] = useState<boolean>(false);
   const [size, setSize] = useState<number>(600);
@@ -78,13 +79,13 @@ const PageCard = ({index, file, pageNumber, last, fullHeight, gutterBottom, setS
     }
   }); 
 
-  const toggleSelected = () => {
-    setSelected(!selected);
-  }
+  useEffect(() => {
+      setSelected(splits.includes(index+1));
+  }, [splits]);
 
   useEffect(() => {
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-  }, [])
+  }, []);
 
   return (
     <Card className={classnames(classes.root, fullHeight && classes.fullHeight, gutterBottom && classes.gutterBottom, selected && classes.selected, !last && classes.backgroundColoring)}>
@@ -94,7 +95,7 @@ const PageCard = ({index, file, pageNumber, last, fullHeight, gutterBottom, setS
           </Document>
         </CardMedia>
         {!last && 
-          <CardActionArea onClick={() => {setSplitAt(index, !selected); toggleSelected();}} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+          <CardActionArea onClick={() => {setSplitAt(index, !selected);}} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
             <CardContent className={classnames(classes.splitContainer, hover && classes.splitContainerHover, selected && classes.splitContainerSelected)}>
               <Divider orientation='vertical' className={classnames(classes.divider, selected && classes.dividerSelected)} />
             </CardContent>
