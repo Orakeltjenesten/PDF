@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import React, { useState } from 'react'
+import useTranslation from 'next-translate/useTranslation';
 
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import MuiContainer from '@material-ui/core/Container';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
 
 //Project components
 import { PageTitle } from '../components/PageTitle';
@@ -13,12 +14,22 @@ import { useFileContext } from "../hooks/FileContext";
 import { PDFListDisplay } from '../components/PDFListDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
-import useTranslation from 'next-translate/useTranslation';
+import Link from 'next/link';
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flex: 1,
+      [theme.breakpoints.down('xl')]: {
+          paddingRight: theme.spacing(2),
+          paddingLeft: theme.spacing(2),
+      },
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
     },
     listView: {
       borderRight: '0',
@@ -70,7 +81,7 @@ export default function Home() {
               </MuiContainer>
             </Grid>
           </Grid>
-          : <h2>{t("upload_some_files")}</h2>}
+          : <Link href="upload"><Button>{t("upload_some_files")}</Button></Link>}
         </MuiContainer>
       </main>
     </>

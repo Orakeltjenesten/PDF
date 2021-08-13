@@ -6,7 +6,7 @@ import useTranslation from 'next-translate/useTranslation';
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
 //Project components
 import { UploadedFile } from '../hooks/UploadedFile';
@@ -14,6 +14,7 @@ import { useAlert } from '../hooks/AlertContext';
 import { PageCardDroppable } from '../containers/PageCardDroppable';
 import { PageTitle } from '../components/PageTitle';
 import { assemblePDF, useFileContext } from '../hooks/FileContext';
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            textAlign: 'center',
         },
         downloadButton: {
             marginTop: theme.spacing(3),
@@ -188,7 +190,7 @@ export default function Home() {
                     <PageCardDroppable splits={splitIndexes} moveSplitTo={moveSplitTo} reorderFiles={reorderFiles} handleWheelEvent={handleWheelEvent} horizontalScrollId={horizontalScrollId} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
 
                     <Button onClick={downloadSplits} className={classes.downloadButton}>{t("download_splits")}</Button>
-                </>) : <h2>{t("upload_some_files")}</h2>}
+                </>) : <Link href="upload"><Button>{t("upload_some_files")}</Button></Link>}
             </main>
         </>
     )
