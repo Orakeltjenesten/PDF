@@ -9,4 +9,8 @@ module.exports = nextTranslate(withTM({
   future: {
     webpack5: true, // if you want to use webpack 5
   },
+  i18n: {
+    locales: ['en', 'no'],
+    defaultLocale: 'en',
+  }
 }));

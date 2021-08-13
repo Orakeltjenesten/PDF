@@ -22,6 +22,7 @@ import NextIcon from '@material-ui/icons/NavigateNextTwoTone';
 import Link from 'next/link';
 import ErrorIcon from '@material-ui/icons/ErrorOutlineTwoTone';
 import { PDFDocument } from 'pdf-lib';
+import { useAlert } from '../hooks/AlertContext';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -96,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Home() {
     const withLink = (to: string, children: any) => <Link href={to}>{children}</Link>;
-
+    const {showPopup} = useAlert();
     const classes = useStyles();
     const fileContext = useFileContext();
     const [accepted, setAccepted] = useState<File[] | undefined>(undefined);

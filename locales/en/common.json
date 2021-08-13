@@ -31,6 +31,10 @@
     "invalid_input": "Invalid input: ",
     "upload_success": "Successfully uploaded!",
     "upload_errors": "One or more files did not successfully upload.",
+    "language": "Language",
+    "change_language": "Change language",
+    "norwegian": "Norwegian",
+    "english": "English",
     "download_splits": "Download splits",
     "split_files_downloaded": "Files were downloaded!"
 

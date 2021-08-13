@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             flex: 1,
             position: 'relative',
-            color: theme.palette.common.white,
+            color: theme.palette.primary.light,
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
@@ -32,8 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
             gridTemplateColumns: 'auto auto',
         },
         button: {
-            color: theme.palette.common.white,
-            borderColor: theme.palette.common.white,
         },
         logoWrapper: {
             display: 'flex',

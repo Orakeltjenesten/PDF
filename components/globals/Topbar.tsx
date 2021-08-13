@@ -20,6 +20,7 @@ import { Box } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/MenuRounded';
 import CloseIcon from '@material-ui/icons/CloseRounded';
 import useTranslation from 'next-translate/useTranslation';
+import LanguageSettings from './LanguageSettings';
 
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -157,6 +158,9 @@ const Topbar = ({ variant }: TopbarProps) => {
             </div>
           </Box>
           <div className={classnames(classes.right, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
+            <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
+              <LanguageSettings className={classes.topbarItem} />
+            </Box>
             <Box component='div' sx={{ display: { xs: 'none', md: 'block' } }}>
               <ThemeSettings className={classes.topbarItem} />
             </Box>

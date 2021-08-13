@@ -94,9 +94,18 @@ const PDFPreview = (props: PDFPreviewProps) => {
   }, [props.currentPage])
 
   useEffect(() => {
-    if (outerBox.current != null) {
-    setWidth(outerBox.current.offsetWidth);
+    const handleResize = () => {
+      if (outerBox.current) {
+        setWidth(outerBox.current.offsetWidth);
+        }
     }
+    handleResize();
+
+    let resize: NodeJS.Timeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resize);
+      resize = setTimeout(handleResize, 300);
+    })
   }, [outerBox])
 
   
