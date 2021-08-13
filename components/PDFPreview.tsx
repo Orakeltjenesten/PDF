@@ -96,7 +96,12 @@ const PDFPreview = (props: PDFPreviewProps) => {
     const handleResize = () => {
       if (outerBox.current) {
         setWidth(outerBox.current.offsetWidth);
+      }
+      if (scroller.current != null && mergedPDF != null) {
+        for (let i=0; i < mergedPDF.getPageCount(); i++) {
+          scroller.current.resetAfterIndex(i)
         }
+      }
     }
     handleResize();
 

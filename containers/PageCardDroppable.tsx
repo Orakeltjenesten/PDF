@@ -17,17 +17,18 @@ const useStyles = makeStyles((theme: Theme) =>
       list: {
         display: 'flex',
         width: '100vw',
-        overflowX: 'auto',
         overflowY: 'hidden',
         whiteSpace: 'nowrap',
-        visibility: 'hidden',
         padding: theme.spacing(6, 6, 0, 6),
         '&:hover': {
-            visibility: 'visible',
-        }
-      },
-      item: {
-        visibility: 'visible',
+            overflowX: 'auto',
+        },
+        [theme.breakpoints.up('lg')]:  {
+            maxHeight: 600,
+        },
+        [theme.breakpoints.down('lg')]: {
+            maxHeight: 500,
+        },
       },
       dragging: {
           background: 'none',
