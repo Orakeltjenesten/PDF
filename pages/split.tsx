@@ -110,6 +110,10 @@ export default function Home() {
             (toValue && !newSplitIndexes.includes(to+1) && newSplitIndexes.push(to+1));
             (!toValue && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != to+1))));
         }
+        (from == pages.length) && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != pages.length-1)));
+
+        // set last index to split
+        !newSplitIndexes.includes(pages.length) && newSplitIndexes.push(pages.length)
         
         
         newSplitIndexes = newSplitIndexes.sort((a, b) => a-b)

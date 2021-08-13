@@ -17,18 +17,19 @@ const useStyles = makeStyles((theme: Theme) =>
       list: {
         display: 'flex',
         width: '100vw',
+        overflowX: 'hidden',
         overflowY: 'hidden',
         whiteSpace: 'nowrap',
         padding: theme.spacing(6, 6, 0, 6),
         '&:hover': {
             overflowX: 'auto',
         },
-        [theme.breakpoints.up('lg')]:  {
-            maxHeight: 600,
+        /*[theme.breakpoints.up('lg')]:  {
+            maxHeight: 700,
         },
         [theme.breakpoints.down('lg')]: {
             maxHeight: 500,
-        },
+        },*/
       },
       dragging: {
           background: 'none',
@@ -116,9 +117,9 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
                         layout="horizontal"
                         outerRef={provided.innerRef} 
                         itemData={itemData}
-                        height={600} 
+                        height={window.innerHeight * 0.6} 
                         width={window.innerWidth} 
-                        itemSize={(i) => ((pages[i].getPage(0).getWidth()) / pages[i].getPage(0).getHeight() * 600 + 50)} 
+                        itemSize={(i) => ((pages[i].getPage(0).getWidth()) / pages[i].getPage(0).getHeight() * window.innerHeight*0.6 + 50)} 
                         itemCount={pages.length}
                         ref={listRef}
                     >

@@ -66,16 +66,16 @@ export type PageProps = {
 const PageCard = ({index, file, pageNumber, last, fullHeight, gutterBottom, setSplitAt, splits}: PageProps) => {
   const classes = useStyles();
   const [hover, setHover] = useState<boolean>(false);
-  const [size, setSize] = useState<number>(600);
+  const [size, setSize] = useState<number>(window.innerHeight * 0.6);
   const [selected, setSelected] = useState<boolean>(false);
   const theme = useTheme();
   
   window.addEventListener('resize', () => {
     if(window.innerWidth > theme.breakpoints.values.lg){
-      setSize(600);
+      setSize(window.innerHeight * 0.6);
     }
     else if(window.innerWidth > theme.breakpoints.values.sm){
-      setSize(500);
+      setSize(window.innerHeight * 0.6);
     }
   }); 
 
