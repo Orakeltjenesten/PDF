@@ -1,10 +1,11 @@
 import React, { useCallback, useState, createContext, ReactNode} from 'react';
-import { PDFDocument, PDFPage, scale } from "pdf-lib";
+import { PDFDocument, PDFPage } from "pdf-lib";
 import { useContext } from 'react';
-import { UploadedFile } from './UploadedFile';
-import { useAlert } from './AlertContext';
 import useTranslation from 'next-translate/useTranslation';
 
+//Project components
+import { UploadedFile } from './UploadedFile';
+import { useAlert } from './AlertContext';
 
 interface FileContextProps {
     files: UploadedFile[];

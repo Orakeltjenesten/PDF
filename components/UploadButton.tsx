@@ -1,8 +1,9 @@
-import { Button } from "@material-ui/core";
-import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
+import { PDFDocument } from "pdf-lib";
 import { FileContext } from "../hooks/FileContext";
 
+// Material UI Components
+import { Button } from "@material-ui/core";
 
 export type UploadButtonProps = {
   text: string;

@@ -1,6 +1,8 @@
-import ServerStyleSheets from '@material-ui/styles/ServerStyleSheets';
 import Document, { Html, Head, Main, NextScript, DocumentContext} from 'next/document'
 import React from 'react';
+
+//Material UI components
+import ServerStyleSheets from '@material-ui/styles/ServerStyleSheets';
 
 class MyDocument extends Document {
   render() {

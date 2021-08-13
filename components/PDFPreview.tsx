@@ -1,13 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import { Document, Page, pdfjs } from 'react-pdf'
-import { Theme } from "@material-ui/core/styles";
-import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
-import { FileContext, assemblePDF } from "../hooks/FileContext";
+import { assemblePDF } from "../hooks/FileContext";
 import { UploadedFile } from "../hooks/UploadedFile";
 import useTranslation from 'next-translate/useTranslation';
-import Paper from "./Paper";
 import { VariableSizeList } from 'react-window';
-import { setLineWidth } from "pdf-lib";
+import Paper from "./Paper";
+
+// Material UI Components
+import { Theme } from "@material-ui/core/styles";
+import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({

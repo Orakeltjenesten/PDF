@@ -1,13 +1,16 @@
-import { Draggable, DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
+import { Draggable } from "react-beautiful-dnd";
 import { FileContext, getPage } from "../hooks/FileContext";
 import React from 'react';
+import { UploadedFile } from '../hooks/UploadedFile';
+import classnames from 'classnames';
+
+
+// Material UI Components
 import { createStyles, makeStyles } from '@material-ui/styles';
 import {IconButton, ListItem, ListItemSecondaryAction, ListItemText, Theme} from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { UploadedFile } from '../hooks/UploadedFile';
-import classnames from 'classnames';
 
 
 const useStyles = makeStyles((theme: Theme) => 

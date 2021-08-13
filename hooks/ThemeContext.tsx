@@ -1,9 +1,13 @@
-import { useCallback, useState, useEffect, useContext, createContext, ReactNode } from 'react';
+import { useCallback, useState, useContext, createContext, ReactNode } from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
-import { getCookie, setCookie } from '../utils/cookie';
-import { getTheme, themes, ThemeTypes } from '../containers/theme';
+
+//Materal UI components
 import { ThemeProvider } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+//Project components
+import { getCookie, setCookie } from '../utils/cookie';
+import { getTheme, themes, ThemeTypes } from '../containers/theme';
 
 const THEME_COOKIE = 'theme-cookie';
 

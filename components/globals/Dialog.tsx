@@ -1,10 +1,11 @@
 import { ReactNode } from 'react';
+import useTranslation from 'next-translate/useTranslation';
 
 // Material-ui
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Button, Dialog as MaterialDialog, DialogActions, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
-import useTranslation from 'next-translate/useTranslation';
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     contentText: {

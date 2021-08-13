@@ -1,6 +1,8 @@
-import { Alert, AlertColor, Snackbar } from "@material-ui/core"
+import { AlertContext, beAlert } from "../hooks/AlertContext"
+
+// Material UI Components
+import { Alert, Snackbar } from "@material-ui/core"
 import React from "react"
-import { AlertContext, AlertContextWrapper, beAlert } from "../hooks/AlertContext"
 
 export const PopupNotification = () => {
     const {message, severity, visible, hidePopup} = beAlert();

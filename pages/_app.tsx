@@ -1,10 +1,11 @@
-import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import React, { useEffect } from 'react';
-import { ThemeMaker } from '../hooks/ThemeContext';
 
-import Topbar from '../components/globals/Topbar';
+//Material UI components
 import { CssBaseline } from '@material-ui/core';
+
+//Project Components
+import { ThemeMaker } from '../hooks/ThemeContext';
 import { FileContextWrapper } from '../hooks/FileContext';
 import Layout from '../components/globals/Layout';
 import { AlertContextWrapper } from '../hooks/AlertContext';

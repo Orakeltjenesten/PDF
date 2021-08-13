@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+
 import { Document, Page, pdfjs } from 'react-pdf'
-import MuiContainer from '@material-ui/core/Container';
 import { UploadedFile } from '../hooks/UploadedFile';
 import useTranslation from "next-translate/useTranslation";
-import { Button, Card, Checkbox, Grid, IconButton } from '@material-ui/core';
+
+// Material UI Components
+import { Checkbox, Grid} from '@material-ui/core';
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import Link from 'next/link';
 
 // Material UI Components
@@ -6,11 +7,10 @@ import { useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import { Theme } from "@material-ui/core/styles";
-import ThemeSettings from './ThemeSettings'
 
 // Project components
-import React from 'react';
 import LanguageSettings from './LanguageSettings';
+import ThemeSettings from './ThemeSettings'
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({

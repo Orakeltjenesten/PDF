@@ -1,11 +1,11 @@
-import { ThemeContext } from "@emotion/react";
-import { Button } from "@material-ui/core";
-import { PDFDocument } from "pdf-lib";
 import React, { SyntheticEvent } from "react";
+
+import { PDFDocument } from "pdf-lib";
 import useTranslation from 'next-translate/useTranslation';
 import { FileContext, assemblePDF } from "../hooks/FileContext";
-import { UploadedFile } from "../hooks/UploadedFile";
 
+// Material UI Components
+import { Button } from "@material-ui/core";
 
 
 interface SavePDFButtonProps {

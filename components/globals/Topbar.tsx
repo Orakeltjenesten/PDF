@@ -1,10 +1,8 @@
-import React, { useMemo, useState, useEffect, Component } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
 import classnames from 'classnames';
-import ThemeSettings from './ThemeSettings';
-import Sidebar from './Sidebar';
-import Logo from './Logo';
+import useTranslation from 'next-translate/useTranslation';
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles';
@@ -16,11 +14,15 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { Box } from '@material-ui/core';
 
-// Assets/Icons
+//Icons
 import MenuIcon from '@material-ui/icons/MenuRounded';
 import CloseIcon from '@material-ui/icons/CloseRounded';
-import useTranslation from 'next-translate/useTranslation';
+
+//Project Components
 import LanguageSettings from './LanguageSettings';
+import ThemeSettings from './ThemeSettings';
+import Sidebar from './Sidebar';
+import Logo from './Logo';
 
 
 const useStyles = makeStyles((theme: Theme) => 

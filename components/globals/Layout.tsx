@@ -1,15 +1,12 @@
-import { classes } from "istanbul-lib-coverage"
-import Topbar from "./Topbar"
+import React, { ReactNode } from "react";
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from "@material-ui/core/styles";
-import React, { ReactNode } from "react";
-import useTranslation from "next-translate/useTranslation";
-import { autocompleteClasses, Divider } from "@material-ui/core";
+
+//Project Components
 import Footer from "../Footer";
-import { Head } from "next/document";
+import Topbar from "./Topbar"
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({

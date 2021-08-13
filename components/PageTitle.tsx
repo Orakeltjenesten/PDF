@@ -1,12 +1,12 @@
-import { Typography } from "@material-ui/core"
+import React from "react"
 import useTranslation from "next-translate/useTranslation";
-import React, { ReactNode } from "react"
 import classnames from 'classnames';
 
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles/";
 import { Variant } from "@material-ui/core/styles/createTypography";
+import { Typography } from "@material-ui/core"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

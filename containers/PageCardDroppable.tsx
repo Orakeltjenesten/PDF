@@ -1,17 +1,17 @@
 import classnames from 'classnames';
-import { DragDropContext, Draggable, DraggableProps, DraggableProvided, DraggableRubric, DraggableStateSnapshot, DragStart, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, DraggableProvided, DraggableRubric, DraggableStateSnapshot, Droppable, DropResult } from 'react-beautiful-dnd';
+import React, { useRef } from 'react';
+import { areEqual, VariableSizeList } from 'react-window';
+import memoize from 'memoize-one';
 
 // Material UI Components
 import { makeStyles, createStyles }  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Box} from '@material-ui/core';
+
+//Project components
 import { UploadedFile } from '../hooks/UploadedFile';
 import PageCard from '../components/PageCard';
-import React, { useRef } from 'react';
-import { areEqual, VariableSizeList, FixedSizeList, ListOnScrollProps, VariableSizeListProps } from 'react-window';
-import memoize from 'memoize-one';
-import { ResetTvOutlined } from '@material-ui/icons';
-import { AnyARecord } from 'dns';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -128,7 +128,7 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
                     outerRef={provided.innerRef} 
                     itemData={itemData}
                     height={window.innerHeight * 0.6} 
-                    width={window.innerWidth} 
+                    width={window.innerWidth}
                     itemSize={(i) => ((pages[i].getPage(0).getWidth()) / pages[i].getPage(0).getHeight() * (window.innerHeight*0.6-28) + 50)} 
                     itemCount={pages.length}
                     ref={listRef}
