@@ -1,186 +1,133 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Document, Page, pdfjs } from 'react-pdf'
 import { Theme } from "@material-ui/core/styles";
 import { createStyles, makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import { FileContext, assemblePDF } from "../hooks/FileContext";
-import { PDFDocument } from "pdf-lib";
-import { FlutterDashTwoTone } from "@material-ui/icons";
 import { UploadedFile } from "../hooks/UploadedFile";
-import { getTypographyUtilityClass } from "@material-ui/core";
 import useTranslation from 'next-translate/useTranslation';
-
-const styles =(theme: Theme) => 
-  createStyles({
-  documentView : {
-    maxHeight: '80vh',
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-
-  pdfPage : {
-    position: 'relative',
-    margin: '5px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: '3px',
-  },
-
-  outer : {
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '80vh',
-    ['@media (min-width:1000px)']: { // eslint-disable-line no-useless-computed-key
-      width: '90%',
-      maxWidth: '700px'
-    },
-    ['@media (max-width:1000px)']: { // eslint-disable-line no-useless-computed-key
-      maxWidth: '100%'
-    },
-  }
-
-});
+import Paper from "./Paper";
+import { VariableSizeList } from 'react-window';
+import { setLineWidth } from "pdf-lib";
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
+      root : {
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        width: '100%',
+      },
       controls : {
         position: 'absolute',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'center',
-        bottom: '6px',
-        left: '0',
-        right: '0',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        padding: '4px',
-        width: '50px',
-        border: '1px solid black',
-        background: 'white',
-        color: 'black'
-      },
-
-      previewText : {
-        border: '1px solid black',
-        position: 'absolute',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        top: '12px',
-        left: '0',
-        right: '0',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        padding: '4px',
-        width: '100%',
-        fontSize: '22px',
+        bottom: theme.spacing(1),
+        padding: theme.spacing(1,2),
         backgroundColor: 'white',
         color: 'black',
-        maxWidth: '90%'
       },
-
-      hidden : {
-        display: 'none'
+      documentView : {
+        maxHeight: '80vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
       },
-
-      pageLoading : {
-        position: 'absolute',
-        zIndex: -100
-      }
-    }));
+      pdfPage : {
+        margin: theme.spacing(2),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingBottom: '3px',
+      },
+}));
 
 
 
 const PreviewControls = (props: {page: number}) => {
   const classes = useStyles({});
     return (
-      <div className={classes.controls}>
-        {props.page}
-      </div>
+      <Paper className={classes.controls} noPadding>
+        {props.page+1}
+      </Paper>
     )
 }
 
-const PreviewText = (props: {text: string}) => {
-  const classes = useStyles({});
-  return (
-    <div className={classes.previewText}>
-        {props.text}
-    </div>
-  )
-}
-
-const PageLoading = (props: {}) => {
-  const { t } = useTranslation("common");
-  const classes = useStyles({});
-  return (
-    <div className={classes.pageLoading}>
-        {t("loading")}
-    </div>
-  )
-}
 
 
-
-interface PDFPreviewProps extends WithStyles<typeof styles> {
+interface PDFPreviewProps {
   files: UploadedFile[] | undefined,
   currentPage: number | undefined
 }
 
 const PDFPreview = (props: PDFPreviewProps) => {
+  // loads something necessary to render pdf
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`; 
+  const scroller = React.createRef<VariableSizeList>();
+  const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
+  const [numberPages, setNumberPages] = useState(0);
+  const [pageSizes, setPageSizes] = useState(new Array<number>());
+  const [width, setWidth] = useState(0);
+  const classes = useStyles({});
   const { t } = useTranslation("common");
   let outerBox = React.createRef<HTMLDivElement>();
-  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-  const [mergedPDF, setMergedPDF] = useState<UploadedFile | undefined>(undefined);
-  const [numberPages, setNumberPages] = useState(-1);
-  
+
   async function makePreview() {
     let file : UploadedFile = (await assemblePDF(props.files!))!
+    let newPageSizes : number[] = [];
+    for (let i=0; i < file.getPageCount(); i++) {
+      newPageSizes.push( (file.getPage(i).getHeight()) / file.getPage(i).getWidth() );
+    }
+    setPageSizes(newPageSizes);
     setMergedPDF(file);
     setNumberPages(file.getPageCount());
   }
 
-  useEffect(() => {
+  useEffect(() => { // re-renders the preview when the order of files update
     if (props.files != null) {
       makePreview();   
     }
   }, [props.files])
 
-  useEffect(() => {
-    if (props.currentPage != null) {
-      if (outerBox.current != null) {
-        let outer: HTMLDivElement = outerBox.current;
-        let doc: HTMLDivElement = (outer.firstChild as HTMLDivElement);
-        doc!.children.item(props.currentPage)?.scrollIntoView();
-      }
-    }
+  useEffect(() => { // changes the focused page; snaps to the file that is clicked on
+    if (props.currentPage != null && scroller.current != null) {
+      scroller.current!.scrollToItem(props.currentPage, "center");
+    } 
   }, [props.currentPage])
 
-    const {classes} = props;
-    return (
-      <FileContext.Consumer> 
-      { (context: any) => (
-      <div className={classes.outer} id="pdfOuter" ref={outerBox}>
-        
-        <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
-          {mergedPDF != null && numberPages > 0 ? Array.from(Array(numberPages).keys()).map( (i) => {
-          return <Page className={classes.pdfPage} pageNumber={i+1} key={i} width={document.getElementById("pdfOuter")!.offsetWidth-32}> 
-            <PageLoading />
-            <PreviewControls page={i+1} />
-          </Page>
-        }) : <div />}
-        
-        </Document>
+  useEffect(() => {
+    const handleResize = () => {
+      if (outerBox.current) {
+        setWidth(outerBox.current.offsetWidth);
+      }
+      if (scroller.current != null && mergedPDF != null) {
+        for (let i=0; i < mergedPDF.getPageCount(); i++) {
+          scroller.current.resetAfterIndex(i)
+        }
+      }
+    }
+    handleResize();
+
+    let resize: NodeJS.Timeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resize);
+      resize = setTimeout(handleResize, 300);
+    })
+  }, [outerBox])
+
+  
+  return (
+        <div className={classes.root} id="pdfOuter" ref={outerBox}>
+          <Document className={classes.documentView} loading={t("loading")} file={mergedPDF != null ? mergedPDF.file : null} noData="">
+          <VariableSizeList ref={scroller} height={window.innerHeight * 0.8} width={width} itemSize={(i) => {return (width-32)*pageSizes[i]+8}} itemCount={numberPages}>
+              { ({style, index}) => (
+                <div style={style}>
+                <Page className={classes.pdfPage} pageNumber={index+1} key={index} width={width-32}> 
+                <PreviewControls page={index} />
+                </Page>
+                </div>
+            )}
+            </VariableSizeList>
+          </Document>
         </div>
-      )}
-        </FileContext.Consumer>
   )
 }
 
-  export default withStyles(styles)(PDFPreview);
+  export default PDFPreview;

@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
       },
       topbarItem: {
-        height: 50,
+        height: theme.spacing(6),
         margin: 'auto 0',
         color: 'inherit',
         fontSize: '1rem',

@@ -18,7 +18,6 @@ const UploadButton = ({text}: UploadButtonProps) => {
 
   const handleUpload = async (e: React.FormEvent<HTMLInputElement>, uploadAction: ((files: File[]) => void) | undefined) => {
     e.preventDefault();
-    console.log()
     const files : (FileList | null) = (e.target as HTMLInputElement).files;
     if (files != null) {
       for (let i=0; i < files.length; i++) {
