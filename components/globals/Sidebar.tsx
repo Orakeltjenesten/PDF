@@ -9,7 +9,6 @@ import { Theme } from "@material-ui/core/styles";
 import ThemeSettings from './ThemeSettings'
 
 // Project components
-import ThemeSettings from './ThemeSettings';
 import React from 'react';
 import LanguageSettings from './LanguageSettings';
 
