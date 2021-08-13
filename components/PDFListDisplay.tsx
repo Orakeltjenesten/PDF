@@ -1,12 +1,9 @@
 import React from "react";
 import { DragDropContext, DropResult} from 'react-beautiful-dnd';
 import { Droppable } from "react-beautiful-dnd";
-import styles from '../styles/Home.module.css'
 import PDFDisplayEntry from "./PDFDisplayEntry";
 import { FileContext } from "../hooks/FileContext";
-import { createStyles, Grid } from "@material-ui/core";
 import { UploadedFile } from "../hooks/UploadedFile";
-import { makeStyles } from "@material-ui/styles";
 
 export const PDFListDisplay = () => {
 

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Card, CardActionArea, CardContent, CardMedia, Divider } from '@material-ui/core';
 
 // Material UI Components
 import { makeStyles, createStyles}  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles/";
 import { UploadedFile } from '../hooks/UploadedFile';
-import { useTheme } from '@material-ui/core';
-import { useAlert } from '../hooks/AlertContext';
+import { useTheme, Card, CardActionArea, CardContent, CardMedia, Divider } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme: Theme) => 

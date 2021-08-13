@@ -103,6 +103,7 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
             }
         }
     }}>
+<<<<<<< Updated upstream
         <Box id={horizontalScrollId} onWheel={handleWheelEvent} className={classes.list}>
             <Droppable 
                 droppableId="droppable"
@@ -130,6 +131,34 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
                 }
             </Droppable>
         </Box>
+=======
+        <Droppable 
+            droppableId="droppable"
+            direction="horizontal"
+            mode="virtual"
+            renderClone={(provided: DraggableProvided, snapshot: DraggableStateSnapshot, rubric: DraggableRubric) => (
+                <Box ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragging)}>
+                    <PageCard splits={splits} setSplitAt={setSplitAt} index={rubric.source.index} file={pages[rubric.source.index]} pageNumber={1} last={snapshot.isDragging || rubric.source.index === pages.length-1}/>
+                </Box>
+        )}>
+            {(provided) => (
+                <VariableSizeList<ItemDataProps>
+                    layout="horizontal"
+                    outerRef={provided.innerRef} 
+                    itemData={itemData}
+                    height={window.innerHeight * 0.6} 
+                    width={window.innerWidth}
+                    itemSize={(i) => ((pages[i].getPage(0).getWidth()) / pages[i].getPage(0).getHeight() * (window.innerHeight*0.6-28) + 50)} 
+                    itemCount={pages.length}
+                    ref={listRef}
+                    className={classes.list}
+                >
+                    {Column}
+                </VariableSizeList>
+            )
+            }
+        </Droppable>
+>>>>>>> Stashed changes
     </DragDropContext>
     );
 }
