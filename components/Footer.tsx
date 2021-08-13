@@ -34,7 +34,7 @@ const Footer = () => {
             <Divider variant='middle' />
             <div className={classes.content}>
                 <Typography align='center' variant='caption'>
-                    {t("with_love")}
+                    {t("footer")}
                 </Typography>
             </div>
         </Container>
