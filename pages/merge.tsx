@@ -1,12 +1,5 @@
-<<<<<<< Updated upstream
-import Head from 'next/head';
-import React, { useState } from 'react';
-import useTranslation from 'next-translate/useTranslation';
-=======
 import Head from 'next/head'
-import React from 'react'
-import { useFileContext } from "../hooks/FileContext";
->>>>>>> Stashed changes
+import React, { useState } from 'react'
 
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
@@ -20,6 +13,7 @@ import { useFileContext } from "../hooks/FileContext";
 import { PDFListDisplay } from '../components/PDFListDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
+import useTranslation from 'next-translate/useTranslation';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
