@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       splitContainer: {
         display: 'flex',
         justifyContent: 'center',
-        height: '70%',
+        height: '60%',
         width: theme.spacing(6),
       },
       splitContainerSelected: {
@@ -64,7 +64,7 @@ export type PageProps = {
 const PageCard = ({index, file, pageNumber, last, fullHeight, gutterBottom, setSplitAt, splits}: PageProps) => {
   const classes = useStyles();
   const [hover, setHover] = useState<boolean>(false);
-  const [size, setSize] = useState<number>(window.innerHeight * 0.6);
+  const [size, setSize] = useState<number>(window.innerHeight * 0.60 - 28);
   const [selected, setSelected] = useState<boolean>(false);
   const theme = useTheme();
   

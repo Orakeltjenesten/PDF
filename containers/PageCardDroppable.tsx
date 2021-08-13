@@ -25,12 +25,12 @@ const useStyles = makeStyles((theme: Theme) =>
         '&:hover': {
             overflowX: 'auto',
         },
-        /*[theme.breakpoints.up('lg')]:  {
-            maxHeight: 700,
+        [theme.breakpoints.up('lg')]:  {
+            maxHeight: 800,
         },
         [theme.breakpoints.down('lg')]: {
             maxHeight: 500,
-        },*/
+        },
       },
       dragging: {
           background: 'none',
@@ -45,8 +45,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface PageCardDroppableProps {
     reorderFiles: (from: number, to: number) => void;
-    horizontalScrollId: string;
-    handleWheelEvent: (e: any) => void;
     pages: UploadedFile[];
     setSplitAt: (index: number, split: boolean) => void;
     moveSplitTo: (from: number, to: number) => void;
@@ -85,11 +83,23 @@ const Column = React.memo(function Column(props: ColumnProps) {
   }, areEqual);
 
 export const PageCardDroppable = (props: PageCardDroppableProps) => {
-    const {reorderFiles, horizontalScrollId, handleWheelEvent, pages, setSplitAt, moveSplitTo, splits} = props;
+    const {reorderFiles, pages, setSplitAt, moveSplitTo, splits} = props;
     const classes = useStyles({});
     const createItemData = memoize((props: ItemDataProps) => ({pages, setSplitAt, splits}));
     const itemData = createItemData({pages, setSplitAt, splits});
     const listRef = useRef<any>();
+
+    /*const handleWheelEvent = (e: any) => {
+        e.preventDefault();
+        if (listRef.current != null) {
+            if (e.deltaX > 0) {
+                listRef.current!.scrollToItem(5);
+            } else {
+                listRef.current!.scrollToItem(0);
+            }
+        }
+    };*/
+
     return (
     <DragDropContext 
     onDragEnd={(result: DropResult) => {
