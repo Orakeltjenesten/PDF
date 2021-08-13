@@ -8,7 +8,7 @@ import { Theme } from "@material-ui/core/styles";
 import useTranslation from 'next-translate/useTranslation';
 import { Box, Button, Typography } from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
-import { PDFDocument, PDFPage } from 'pdf-lib';
+import { IndexOutOfBoundsError, PDFDocument, PDFPage } from 'pdf-lib';
 import { useAlert } from '../hooks/AlertContext';
 import { PageCardDroppable } from '../containers/PageCardDroppable';
 import { PageTitle } from '../components/PageTitle';
@@ -84,8 +84,40 @@ export default function Home() {
             newSplits = Array.from(splitIndexes);
             newSplits = newSplits.filter((num: number) => (num != splitIndex));
         }
-        newSplits.sort();
+        newSplits = newSplits.sort((a, b) => a-b);
         setSplitIndexes(newSplits);
+    }
+
+    function moveSplitTo(from: number, to: number) {
+        from += 1;
+        to += 1;
+        let newSplitIndexes = Array.from(splitIndexes);
+        let fromValue = newSplitIndexes.includes(from);
+        let toValue = newSplitIndexes.includes(to);
+        // clear from
+        newSplitIndexes = newSplitIndexes.filter((num: number) => (num != from));
+
+        // set to
+        if (fromValue) {!newSplitIndexes.includes(to) && newSplitIndexes.push(to) }
+        if (!fromValue) {newSplitIndexes = newSplitIndexes.filter((num: number) => (num != to))}
+
+        // all values between from and to should be decremented by 1
+        if (from < to) {
+            console.log(newSplitIndexes);
+            newSplitIndexes = newSplitIndexes.map((value: number) => {if (value > from && value < to) {return value-1} else {return value}});
+            console.log(newSplitIndexes);
+            (toValue && !newSplitIndexes.includes(to-1) && newSplitIndexes.push(to-1));
+            (!toValue && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != to-1))));
+        } else if ( from > to) {
+            newSplitIndexes = newSplitIndexes.map((value: number) => {if (value > to && value < from) {return value+1} else {return value}});
+            (toValue && !newSplitIndexes.includes(to+1) && newSplitIndexes.push(to+1));
+            (!toValue && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != to+1))));
+        }
+        
+        
+        newSplitIndexes = newSplitIndexes.sort((a, b) => a-b)
+        console.log(newSplitIndexes);
+        setSplitIndexes(newSplitIndexes);
     }
 
     async function downloadSplits() {
@@ -154,7 +186,7 @@ export default function Home() {
                 <PageTitle text="split" />
                 {(fileContext.files.length > 0) ? (<>
 
-                    <PageCardDroppable reorderFiles={reorderFiles} handleWheelEvent={handleWheelEvent} horizontalScrollId={horizontalScrollId} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
+                    <PageCardDroppable splits={splitIndexes} moveSplitTo={moveSplitTo} reorderFiles={reorderFiles} handleWheelEvent={handleWheelEvent} horizontalScrollId={horizontalScrollId} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
 
                     <Button onClick={downloadSplits} className={classes.downloadButton}>{t("download_splits")}</Button>
                 </>) : <h2>{t("upload_some_files")}</h2>}
