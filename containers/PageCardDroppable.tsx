@@ -7,7 +7,7 @@ import { Theme } from "@material-ui/core/styles";
 import { Box} from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
 import PageCard from '../components/PageCard';
-import React from 'react';
+import React, { useRef } from 'react';
 import { areEqual, VariableSizeList, FixedSizeList } from 'react-window';
 import memoize from 'memoize-one';
 import { ResetTvOutlined } from '@material-ui/icons';
@@ -88,12 +88,18 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
     const classes = useStyles({});
     const createItemData = memoize((props: ItemDataProps) => ({pages, setSplitAt, splits}));
     const itemData = createItemData({pages, setSplitAt, splits});
+    const listRef = useRef<any>();
     return (
     <DragDropContext 
     onDragEnd={(result: DropResult) => {
         if (result.destination && result.destination.index !== result.source.index) {
-        reorderFiles(result.source.index, result.destination!.index);
-        moveSplitTo(result.source.index, result.destination!.index)
+            reorderFiles(result.source.index, result.destination!.index);
+            moveSplitTo(result.source.index, result.destination!.index);
+            if (listRef.current != null) {
+                for (let i=Math.min(result.source.index, result.destination.index); i < Math.max(result.source.index, result.destination.index); i++) {
+                    listRef.current.resetAfterIndex(i);
+                }
+            }
         }
     }}>
         <Box id={horizontalScrollId} onWheel={handleWheelEvent} className={classes.list}>
@@ -115,6 +121,7 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
                         width={window.innerWidth} 
                         itemSize={(i) => ((pages[i].getPage(0).getWidth()) / pages[i].getPage(0).getHeight() * 600 + 50)} 
                         itemCount={pages.length}
+                        ref={listRef}
                     >
                         {Column}
                     </VariableSizeList>

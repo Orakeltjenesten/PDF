@@ -103,9 +103,7 @@ export default function Home() {
 
         // all values between from and to should be decremented by 1
         if (from < to) {
-            console.log(newSplitIndexes);
             newSplitIndexes = newSplitIndexes.map((value: number) => {if (value > from && value < to) {return value-1} else {return value}});
-            console.log(newSplitIndexes);
             (toValue && !newSplitIndexes.includes(to-1) && newSplitIndexes.push(to-1));
             (!toValue && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != to-1))));
         } else if ( from > to) {
@@ -116,7 +114,6 @@ export default function Home() {
         
         
         newSplitIndexes = newSplitIndexes.sort((a, b) => a-b)
-        console.log(newSplitIndexes);
         setSplitIndexes(newSplitIndexes);
     }
 
