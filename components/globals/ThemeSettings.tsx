@@ -1,6 +1,5 @@
 import { MouseEvent as ReactMouseEvent, useState } from 'react';
-import { useThemeSettings } from '../../hooks/ThemeContext';
-import { ThemeTypes, themesDetails } from '../../containers/theme';
+import useTranslation from 'next-translate/useTranslation';
 
 // Material-ui
 import { makeStyles, createStyles}  from '@material-ui/styles';
@@ -8,15 +7,16 @@ import { Theme } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import ToggleButton from '@material-ui/core/ToggleButton';
 import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
-import IconButton from '@material-ui/core/IconButton';
 
-// Icons
+//Icons
+import IconButton from '@material-ui/core/IconButton';
 import LightIcon from '@material-ui/icons/WbSunnyRounded';
 import DarkIcon from '@material-ui/icons/Brightness3Rounded';
 
 // Project components
 import Dialog from './Dialog';
-import useTranslation from 'next-translate/useTranslation';
+import { useThemeSettings } from '../../hooks/ThemeContext';
+import { ThemeTypes, themesDetails } from '../../containers/theme';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({

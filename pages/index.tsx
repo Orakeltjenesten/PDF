@@ -1,13 +1,15 @@
-import Head from 'next/head'
-import React from 'react'
+import Head from 'next/head';
+import React from 'react';
+import Link from 'next/link';
+import useTranslation from 'next-translate/useTranslation';
 
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
-import { Button, Typography } from '@material-ui/core'
-import Logo from '../components/globals/Logo'
-import Link from 'next/link'
-import useTranslation from 'next-translate/useTranslation';
+import { Button, Typography } from '@material-ui/core';
+
+//Project components
+import Logo from '../components/globals/Logo';
 
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -1,16 +1,17 @@
 import classnames from 'classnames';
-import { DragDropContext, Draggable, DraggableProps, DraggableProvided, DraggableRubric, DraggableStateSnapshot, DragStart, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, DraggableProvided, DraggableRubric, DraggableStateSnapshot, Droppable, DropResult } from 'react-beautiful-dnd';
+import React, { useRef } from 'react';
+import { areEqual, VariableSizeList } from 'react-window';
+import memoize from 'memoize-one';
 
 // Material UI Components
 import { makeStyles, createStyles }  from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import { Box} from '@material-ui/core';
+
+//Project components
 import { UploadedFile } from '../hooks/UploadedFile';
 import PageCard from '../components/PageCard';
-import React, { useRef } from 'react';
-import { areEqual, VariableSizeList, FixedSizeList } from 'react-window';
-import memoize from 'memoize-one';
-import { ResetTvOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({

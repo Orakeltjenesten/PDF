@@ -1,18 +1,19 @@
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import { assemblePDF, useFileContext } from '../hooks/FileContext';
+import { PDFDocument, PDFPage } from 'pdf-lib';
+import useTranslation from 'next-translate/useTranslation';
 
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
-import useTranslation from 'next-translate/useTranslation';
 import { Button } from '@material-ui/core';
+
+//Project components
 import { UploadedFile } from '../hooks/UploadedFile';
-import { IndexOutOfBoundsError, PDFDocument, PDFPage } from 'pdf-lib';
 import { useAlert } from '../hooks/AlertContext';
 import { PageCardDroppable } from '../containers/PageCardDroppable';
 import { PageTitle } from '../components/PageTitle';
-
+import { assemblePDF, useFileContext } from '../hooks/FileContext';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,7 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
-
 
 export default function Home() {
     const { t } = useTranslation("common");

@@ -1,20 +1,19 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import React from 'react'
-import { FileContext, useFileContext } from "../hooks/FileContext";
+import Head from 'next/head';
+import React, { useState } from 'react';
+import useTranslation from 'next-translate/useTranslation';
 
 // Material UI Components
 import { makeStyles, createStyles } from '@material-ui/styles/';
 import { Theme } from "@material-ui/core/styles";
 import MuiContainer from '@material-ui/core/Container';
+import { Button, Grid } from '@material-ui/core';
+
+//Project components
+import { PageTitle } from '../components/PageTitle';
+import { useFileContext } from "../hooks/FileContext";
 import { PDFListDisplay } from '../components/PDFListDisplay';
 import { SavePDFButton } from '../components/SavePDFButton';
 import PDFPreview from '../components/PDFPreview';
-import { useState } from 'react';
-import { Button, Grid } from '@material-ui/core';
-import useTranslation from 'next-translate/useTranslation';
-import { PageTitle } from '../components/PageTitle';
-
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

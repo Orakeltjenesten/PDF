@@ -1,5 +1,7 @@
-import { AlertColor } from "@material-ui/core";
 import { createContext , ReactNode, useContext, useState } from "react";
+
+//Material UI components
+import { AlertColor } from "@material-ui/core";
 
 interface AlertContextProps {
     message: string;
