@@ -8,9 +8,10 @@ import { Box} from '@material-ui/core';
 import { UploadedFile } from '../hooks/UploadedFile';
 import PageCard from '../components/PageCard';
 import React, { useRef } from 'react';
-import { areEqual, VariableSizeList, FixedSizeList } from 'react-window';
+import { areEqual, VariableSizeList, FixedSizeList, ListOnScrollProps, VariableSizeListProps } from 'react-window';
 import memoize from 'memoize-one';
 import { ResetTvOutlined } from '@material-ui/icons';
+import { AnyARecord } from 'dns';
 
 const useStyles = makeStyles((theme: Theme) => 
     createStyles({
@@ -24,12 +25,12 @@ const useStyles = makeStyles((theme: Theme) =>
         '&:hover': {
             overflowX: 'auto',
         },
-        /*[theme.breakpoints.up('lg')]:  {
-            maxHeight: 700,
+        [theme.breakpoints.up('lg')]:  {
+            maxHeight: 800,
         },
         [theme.breakpoints.down('lg')]: {
             maxHeight: 500,
-        },*/
+        },
       },
       dragging: {
           background: 'none',
@@ -44,8 +45,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface PageCardDroppableProps {
     reorderFiles: (from: number, to: number) => void;
-    horizontalScrollId: string;
-    handleWheelEvent: (e: any) => void;
     pages: UploadedFile[];
     setSplitAt: (index: number, split: boolean) => void;
     moveSplitTo: (from: number, to: number) => void;
@@ -84,11 +83,23 @@ const Column = React.memo(function Column(props: ColumnProps) {
   }, areEqual);
 
 export const PageCardDroppable = (props: PageCardDroppableProps) => {
-    const {reorderFiles, horizontalScrollId, handleWheelEvent, pages, setSplitAt, moveSplitTo, splits} = props;
+    const {reorderFiles, pages, setSplitAt, moveSplitTo, splits} = props;
     const classes = useStyles({});
     const createItemData = memoize((props: ItemDataProps) => ({pages, setSplitAt, splits}));
     const itemData = createItemData({pages, setSplitAt, splits});
     const listRef = useRef<any>();
+
+    /*const handleWheelEvent = (e: any) => {
+        e.preventDefault();
+        if (listRef.current != null) {
+            if (e.deltaX > 0) {
+                listRef.current!.scrollToItem(5);
+            } else {
+                listRef.current!.scrollToItem(0);
+            }
+        }
+    };*/
+
     return (
     <DragDropContext 
     onDragEnd={(result: DropResult) => {
@@ -102,33 +113,32 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
             }
         }
     }}>
-        <Box id={horizontalScrollId} onWheel={handleWheelEvent} className={classes.list}>
-            <Droppable 
-                droppableId="droppable"
-                direction="horizontal"
-                mode="virtual"
-                renderClone={(provided: DraggableProvided, snapshot: DraggableStateSnapshot, rubric: DraggableRubric) => (
-                    <Box ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragging)}>
-                        <PageCard splits={splits} setSplitAt={setSplitAt} index={rubric.source.index} file={pages[rubric.source.index]} pageNumber={1} last={snapshot.isDragging || rubric.source.index === pages.length-1}/>
-                    </Box>
-            )}>
-                {(provided) => (
-                    <VariableSizeList<ItemDataProps>
-                        layout="horizontal"
-                        outerRef={provided.innerRef} 
-                        itemData={itemData}
-                        height={window.innerHeight * 0.6} 
-                        width={window.innerWidth} 
-                        itemSize={(i) => ((pages[i].getPage(0).getWidth()) / pages[i].getPage(0).getHeight() * window.innerHeight*0.6 + 50)} 
-                        itemCount={pages.length}
-                        ref={listRef}
-                    >
-                        {Column}
-                    </VariableSizeList>
-                )
-                }
-            </Droppable>
-        </Box>
+        <Droppable 
+            droppableId="droppable"
+            direction="horizontal"
+            mode="virtual"
+            renderClone={(provided: DraggableProvided, snapshot: DraggableStateSnapshot, rubric: DraggableRubric) => (
+                <Box ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className={classnames(classes.dragging)}>
+                    <PageCard splits={splits} setSplitAt={setSplitAt} index={rubric.source.index} file={pages[rubric.source.index]} pageNumber={1} last={snapshot.isDragging || rubric.source.index === pages.length-1}/>
+                </Box>
+        )}>
+            {(provided) => (
+                <VariableSizeList<ItemDataProps>
+                    layout="horizontal"
+                    outerRef={provided.innerRef} 
+                    itemData={itemData}
+                    height={window.innerHeight * 0.6} 
+                    width={window.innerWidth} 
+                    itemSize={(i) => ((pages[i].getPage(0).getWidth()) / pages[i].getPage(0).getHeight() * (window.innerHeight*0.6-28) + 50)} 
+                    itemCount={pages.length}
+                    ref={listRef}
+                    className={classes.list}
+                >
+                    {Column}
+                </VariableSizeList>
+            )
+            }
+        </Droppable>
     </DragDropContext>
     );
 }

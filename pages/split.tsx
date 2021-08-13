@@ -155,19 +155,6 @@ export default function Home() {
 
     }, [fileContext.files]) // runs when fileContext.files updates
 
-    const horizontalScrollId = 'horizontalScroll';
-    const handleWheelEvent = (e: any) => {
-        e.preventDefault()
-        var container = document.getElementById(horizontalScrollId)
-        if (container) {
-            var containerScrollPosition = container.scrollLeft;
-            container.scrollTo({
-                top: 0,
-                left: containerScrollPosition + (e.deltaY),
-            })
-        }
-    };
-
     const reorderFiles = (source: number, target: number) => {
         let newFiles = Array.from(pages); // Copy the array, as arrays should not be changed directly
         let [deleted] = newFiles.splice(source, 1);
@@ -185,7 +172,7 @@ export default function Home() {
             <main className={classes.root}>
                 {(fileContext.files.length > 0) ? (<>
 
-                    <PageCardDroppable splits={splitIndexes} moveSplitTo={moveSplitTo} reorderFiles={reorderFiles} handleWheelEvent={handleWheelEvent} horizontalScrollId={horizontalScrollId} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
+                    <PageCardDroppable splits={splitIndexes} moveSplitTo={moveSplitTo} reorderFiles={reorderFiles} pages={pages} setSplitAt={setSplitAt}></PageCardDroppable>
 
                     <Button onClick={downloadSplits} className={classes.downloadButton}>{t("download_splits")}</Button>
                 </>) : <h2>{t("upload_some_files")}</h2>}
