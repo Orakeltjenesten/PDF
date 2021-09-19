@@ -95,6 +95,7 @@ export default function Home() {
         let newSplitIndexes = Array.from(splitIndexes);
         let fromValue = newSplitIndexes.includes(from);
         let toValue = newSplitIndexes.includes(to);
+
         // clear from
         newSplitIndexes = newSplitIndexes.filter((num: number) => (num != from));
 
@@ -112,10 +113,15 @@ export default function Home() {
             (toValue && !newSplitIndexes.includes(to+1) && newSplitIndexes.push(to+1));
             (!toValue && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != to+1))));
         }
-        (from == pages.length) && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != pages.length-1)));
 
         // set last index to split
         !newSplitIndexes.includes(pages.length) && newSplitIndexes.push(pages.length)
+
+        //if to was the last page, set the next-last page to not split
+        to == pages.length && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != (to-1))));
+
+        //if from was the last page, set 'to' to not split
+        from == pages.length && (newSplitIndexes = newSplitIndexes.filter((num: number) => (num != to)));
         
         
         newSplitIndexes = newSplitIndexes.sort((a, b) => a-b)

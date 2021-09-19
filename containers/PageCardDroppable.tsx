@@ -105,7 +105,7 @@ export const PageCardDroppable = (props: PageCardDroppableProps) => {
     onDragEnd={(result: DropResult) => {
         if (result.destination && result.destination.index !== result.source.index) {
             reorderFiles(result.source.index, result.destination!.index);
-            moveSplitTo(result.source.index, result.destination!.index);
+            //moveSplitTo(result.source.index, result.destination!.index);
             if (listRef.current != null) {
                 for (let i=Math.min(result.source.index, result.destination.index); i < Math.max(result.source.index, result.destination.index); i++) {
                     listRef.current.resetAfterIndex(i);
