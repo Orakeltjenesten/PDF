@@ -1,7 +1,7 @@
 {
     "meta_name": "PDF Application",
     "meta_description": "An application to merge, split and add images to PDFs.",
-    "welcome_message": "Welcome to PDF merger. This is an application where you may quickly upload, organize, split and/or merge your files.",
+    "welcome_message": "Welcome to PDF merger. This is an application where you may quickly upload, organize, split and/or merge your files. Using our tool is fast, secure and safe! None of your data is uploaded to the cloud - everthing happens locally on your machine.",
     "upload": "Upload",
     "merge": "Merge",
     "split": "Split",

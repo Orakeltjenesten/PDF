@@ -1,7 +1,7 @@
 {
     "meta_name": "PDF Program",
     "meta_description": "Et program for å slå sammen, dele opp og legge til bilder i PDFer.",
-    "welcome_message": "Velkommen til NTNUs PDF-verktøy! Her kan du slå sammen, dele opp og legge inn bilder i PDFer!",
+    "welcome_message": "Velkommen til NTNUs PDF-verktøy! Her kan du slå sammen, dele opp og legge inn bilder i PDFer! Å bruke verktøyet er trygt, sikkert og raskt! Ingen av din data lastes opp til skyen, alt forblir på din maskin.",
     "upload": "Last opp",
     "merge": "Slå sammen",
     "split": "Del opp",

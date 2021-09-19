@@ -10,6 +10,7 @@ import { Button, Typography } from '@material-ui/core';
 
 //Project components
 import Logo from '../components/globals/Logo';
+import { themes } from '../containers/theme';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -61,7 +62,7 @@ export default function Home() {
                 <div className={classes.logoWrapper}>
                     <Logo darkColor='white' lightColor='black' />
                 </div>
-                <Typography align='center' color='inherit' variant='h3'>
+                <Typography align='center' color='inherit' variant='h3' maxWidth={700}>
                     {t("welcome_message")}
                 </Typography>
                 <div className={classes.btnGroup}>
