@@ -17,3 +17,13 @@ PDF splitter / merger
 * Stokke om på siderekkefølge i PDF
 * Rotere og speilvende sider i PDF
 * Konvertere ulike filer til PDF, som bilder, kodefiler og mer
+
+# Oppdatere versjon på nettet
+* Logg på SSH på pdf.orakel.ntnu.no
+* Naviger til /etc/var/www/PDF
+* Skriv `pm2 stop pdf`
+* Skriv `sudo git pull`
+* Skriv `sudo npm i`
+* Skriv `sudo npm run build`
+* Skriv `pm2 start pdf`
+* Nettsiden er nå oppdatert!
