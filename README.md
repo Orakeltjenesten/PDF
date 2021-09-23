@@ -18,7 +18,9 @@ PDF splitter / merger
 * Rotere og speilvende sider i PDF
 * Konvertere ulike filer til PDF, som bilder, kodefiler og mer
 
-# Oppdatere versjon på nettet
+# Driftsinformasjon
+
+## Oppdatere versjon på nettet
 * Logg på SSH på pdf.orakel.ntnu.no
 * Naviger til /etc/var/www/PDF
 * Skriv `pm2 stop pdf`
@@ -27,3 +29,6 @@ PDF splitter / merger
 * Skriv `sudo npm run build`
 * Skriv `pm2 start pdf`
 * Nettsiden er nå oppdatert!
+
+## Redigere konfigurasjon
+* Config ligger i `/etc/nginx/conf.d`
