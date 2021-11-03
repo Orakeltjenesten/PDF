@@ -72,7 +72,7 @@ export default function Home() {
           <Grid container className={classes.wrapper}>
             <Grid container item xs={12} lg={6} spacing={1} alignItems='center' justifyContent='center' direction='column'>
               <Grid item xs={12} style={{ overflowY: 'auto', maxHeight: '400px', borderBottom: '5px dashed'}}><PDFListDisplay /></Grid>
-              <Grid item> <SavePDFButton text={t("merge")} /></Grid>
+              <Grid item> <SavePDFButton text={t("merge_download")} /></Grid>
               <Grid item><Button variant="contained" onClick={(e) => { e.preventDefault(); setTogglePreview(!togglePreview) }}>{t("toggle_preview")}</Button></Grid>
             </Grid>
             <Grid item xs={12} lg={6} style={{ overflowY: 'auto', maxHeight: '600px', borderBottom: '5px dashed'}}>
