@@ -4,6 +4,7 @@
     "welcome_message": "Velkommen til NTNUs PDF-verktøy! Her kan du slå sammen, dele opp og legge inn bilder i PDFer! Å bruke verktøyet er trygt, sikkert og raskt! Ingen av din data lastes opp til skyen, alt forblir på din maskin.",
     "upload": "Last opp",
     "merge": "Slå sammen",
+    "merge_download": "Slå sammen og last ned",
     "split": "Del opp",
     "drag_or_select": "Dra filer hit, eller klikk for å velge filer.",
     "click_select": "Klikk for å velge filer som skal lastes opp",
@@ -21,7 +22,7 @@
     "no_files_error": "Kunne ikke lastet ned - Ingen filer er lastet opp.",
     "get_started": "Kom i gang!",
     "upload_some_files": "Last opp noen filer for å begynne!",
-    "toggle_preview": "Forhåndsvisning",
+    "toggle_preview": "Veksle forhåndsvisning",
     "footer": "Rett uta' Sluppen",
     "duplicate_file_code": "Existerende fil error",
     "already_uploaded_error_message": "En fil ved dette navnet har allerede blit opplastet",
@@ -36,5 +37,8 @@
     "norwegian": "Norsk",
     "english": "Engelsk",
     "download_splits": "Last ned oppdelte",
-    "split_files_downloaded": "Filer ble lastet ned!"
+    "split_files_downloaded": "Filer ble lastet ned!",
+    "download_this": "Last ned denne",
+    "split_pages": "Del i sider",
+    "delete_this": "Slett denne"
 }

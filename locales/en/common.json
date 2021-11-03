@@ -4,6 +4,7 @@
     "welcome_message": "Welcome to PDF merger. This is an application where you may quickly upload, organize, split and/or merge your files. Using our tool is fast, secure and safe! None of your data is uploaded to the cloud - everthing happens locally on your machine.",
     "upload": "Upload",
     "merge": "Merge",
+    "merge_download": "Merge and download",
     "split": "Split",
     "drag_or_select": "Drag files here, or click to select files",
     "click_select": "Click to select files to upload",
@@ -36,6 +37,9 @@
     "norwegian": "Norwegian",
     "english": "English",
     "download_splits": "Download splits",
-    "split_files_downloaded": "Files were downloaded!"
+    "split_files_downloaded": "Files were downloaded!",
+    "download_this": "Download this",
+    "split_pages": "Split into pages",
+    "delete_this": "Delete this"
 
 }

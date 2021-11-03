@@ -134,18 +134,21 @@ export default function Home() {
         let downloadableFile: Blob;
         let url: string;
         let name: string;
+        let mainName: string | null;
         var a = document.createElement("a");
         document.body.appendChild(a);
         a.setAttribute("style", "display: none;");
+        mainName = prompt("Save files as ");
+        mainName = mainName != null ? mainName : "split"
         for (let i = 0; i < splitIndexes.length - 1; i++) {
             sliceFrom = splitIndexes[i];
             sliceTo = splitIndexes[i + 1];
             if (sliceTo - sliceFrom == 1) {
                 downloadableFile = pages[sliceFrom]!.file;
-                name = "page " + sliceTo.toString() + ".pdf";
+                name = mainName + " page " + sliceTo.toString() + ".pdf";
             } else {
                 downloadableFile = (await assemblePDF(pages.slice(sliceFrom, sliceTo)))!.file;
-                name = "pages " + (sliceFrom + 1).toString() + "-" + (sliceTo).toString() + ".pdf";
+                name = mainName + " pages " + (sliceFrom + 1).toString() + "-" + (sliceTo).toString() + ".pdf";
             }
             url = window.URL.createObjectURL(downloadableFile);
             // Set its download and href attributes accordingly to filename and URL of file
