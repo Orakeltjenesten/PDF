@@ -37,7 +37,15 @@ export const SavePDFButton = (props: SavePDFButtonProps) => {
 
     // Set its download and href attributes accordingly to filename and URL of file
     name = prompt("Save file as ")
-    a.download =  name != null ? name : "merged" + ".pdf"
+    if (name == null) {
+      a.remove();
+      return
+    } else if (name == "") {
+      name = "merged"
+    } else if ((name.substring(name.length-4)) == ".pdf") {
+      name = name.substring(0, name.length-4)
+    }
+    a.download =  name + ".pdf"
     a.href = url!;
     a.click();
     a.remove();

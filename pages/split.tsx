@@ -139,7 +139,15 @@ export default function Home() {
         document.body.appendChild(a);
         a.setAttribute("style", "display: none;");
         mainName = prompt("Save files as ");
-        mainName = mainName != null ? mainName : "split"
+        if (mainName == null) {
+            a.remove();
+            return
+        } else if (mainName == "") {
+            mainName = "split"
+        } else if ((mainName.substring(mainName.length-4)) == ".pdf") {
+            mainName = mainName.substring(0, mainName.length-4)
+        }
+
         for (let i = 0; i < splitIndexes.length - 1; i++) {
             sliceFrom = splitIndexes[i];
             sliceTo = splitIndexes[i + 1];
