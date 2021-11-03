@@ -75,7 +75,7 @@ export default function Home() {
               <Grid item> <SavePDFButton text={t("merge_download")} /></Grid>
               <Grid item><Button variant="contained" onClick={(e) => { e.preventDefault(); setTogglePreview(!togglePreview) }}>{t("toggle_preview")}</Button></Grid>
             </Grid>
-            <Grid item xs={12} lg={6} style={{ overflowY: 'auto', maxHeight: '600px', borderBottom: '5px dashed'}}>
+            <Grid item xs={12} lg={6} style={{ overflowY: 'auto', height: '600px', borderBottom: '5px dashed'}}>
               <MuiContainer className={classes.pdfPreview}>
                 {togglePreview && <PDFPreview currentPage={fileContext.focusedPage} files={fileContext.files} />}
               </MuiContainer>
