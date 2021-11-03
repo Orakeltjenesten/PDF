@@ -26,7 +26,7 @@ PDF splitter / merger
 * Skriv `pm2 stop pdf`
 * Skriv `sudo git pull`
 * Skriv `sudo npm i`
-* Skriv `sudo npm audit fix`, dersom det kommer varsel om sårbarheter
+* Følg veiledning for å fikse sårbarheter, dersom det er noen. Se `sudo npm audit`
 * Skriv `sudo npm run build`
 * Skriv `pm2 start pdf`
 * Nettsiden er nå oppdatert!
