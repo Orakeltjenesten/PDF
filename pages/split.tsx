@@ -15,6 +15,7 @@ import { PageCardDroppable } from '../containers/PageCardDroppable';
 import { PageTitle } from '../components/PageTitle';
 import { assemblePDF, useFileContext } from '../hooks/FileContext';
 import Link from 'next/link';
+import JSZip from 'jszip';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -139,12 +140,15 @@ export default function Home() {
         document.body.appendChild(a);
         a.setAttribute("style", "display: none;");
         mainName = prompt("Save files as ");
+        var zip = new JSZip();
+        
         if (mainName == null) {
             a.remove();
             return
         } else if (mainName == "") {
             mainName = "split"
         } else if ((mainName.substring(mainName.length-4)) == ".pdf") {
+            // Remove pdf extension because it is added again in the code below
             mainName = mainName.substring(0, mainName.length-4)
         }
 
@@ -154,16 +158,19 @@ export default function Home() {
             if (sliceTo - sliceFrom == 1) {
                 downloadableFile = pages[sliceFrom]!.file;
                 name = mainName + " page " + sliceTo.toString() + ".pdf";
+                zip.file(name, downloadableFile);
             } else {
                 downloadableFile = (await assemblePDF(pages.slice(sliceFrom, sliceTo)))!.file;
                 name = mainName + " pages " + (sliceFrom + 1).toString() + "-" + (sliceTo).toString() + ".pdf";
+                zip.file(name, downloadableFile);
             }
-            url = window.URL.createObjectURL(downloadableFile);
-            // Set its download and href attributes accordingly to filename and URL of file
-            a.download = name;
-            a.href = url!;
-            a.click();
+            
         }
+        url = window.URL.createObjectURL(await zip.generateAsync({type: "blob"}));
+        // Set its download and href attributes accordingly to filename and URL of file
+        a.download = "pdf.zip";
+        a.href = url!;
+        a.click();
         a.remove();
         showPopup(t("split_files_downloaded"), 'success');
     }
