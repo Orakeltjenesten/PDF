@@ -18,4 +18,5 @@ COPY . .
 EXPOSE 3000
 
 # Start the application
-CMD ["pm2-runtime", "pdf"]
+#CMD ["pm2-runtime", "pdf"]
+CMD ["pm2-runtime", "start", "npm", "--name", "pdf", "--", "run", "start"]
