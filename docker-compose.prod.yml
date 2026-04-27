@@ -1,0 +1,7 @@
+services:
+  app:
+    build: .
+    container_name: pdf-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
