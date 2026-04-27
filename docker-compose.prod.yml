@@ -1,7 +1,14 @@
 services:
   app:
     build: .
-    container_name: pdf-app
-    restart: unless-stopped
+    expose:
+      - "3000"
+    restart: always
+
+  proxy:
+    build: ./nginx
     ports:
-      - "3000:3000"
+      - "2003:80"
+    depends_on:
+      - app
+    restart: always
